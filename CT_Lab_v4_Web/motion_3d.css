@@ -1,0 +1,379 @@
+/* CT-Lab v4.0 — 3D Perspective, Pixar Card Depth & 60fps Motion */
+.module-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+  position: relative;
+}
+.pixar-card-cover,
+.howto-img {
+  position: relative;
+  transform-style: preserve-3d;
+}
+.pixar-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--sx, 50%) var(--sy, 30%), rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0) 62%);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  z-index: 2;
+}
+.module-card:hover .pixar-sheen,
+.howto-banner:hover .pixar-sheen {
+  opacity: 1;
+}
+
+@keyframes semiPopIn {
+  0% {
+    opacity: 0;
+    transform: perspective(600px) rotateX(-14deg) scale(0.94);
+  }
+  70% {
+    transform: perspective(600px) rotateX(3deg) scale(1.015);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(600px) rotateX(0deg) scale(1);
+  }
+}
+.semi-seq-item,
+.ch-card {
+  animation: semiPopIn 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Interactive 3D House Canvas in Module 03 */
+.house-3d-panel {
+  margin-top: 18px;
+}
+.house-3d-canvas-wrap {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #d5e3f5;
+  background: radial-gradient(circle at 50% 25%, #eff6ff, #dbeafe 70%, #c7dcfb);
+  touch-action: none;
+}
+.house-3d-canvas-wrap canvas {
+  display: block;
+  width: 100%;
+  height: 320px;
+  cursor: grab;
+}
+.house-3d-canvas-wrap canvas:active {
+  cursor: grabbing;
+}
+.house-3d-hint {
+  position: absolute;
+  left: 12px;
+  bottom: 10px;
+  background: rgba(16, 36, 61, 0.78);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 20px;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .semi-seq-item,
+  .ch-card,
+  .gh-cloud,
+  .gh-tree-sway,
+  .gh-tree-sway2,
+  .gh-bear-breathe,
+  .gh-stu-breathe,
+  .gh-blink,
+  .gh-firefly,
+  .gh-sunbeam {
+    animation: none !important;
+  }
+}
+
+/* 3D Pixar-Ghibli Forest Animation (60 FPS) */
+@keyframes ghCloudDrift {
+  0%, 100% { transform: translateX(0px); }
+  50% { transform: translateX(22px); }
+}
+@keyframes ghTreeSway {
+  0%, 100% { transform: rotate(-1.4deg); }
+  50% { transform: rotate(1.6deg); }
+}
+@keyframes ghBreathe {
+  0%, 100% { transform: scaleY(1) translateY(0); }
+  50% { transform: scaleY(1.028) translateY(-1.5px); }
+}
+@keyframes ghBlink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  96% { transform: scaleY(0.1); }
+}
+@keyframes ghFirefly {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.45; }
+  50% { transform: translate(8px, -12px) scale(1.35); opacity: 1; }
+}
+.gh-cloud {
+  animation: ghCloudDrift 11s ease-in-out infinite;
+}
+.gh-tree-sway {
+  animation: ghTreeSway 5.5s ease-in-out infinite;
+}
+.gh-tree-sway2 {
+  animation: ghTreeSway 6.5s ease-in-out infinite reverse;
+}
+.gh-bear-breathe {
+  animation: ghBreathe 3.2s ease-in-out infinite;
+}
+.gh-stu-breathe {
+  animation: ghBreathe 2.8s ease-in-out infinite 0.5s;
+}
+.gh-blink {
+  animation: ghBlink 4.2s ease-in-out infinite;
+}
+.gh-firefly.f1 { animation: ghFirefly 3.6s ease-in-out infinite; }
+.gh-firefly.f2 { animation: ghFirefly 4.2s ease-in-out infinite 0.8s; }
+.gh-firefly.f3 { animation: ghFirefly 3.8s ease-in-out infinite 1.4s; }
+.gh-firefly.f4 { animation: ghFirefly 4.5s ease-in-out infinite 2.1s; }
+
+@keyframes ghArmWave {
+  0%, 100% { transform: rotate(-10deg); }
+  50% { transform: rotate(12deg); }
+}
+@keyframes ghHeadBob {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(3deg); }
+}
+.gh-stu-1 { animation: ghBreathe 2.7s ease-in-out infinite 0.2s; }
+.gh-stu-2 { animation: ghBreathe 3.0s ease-in-out infinite 0.7s; }
+.gh-stu-3 { animation: ghBreathe 2.9s ease-in-out infinite 1.2s; }
+.gh-blink-1 { animation: ghBlink 3.9s ease-in-out infinite 0.4s; }
+.gh-blink-2 { animation: ghBlink 4.6s ease-in-out infinite 1.5s; }
+.gh-blink-3 { animation: ghBlink 4.1s ease-in-out infinite 2.3s; }
+.gh-arm-wave { animation: ghArmWave 2.4s ease-in-out infinite; }
+.gh-head-bob { animation: ghHeadBob 3.4s ease-in-out infinite; }
+
+/* 3D Pixar Books Showcase in Module 02 */
+.pixar-book-shelf {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0 8px;
+}
+.pixar-book-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  background: #ffffff;
+  border: 1px solid #d7e5f7;
+  border-radius: 12px;
+  padding: 8px 10px;
+  width: 96px;
+  box-shadow: 0 8px 18px rgba(30, 58, 138, 0.12);
+  animation: ghBreathe 3.2s ease-in-out infinite;
+  transition: transform 0.2s ease;
+}
+.pixar-book-card:hover {
+  transform: perspective(600px) rotateY(-12deg) translateY(-3px);
+}
+.pixar-book-svg {
+  width: 62px;
+  height: 78px;
+  filter: drop-shadow(0 6px 8px rgba(15, 23, 42, 0.22));
+}
+.pixar-book-card span {
+  font-size: 10px;
+  font-weight: 800;
+  color: #1e3a5f;
+  text-align: center;
+  line-height: 1.25;
+}
+
+/* Module 05: 3D Euclidean Tiling & Real-World Story */
+.gcd-story-box {
+  margin-top: 12px;
+  background: #f0f7ff;
+  border: 1px solid #cfe2fa;
+  border-left: 4px solid var(--blue);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e3a5f;
+}
+.gcd-3d-visual {
+  margin: 10px 0 14px;
+  background: #f8fbff;
+  border: 1px solid #dbe6f5;
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+.gcd-3d-visual:empty {
+  display: none;
+}
+.gcd-3d-visual svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Module 06: 3D Realistic Bicycle Decomposition Animation (60 FPS) */
+@keyframes bikeRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes bikeRoadSlide {
+  from { transform: translateX(0); }
+  to { transform: translateX(-160px); }
+}
+.bike-wheel-spin {
+  animation: bikeRotate 2.4s linear infinite;
+}
+.bike-drive-spin {
+  animation: bikeRotate 2.4s linear infinite;
+}
+.bike-road-move {
+  animation: bikeRoadSlide 1.2s linear infinite;
+}
+/* Module 07: 3D Flip Cards, Swap Deck & Split Race */
+.search-number,
+.search-bottle {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease;
+  transform-style: preserve-3d;
+}
+.search-number.is-done,
+.search-number.is-found {
+  animation: semiPopIn 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.16);
+}
+.race-deck-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.race-card-3d {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 6px;
+  border-radius: 12px;
+  border: 1px solid #d4e2f4;
+  background: linear-gradient(145deg, #ffffff, #eef5ff);
+  box-shadow: 0 5px 12px rgba(15, 23, 42, 0.08);
+  color: #1e3a5f;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.race-card-3d small {
+  font-size: 10px;
+  color: #7c90a8;
+  font-weight: 700;
+}
+.race-card-3d b {
+  font-size: 16px;
+  font-weight: 850;
+}
+.race-card-3d:hover {
+  transform: translateY(-3px);
+  border-color: var(--blue);
+}
+.race-card-3d.is-target {
+  border-color: #f59e0b;
+  background: linear-gradient(145deg, #fffbeb, #fef3c7);
+}
+.race-card-3d.swap-selected {
+  border-color: #ec4899;
+  background: #fdf2f8;
+  transform: scale(1.06);
+  box-shadow: 0 8px 18px rgba(236, 72, 153, 0.24);
+}
+.race-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.race-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.race-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.race-mini-card {
+  border: 1px solid #d7e3f3;
+  border-radius: 10px;
+  padding: 8px 4px;
+  text-align: center;
+  background: linear-gradient(145deg, #f8fbff, #e6effc);
+  color: #475569;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+  transform-style: preserve-3d;
+}
+.race-mini-card small {
+  display: block;
+  font-size: 9px;
+  color: #64748b;
+  font-weight: 700;
+}
+.race-mini-card span {
+  display: block;
+  font-size: 15px;
+  font-weight: 850;
+  margin-top: 2px;
+}
+.race-mini-card.flipped {
+  background: #fff;
+  border-color: #60a5fa;
+  color: #1e3a8a;
+  transform: perspective(500px) rotateY(360deg);
+}
+.race-mini-card.current {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.22);
+}
+.race-mini-card.found {
+  background: linear-gradient(145deg, #dcfce7, #bbf7d0);
+  border-color: #16a34a;
+  color: #14532d;
+}
+.race-mini-card.eliminated {
+  opacity: 0.35;
+  transform: scale(0.94);
+}
+@media (max-width: 860px) {
+  .race-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Module 08 & 09: 3D Watering Animation & 3D Glossy Flowchart Blocks */
+.v4-water-drop {
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  animation: ghBreathe 1.8s ease-in-out infinite;
+}
+.v4-water-drop.off {
+  animation: none;
+  opacity: 0.28;
+}
+.v4-flow-block,
+.v4-bank-item {
+  border-radius: 12px !important;
+  box-shadow: 0 5px 14px rgba(15, 23, 42, 0.08);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.v4-flow-block {
+  animation: semiPopIn 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.v4-bank-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.14);
+}
+.v4-sim-row.now {
+  transform: scale(1.02);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.18);
+  transition: all 0.25s ease;
+}

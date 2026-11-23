@@ -1,0 +1,1505 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CT-Lab v4.0 — ระบบตรวจงานสำหรับผู้สอน (Teacher Portal)</title>
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="submit.css">
+  <style>
+    .t-wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 28px 20px 60px;
+    }
+    .t-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .t-login-card {
+      max-width: 420px;
+      margin: 70px auto;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+    .t-filters {
+      display: grid;
+      grid-template-columns: 1.2fr 1.2fr 1.2fr 0.9fr 0.9fr auto auto;
+      gap: 10px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow);
+    }
+    .cat-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .cat-pill {
+      border: 1px solid #d7e2f0;
+      background: #fff;
+      color: #415c7a;
+      border-radius: 20px;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 750;
+      transition: 0.15s;
+    }
+    .cat-pill:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+    .cat-pill.active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+    }
+    .t-filters input,
+    .t-filters select {
+      border: 1px solid #dce5f0;
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-size: 13px;
+      background: #fff;
+      color: var(--ink);
+    }
+    .t-table-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      overflow-x: auto;
+    }
+    .gb-score {
+      display: inline-block;
+      min-width: 38px;
+      text-align: center;
+      padding: 3px 6px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .gb-pass {
+      background: #e5f9ef;
+      color: #147956;
+    }
+    .gb-warn {
+      background: #fff4e5;
+      color: #b45309;
+    }
+    .gb-none {
+      color: #94a3b8;
+      font-weight: 600;
+    }
+    .t-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+    .t-table th {
+      background: #eef4ff;
+      color: #365475;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 12px 14px;
+      border-bottom: 1px solid #d7e3f3;
+      white-space: nowrap;
+    }
+    .t-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid #eef2f7;
+      vertical-align: middle;
+    }
+    .t-table tr:hover td {
+      background: #f8fbff;
+    }
+    .t-pre {
+      background: #10243d;
+      color: #cce9ff;
+      border-radius: 10px;
+      padding: 12px;
+      font: 11px/1.6 ui-monospace, SFMono-Regular, Consolas, monospace;
+      max-height: 180px;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    @media (max-width: 860px) {
+      .t-filters {
+        grid-template-columns: 1fr;
+      }
+      .t-table-card {
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="t-wrap">
+    <div id="t-login-view" class="t-login-card" hidden>
+      <div class="eyebrow">TEACHER PORTAL</div>
+      <h2 style="margin:6px 0 8px">เข้าสู่ระบบตรวจงานผู้สอน</h2>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:16px">กรุณากรอกรหัสผ่านผู้ดูแลระบบ (Admin) เพื่อเข้าตรวจงานและจัดการคะแนน</p>
+      <form id="t-login-form">
+        <div class="submit-field" style="margin-bottom:12px">
+          <label for="t-pin">รหัสผ่านผู้สอน (Teacher PIN)</label>
+          <input type="password" id="t-pin" required placeholder="กรอกรหัสผ่าน">
+        </div>
+        <div id="t-login-fb" class="feedback" aria-live="polite"></div>
+        <button type="submit" class="btn btn-primary btn-block">เข้าสู่ระบบตรวจงาน</button>
+      </form>
+      <div style="margin-top:14px;text-align:center">
+        <a href="index.html" style="font-size:12px">← กลับหน้าห้องทดลอง CT-Lab</a>
+      </div>
+    </div>
+
+    <div id="t-dashboard-view" hidden>
+      <div class="t-header">
+        <div>
+          <div class="eyebrow">CT-LAB v4.0 • TEACHER GRADING &amp; AI PORTAL <span id="t-db-badge" class="ai-pill-badge" style="margin-left:6px">DB: checking...</span></div>
+          <h1 style="font-size:26px;margin:4px 0">ระบบฐานข้อมูลตรวจงานและรายงาน AI อัตโนมัติ</h1>
+        </div>
+        <div class="btn-row" style="flex-wrap:wrap">
+          <a href="index.html" class="btn btn-outline btn-small">← กลับหน้าหลัก</a>
+          <button type="button" class="btn btn-primary btn-small" id="t-ai-batch-btn">🤖 AI ตรวจงานอัตโนมัติทั้งหมด</button>
+          <button type="button" class="btn btn-outline btn-small" id="t-ai-cfg-btn">⚙️ ตั้งค่า AI</button>
+          <a href="api/admin.php?action=export" class="btn btn-outline btn-small">↓ Export CSV (Excel)</a>
+          <button type="button" class="btn btn-outline btn-small" id="t-github-btn">☁️ Backup ขึ้น GitHub</button>
+          <button type="button" class="btn btn-quiet btn-small" id="t-logout-btn">ออกจากระบบ</button>
+        </div>
+      </div>
+
+      <div class="metric-grid" style="margin-top:0">
+        <div class="metric"><strong id="kpi-students">0</strong><span>นักศึกษาในระบบ (คน)</span></div>
+        <div class="metric"><strong id="kpi-total">0</strong><span>งานที่ส่งทั้งหมด (ครั้ง)</span></div>
+        <div class="metric"><strong id="kpi-pending">0</strong><span>รอตรวจ (รายการ)</span></div>
+        <div class="metric"><strong id="kpi-avg">0</strong><span>คะแนนเฉลี่ยรวม</span></div>
+      </div>
+
+      <div class="submit-tabs" style="max-width:100%;flex-wrap:wrap;margin:0 0 16px">
+        <button type="button" class="active" data-t-tab="submissions">📥 รายการส่งงาน</button>
+        <button type="button" data-t-tab="roster">👥 เช็คชื่อนักศึกษา (รายชื่อในทะเบียน)</button>
+        <button type="button" data-t-tab="gradebook">📊 ตารางคะแนนรวม (Gradebook 10 โมดูล)</button>
+        <button type="button" data-t-tab="aireport">🤖 รายงานวิเคราะห์ด้วย AI (AI Auto-Report)</button>
+        <button type="button" data-t-tab="answers">📖 เฉลยกิจกรรม 10 (เฉพาะอาจารย์)</button>
+      </div>
+
+      <div id="t-pane-submissions">
+        <div class="cat-pills" id="cat-pills">
+          <button type="button" class="cat-pill active" data-cat="">ทั้งหมด</button>
+          <button type="button" class="cat-pill" data-cat="all">📌 ภาพรวมทั้งหมด</button>
+          <button type="button" class="cat-pill" data-cat="cat:thinking">🧠 แนวคิดเชิงคำนวณ &amp; ย่อยปัญหา (01–04, 06)</button>
+          <button type="button" class="cat-pill" data-cat="cat:algorithms">⚙️ ขั้นตอนวิธี การค้นหา &amp; ผังงาน (05, 07–09)</button>
+          <button type="button" class="cat-pill" data-cat="cat:assessment">🖼️ แบบฝึกหัดภาพประกอบ (10)</button>
+        </div>
+
+        <div class="t-filters">
+          <input type="text" id="f-q" placeholder="ค้นหารหัสหรือชื่อ...">
+          <select id="f-student">
+            <option value="">นักศึกษาทุกคน (เลือกรหัส)</option>
+          </select>
+          <select id="f-module">
+            <option value="">ทุกกิจกรรม / หมวดหมู่</option>
+            <optgroup label="ภาพรวม">
+              <option value="all">ภาพรวมทั้งหมด (9-10 กิจกรรม)</option>
+            </optgroup>
+            <optgroup label="หมวดที่ 1: แนวคิดเชิงคำนวณ &amp; ย่อยปัญหา">
+              <option value="cat:thinking">รวมหมวดที่ 1 ทั้งหมด</option>
+              <option value="survival">01 สถานการณ์ชวนคิด</option>
+              <option value="books">02 แนะนำหนังสือ</option>
+              <option value="house">03 บ้านตามพิกัด</option>
+              <option value="routes">04 ไปให้ครบทุกที่</option>
+              <option value="decomposition">06 การย่อยปัญหา</option>
+            </optgroup>
+            <optgroup label="หมวดที่ 2: ขั้นตอนวิธี การค้นหา &amp; ผังงาน">
+              <option value="cat:algorithms">รวมหมวดที่ 2 ทั้งหมด</option>
+              <option value="gcd">05 หา ห.ร.ม.</option>
+              <option value="searching">07 การค้นหาข้อมูล</option>
+              <option value="algorithms">08 ออกแบบขั้นตอนวิธี</option>
+              <option value="flowcharts">09 เกมเรียงผังงาน</option>
+            </optgroup>
+            <optgroup label="หมวดที่ 3: แบบทดสอบประเมินผล">
+              <option value="challenge10">10 แบบฝึกหัดภาพประกอบ</option>
+            </optgroup>
+          </select>
+          <select id="f-section">
+            <option value="">ทุกกลุ่มเรียน</option>
+          </select>
+          <select id="f-status">
+            <option value="">ทุกสถานะ</option>
+            <option value="submitted">รออาจารย์ตรวจ</option>
+            <option value="graded">ตรวจแล้ว</option>
+            <option value="resubmit">ส่งแก้ไข</option>
+          </select>
+          <button type="button" class="btn btn-primary btn-small" id="f-apply">กรอง</button>
+          <button type="button" class="btn btn-outline btn-small" id="f-refresh">↻ รีเฟรช</button>
+        </div>
+
+        <div class="t-table-card">
+          <table class="t-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>รหัสนักศึกษา</th>
+                <th>ชื่อ-นามสกุล</th>
+                <th>กลุ่ม</th>
+                <th>ขอบเขตงาน</th>
+                <th>ผ่านกิจกรรม</th>
+                <th>คะแนนระบบ</th>
+                <th>คะแนน AI</th>
+                <th>คะแนนอาจารย์</th>
+                <th>สถานะ</th>
+                <th>เวลาส่ง</th>
+                <th>จัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="t-tbody">
+              <tr><td colspan="12" class="muted-cell">กำลังโหลดข้อมูล...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="t-pane-roster" hidden>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+          <span style="font-size:13px;color:var(--muted)">เพิ่ม แก้ไข หรือลบรายชื่อนักศึกษาในระบบ (ส่งผลต่อรายการเลือกในหน้าส่งงานทันที)</span>
+          <button type="button" class="btn btn-primary btn-small" id="btn-add-student">➕ เพิ่มนักศึกษา</button>
+        </div>
+        <div class="t-table-card">
+          <table class="t-table">
+            <thead>
+              <tr>
+                <th>ลำดับ</th>
+                <th>รหัสนักศึกษา</th>
+                <th>ชื่อ-นามสกุล</th>
+                <th>รุ่น/กลุ่ม</th>
+                <th>จำนวนครั้งที่ส่ง</th>
+                <th>ผ่านล่าสุด</th>
+                <th>คะแนนล่าสุด</th>
+                <th>สถานะล่าสุด</th>
+                <th>ส่งล่าสุดเมื่อ</th>
+                <th>จัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="t-roster-tbody">
+              <tr><td colspan="10" class="muted-cell">กำลังโหลดรายชื่อ...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="t-pane-gradebook" hidden>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+          <div class="btn-row">
+            <select id="gb-section" class="select" style="width:auto;min-height:36px;padding:6px 12px;font-size:13px">
+              <option value="">ทุกกลุ่มเรียน (Section)</option>
+            </select>
+            <button type="button" class="btn btn-outline btn-small" id="gb-refresh">↻ รีเฟรช</button>
+          </div>
+          <a href="api/admin.php?action=export_gradebook" id="gb-export-link" class="btn btn-primary btn-small">↓ Export Gradebook CSV (Excel)</a>
+        </div>
+        <div class="t-table-card">
+          <table class="t-table" style="font-size:12px">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>รหัสนักศึกษา</th>
+                <th>ชื่อ-นามสกุล</th>
+                <th>กลุ่ม</th>
+                <th title="01 สถานการณ์ชวนคิด">01</th>
+                <th title="02 แนะนำหนังสือ">02</th>
+                <th title="03 บ้านตามพิกัด">03</th>
+                <th title="04 ไปให้ครบทุกที่">04</th>
+                <th title="05 หา ห.ร.ม.">05</th>
+                <th title="06 การย่อยปัญหา">06</th>
+                <th title="07 การค้นหาข้อมูล">07</th>
+                <th title="08 ออกแบบขั้นตอนวิธี">08</th>
+                <th title="09 เกมเรียงผังงาน">09</th>
+                <th title="10 แบบฝึกหัดภาพประกอบ">10</th>
+                <th>ครบ</th>
+                <th>รวม (1000)</th>
+                <th>เฉลี่ย (%)</th>
+              </tr>
+            </thead>
+            <tbody id="t-gb-tbody">
+              <tr><td colspan="17" class="muted-cell">กำลังโหลดตารางคะแนนรวม...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="t-pane-aireport" hidden>
+        <div id="air-toolbar" style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+          <div class="btn-row" style="flex-wrap:wrap">
+            <select id="air-section" class="select" style="width:auto;min-height:36px;padding:6px 12px;font-size:13px">
+              <option value="">ทุกกลุ่มเรียน (ภาพรวมทั้งหมด)</option>
+            </select>
+            <button type="button" class="btn btn-primary btn-small" id="air-generate-btn">🔄 สร้าง/อัปเดตรายงาน AI อัตโนมัติ</button>
+            <button type="button" class="btn btn-outline btn-small" id="air-demo-seed-btn">🧪 จำลองข้อมูลส่งงานเพื่อทดสอบระบบ</button>
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn btn-outline btn-small" id="air-print-btn">🖨️ พิมพ์รายงาน / บันทึก PDF</button>
+          </div>
+        </div>
+        <div id="air-fb" class="feedback" aria-live="polite" style="margin-bottom:10px"></div>
+        <div id="air-content">
+          <div class="empty-state">กำลังประมวลผลรายงานวิเคราะห์ด้วย AI...</div>
+        </div>
+      </div>
+
+      <div id="t-pane-answers" hidden>
+        <div id="t-answers-list" class="history-list" style="max-height:none">
+          <div class="empty-state">กำลังโหลดเฉลยสำหรับอาจารย์...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <dialog id="grade-dialog" class="teacher-dialog submit-dialog">
+    <div class="dialog-head">
+      <div>
+        <div class="eyebrow">GRADE SUBMISSION</div>
+        <h2 id="g-title">ตรวจงานนักศึกษา</h2>
+      </div>
+      <button type="button" class="icon-btn" id="g-close" aria-label="ปิด">✕</button>
+    </div>
+    <div id="g-meta" style="font-size:12px;color:#5d728c;margin:10px 0"></div>
+    <div class="submit-summary-box">
+      <div class="submit-summary-head">
+        <span>กิจกรรมที่นักศึกษาทำผ่าน</span>
+        <span id="g-comp-text"></span>
+      </div>
+      <div class="submit-module-pills" id="g-pills"></div>
+    </div>
+    <div id="g-student-note" style="font-size:12px;margin-bottom:10px"></div>
+    <div id="g-ai-box" style="margin-bottom:12px"></div>
+    <div style="margin-bottom:12px;display:flex;justify-content:flex-end">
+      <button type="button" class="btn btn-outline btn-small" id="g-ai-regrade-btn">🤖 ให้ AI วิเคราะห์และให้คะแนนใหม่</button>
+    </div>
+    <details style="margin-bottom:12px">
+      <summary style="cursor:pointer;font-size:12px;font-weight:750;color:#3b5d85">ดูข้อมูล JSON Snapshot ที่ส่งมา</summary>
+      <pre class="t-pre" id="g-json"></pre>
+    </details>
+    <form id="g-form">
+      <input type="hidden" id="g-id">
+      <div class="submit-grid" style="grid-template-columns:1fr 1fr">
+        <div class="submit-field">
+          <label for="g-score">คะแนนอาจารย์ (0 - 100)</label>
+          <input type="number" id="g-score" min="0" max="100" step="0.5" placeholder="เช่น 95">
+        </div>
+        <div class="submit-field">
+          <label for="g-status">สถานะการตรวจ</label>
+          <select id="g-status">
+            <option value="graded">ตรวจแล้ว (Graded)</option>
+            <option value="resubmit">ให้ส่งแก้ไข (Resubmit)</option>
+            <option value="submitted">รอตรวจ (Submitted)</option>
+          </select>
+        </div>
+      </div>
+      <div class="submit-field" style="margin-bottom:10px">
+        <label for="g-feedback">ข้อเสนอแนะถึงนักศึกษา (Feedback)</label>
+        <textarea id="g-feedback" rows="3" placeholder="เขียนคำชมหรือจุดที่ควรปรับปรุง..."></textarea>
+      </div>
+      <div id="g-fb" class="feedback" aria-live="polite"></div>
+      <button type="submit" class="btn btn-primary btn-block" id="g-save-btn">💾 บันทึกผลการตรวจ</button>
+    </form>
+  </dialog>
+
+  <dialog id="student-dialog" class="teacher-dialog submit-dialog">
+    <div class="dialog-head">
+      <div>
+        <div class="eyebrow">STUDENT MANAGEMENT</div>
+        <h2 id="st-modal-title">เพิ่มนักศึกษาใหม่</h2>
+      </div>
+      <button type="button" class="icon-btn" id="st-close" aria-label="ปิด">✕</button>
+    </div>
+    <form id="st-form" style="margin-top:14px">
+      <input type="hidden" id="st-orig-id">
+      <div class="submit-field" style="margin-bottom:10px">
+        <label for="st-id">รหัสนักศึกษา *</label>
+        <input type="text" id="st-id" required maxlength="32" placeholder="เช่น 6614611030">
+      </div>
+      <div class="submit-field" style="margin-bottom:10px">
+        <label for="st-name">ชื่อ-นามสกุล *</label>
+        <input type="text" id="st-name" required maxlength="120" placeholder="เช่น นางสาวสมหญิง ใจดี">
+      </div>
+      <div class="submit-field" style="margin-bottom:12px">
+        <label for="st-section">สาขา / กลุ่มเรียน *</label>
+        <input type="text" id="st-section" required maxlength="40" placeholder="เช่น 661/วิทย์ หรือ 661/ฟิสิกส์">
+      </div>
+      <div id="st-fb" class="feedback" aria-live="polite"></div>
+      <button type="submit" class="btn btn-primary btn-block" id="st-save-btn">💾 บันทึกข้อมูลนักศึกษา</button>
+    </form>
+  </dialog>
+
+  <dialog id="github-dialog" class="teacher-dialog submit-dialog">
+    <div class="dialog-head">
+      <div>
+        <div class="eyebrow">GITHUB BACKUP</div>
+        <h2>☁️ Backup ข้อมูลขึ้น GitHub ส่วนตัว</h2>
+      </div>
+      <button type="button" class="icon-btn" id="gh-close" aria-label="ปิด">✕</button>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin:10px 0 14px">สำรองข้อมูลนักศึกษาและรายการส่งงานทั้งหมด (JSON + CSV) ไปยัง Private Repository ของอาจารย์</p>
+    <form id="gh-form">
+      <div class="submit-field" style="margin-bottom:10px">
+        <label for="gh-repo">GitHub Repository (username/repo-name) *</label>
+        <input type="text" id="gh-repo" required placeholder="เช่น chewa-rbru/ct-lab-backups">
+      </div>
+      <div class="submit-grid" style="grid-template-columns:1fr 1fr">
+        <div class="submit-field">
+          <label for="gh-branch">Branch</label>
+          <input type="text" id="gh-branch" value="main" placeholder="main">
+        </div>
+        <div class="submit-field">
+          <label for="gh-folder">โฟลเดอร์ปลายทาง</label>
+          <input type="text" id="gh-folder" value="backups" placeholder="backups">
+        </div>
+      </div>
+      <div class="submit-field" style="margin-bottom:12px">
+        <label for="gh-token">GitHub Personal Access Token (สิทธิ์ Contents: Read &amp; Write)</label>
+        <input type="password" id="gh-token" placeholder="ghp_... (เว้นว่างได้หากเคยบันทึกไว้แล้ว)">
+      </div>
+      <div id="gh-fb" class="feedback" aria-live="polite"></div>
+      <div class="btn-row" style="margin-top:10px">
+        <button type="submit" class="btn btn-outline" style="flex:1" id="gh-save-btn">💾 บันทึกการตั้งค่า</button>
+        <button type="button" class="btn btn-primary" style="flex:1.4" id="gh-run-btn">☁️ Backup ข้อมูลขึ้น GitHub ทันที</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="ai-config-dialog" class="teacher-dialog submit-dialog">
+    <div class="dialog-head">
+      <div>
+        <div class="eyebrow">AI AUTO-GRADING SETTINGS</div>
+        <h2>⚙️ ตั้งค่าระบบ AI ตรวจงานและรายงานอัตโนมัติ</h2>
+      </div>
+      <button type="button" class="icon-btn" id="aic-close" aria-label="ปิด">✕</button>
+    </div>
+    <form id="aic-form" style="margin-top:12px">
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px">
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;cursor:pointer">
+          <input type="checkbox" id="aic-auto-submit" checked>
+          <span>ตรวจงานด้วย AI Rubric ทันทีเมื่อนักศึกษากดส่งงาน</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;cursor:pointer">
+          <input type="checkbox" id="aic-auto-approve" checked>
+          <span>อนุมัติคะแนน AI ลงช่องคะแนนอาจารย์และเปลี่ยนสถานะเป็น "ตรวจแล้ว" อัตโนมัติ</span>
+        </label>
+      </div>
+      <div class="submit-grid submit-grid-2">
+        <div class="submit-field">
+          <label for="aic-threshold">เกณฑ์คะแนนขั้นต่ำที่ให้ส่งแก้ไขอัตโนมัติ (0 = ปิด)</label>
+          <input type="number" id="aic-threshold" min="0" max="100" step="1" value="0">
+        </div>
+        <div class="submit-field">
+          <label for="aic-provider">เอนจิน AI ที่ใช้ตรวจงาน</label>
+          <select id="aic-provider">
+            <option value="hybrid_local">CT-Lab Hybrid AI v4.0 (ออฟไลน์ในตัว ไม่ต้องต่อเน็ต)</option>
+            <option value="gemini">Hybrid + เสริมคำแนะนำด้วย Gemini API</option>
+            <option value="ollama">Hybrid + เสริมคำแนะนำด้วย Local Ollama</option>
+          </select>
+        </div>
+      </div>
+      <div id="aic-gemini-box" style="display:none;margin-bottom:10px">
+        <div class="submit-grid submit-grid-2">
+          <div class="submit-field">
+            <label for="aic-gemini-key">Gemini API Key</label>
+            <input type="password" id="aic-gemini-key" placeholder="AIza... (เว้นว่างหากบันทึกไว้แล้ว)">
+          </div>
+          <div class="submit-field">
+            <label for="aic-gemini-model">Gemini Model</label>
+            <input type="text" id="aic-gemini-model" value="gemini-2.5-flash">
+          </div>
+        </div>
+      </div>
+      <div id="aic-ollama-box" style="display:none;margin-bottom:10px">
+        <div class="submit-grid submit-grid-2">
+          <div class="submit-field">
+            <label for="aic-ollama-url">Ollama Base URL</label>
+            <input type="text" id="aic-ollama-url" value="http://127.0.0.1:11434">
+          </div>
+          <div class="submit-field">
+            <label for="aic-ollama-model">Ollama Model</label>
+            <input type="text" id="aic-ollama-model" value="llama3.2">
+          </div>
+        </div>
+      </div>
+      <div id="aic-fb" class="feedback" aria-live="polite"></div>
+      <button type="submit" class="btn btn-primary btn-block" id="aic-save-btn">💾 บันทึกการตั้งค่า AI</button>
+    </form>
+  </dialog>
+
+  <script>
+    const MODULES = {
+      survival: '01 สถานการณ์ชวนคิด',
+      books: '02 แนะนำหนังสือ',
+      house: '03 บ้านตามพิกัด',
+      routes: '04 ไปให้ครบทุกที่',
+      gcd: '05 หา ห.ร.ม.',
+      decomposition: '06 การย่อยปัญหา',
+      searching: '07 การค้นหาข้อมูล',
+      algorithms: '08 ขั้นตอนวิธี',
+      flowcharts: '09 ผังงาน',
+      challenge: '10 แบบฝึกหัดภาพประกอบ',
+      challenge10: '10 แบบฝึกหัดภาพประกอบ'
+    };
+
+    const $id = (id) => document.getElementById(id);
+    let currentRows = [];
+
+    function esc(s) {
+      return String(s ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function badgeHtml(st) {
+      if (st === 'graded') return '<span class="badge badge-graded">ตรวจแล้ว</span>';
+      if (st === 'resubmit') return '<span class="badge badge-resubmit">ส่งแก้ไข</span>';
+      return '<span class="badge badge-submitted">รอตรวจ</span>';
+    }
+
+    function renderTeacherAiBox(aiScore, aiRubricRaw, aiFeedback, aiModel) {
+      if (aiScore === null || aiScore === undefined) {
+        return '<div class="empty-state" style="padding:12px">งานนี้ยังไม่ได้วิเคราะห์ด้วย AI — กดปุ่ม "🤖 ให้ AI วิเคราะห์และให้คะแนนใหม่" ด้านล่างได้ทันที</div>';
+      }
+      let rub = aiRubricRaw;
+      if (typeof rub === 'string') {
+        try { rub = JSON.parse(rub); } catch { rub = null; }
+      }
+      const num = Number(aiScore);
+      const tierCls = num >= 80 ? 'score-high' : (num >= 50 ? 'score-mid' : 'score-low');
+      let barsHtml = '';
+      if (rub && typeof rub.simulation === 'number' && typeof rub.sequencing === 'number' && typeof rub.subjective === 'number') {
+        const simPct = Math.min(100, Math.round((rub.simulation / 40) * 100));
+        const seqPct = Math.min(100, Math.round((rub.sequencing / 35) * 100));
+        const subjPct = Math.min(100, Math.round((rub.subjective / 25) * 100));
+        barsHtml = `
+          <div class="ai-rubric-bars">
+            <div class="ai-bar-row">
+              <div class="ai-bar-label"><span>ห้องจำลอง</span><span>${rub.simulation}/40</span></div>
+              <div class="ai-bar-track"><div class="ai-bar-fill" style="width:${simPct}%"></div></div>
+            </div>
+            <div class="ai-bar-row">
+              <div class="ai-bar-label"><span>จัดลำดับบล็อก</span><span>${rub.sequencing}/35</span></div>
+              <div class="ai-bar-track"><div class="ai-bar-fill" style="width:${seqPct}%"></div></div>
+            </div>
+            <div class="ai-bar-row">
+              <div class="ai-bar-label"><span>เหตุผลอัตนัย</span><span>${rub.subjective}/25</span></div>
+              <div class="ai-bar-track"><div class="ai-bar-fill" style="width:${subjPct}%"></div></div>
+            </div>
+          </div>
+        `;
+      }
+      return `
+        <div class="ai-eval-card">
+          <div class="ai-eval-head">
+            <div class="ai-eval-title">🤖 ผลการวิเคราะห์ของ AI ${aiModel ? `<span class="ai-pill-badge">${esc(aiModel)}</span>` : ''}</div>
+            <span class="ai-pill-badge ${tierCls}">คะแนน AI: ${num.toFixed(1)}%</span>
+          </div>
+          ${barsHtml}
+          ${aiFeedback ? `<pre class="ai-feedback-pre">${esc(aiFeedback)}</pre>` : ''}
+        </div>
+      `;
+    }
+
+    async function checkAuth() {
+      try {
+        const res = await fetch('api/admin.php?action=check');
+        const data = await res.json();
+        if (data.authenticated) {
+          $id('t-login-view').hidden = true;
+          $id('t-dashboard-view').hidden = false;
+          loadSubmissions();
+        } else {
+          $id('t-login-view').hidden = false;
+          $id('t-dashboard-view').hidden = true;
+        }
+      } catch {
+        $id('t-login-view').hidden = false;
+        $id('t-login-fb').className = 'feedback bad';
+        $id('t-login-fb').textContent = 'ไม่สามารถเชื่อมต่อ api/admin.php ได้ กรุณาเปิดผ่าน XAMPP (http://localhost/CT_Lab_v4_Web/teacher.html)';
+      }
+    }
+
+    async function loadSubmissions() {
+      const q = $id('f-q').value.trim();
+      const sec = $id('f-section').value;
+      const st = $id('f-status').value;
+      const mod = $id('f-module').value;
+      const stu = $id('f-student').value;
+      const params = new URLSearchParams({ action: 'list', q, section: sec, status: st, module_id: mod, student_id: stu });
+
+      const res = await fetch('api/admin.php?' + params.toString());
+      if (res.status === 401) {
+        $id('t-login-view').hidden = false;
+        $id('t-dashboard-view').hidden = true;
+        return;
+      }
+      const data = await res.json();
+      if (!data.ok) return;
+
+      const kpi = data.kpi || {};
+      $id('kpi-students').textContent = kpi.total_students ?? 0;
+      $id('kpi-total').textContent = kpi.total_submissions ?? 0;
+      $id('kpi-pending').textContent = kpi.pending_count ?? 0;
+      $id('kpi-avg').textContent = kpi.avg_score ?? 0;
+      const dbBadge = $id('t-db-badge');
+      if (dbBadge && data.db_engine) {
+        dbBadge.textContent = 'DB: ' + String(data.db_engine).toUpperCase();
+      }
+
+      // Update section dropdown preserving selection
+      const secSel = $id('f-section');
+      const prevSec = secSel.value;
+      secSel.innerHTML = '<option value="">ทุกกลุ่มเรียน</option>';
+      (data.sections || []).forEach((s) => {
+        const opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = s;
+        secSel.appendChild(opt);
+      });
+      secSel.value = prevSec;
+
+      // Update student dropdown preserving selection
+      const stuSel = $id('f-student');
+      const prevStu = stuSel.value;
+      stuSel.innerHTML = '<option value="">นักศึกษาทุกคน (เลือกรหัส)</option>';
+      (data.students || []).forEach((s) => {
+        const opt = document.createElement('option');
+        opt.value = s.student_id;
+        opt.textContent = `${s.student_id} — ${s.full_name}`;
+        stuSel.appendChild(opt);
+      });
+      stuSel.value = prevStu;
+
+      currentRows = data.submissions || [];
+      const tbody = $id('t-tbody');
+      if (currentRows.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="12" class="muted-cell">ไม่พบรายการส่งงาน</td></tr>';
+        return;
+      }
+
+      tbody.replaceChildren();
+      currentRows.forEach((row) => {
+        const tr = document.createElement('tr');
+        const modText = row.module_id === 'all' ? 'ทั้งหมด (9)' : (MODULES[row.module_id] || row.module_id);
+        const aiText = row.ai_score !== null && row.ai_score !== undefined
+          ? `<span class="gb-score ${Number(row.ai_score) >= 50 ? 'gb-pass' : 'gb-warn'}">${row.ai_score}</span>`
+          : '<span class="gb-score gb-none">—</span>';
+        tr.innerHTML = `
+          <td>#${row.id}</td>
+          <td><b>${esc(row.student_id)}</b></td>
+          <td>${esc(row.full_name)}</td>
+          <td>${esc(row.section || '—')}</td>
+          <td>${esc(modText)}</td>
+          <td>${row.completed_count}/${row.total_modules}</td>
+          <td>${row.auto_score}</td>
+          <td>${aiText}</td>
+          <td><b>${row.teacher_score !== null ? row.teacher_score : '—'}</b></td>
+          <td>${badgeHtml(row.status)}</td>
+          <td style="white-space:nowrap">${esc(row.submitted_at)}</td>
+          <td style="white-space:nowrap">
+            <div class="btn-row">
+              <button type="button" class="btn btn-small btn-outline" data-grade-id="${row.id}">ตรวจ/แก้ไข</button>
+              <button type="button" class="btn btn-small btn-quiet" style="color:#c53030" data-del-sub="${row.id}">ลบ</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      tbody.querySelectorAll('[data-grade-id]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const id = Number(btn.getAttribute('data-grade-id'));
+          const row = currentRows.find((r) => Number(r.id) === id);
+          if (row) openGradeModal(row);
+        });
+      });
+
+      tbody.querySelectorAll('[data-del-sub]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const id = Number(btn.getAttribute('data-del-sub'));
+          if (!window.confirm(`ต้องการลบรายการส่งงาน #${id} ใช่หรือไม่?`)) return;
+          const res = await fetch('api/admin.php?action=submission_delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id })
+          });
+          const data = await res.json();
+          if (data.ok) loadSubmissions();
+          else alert(data.error || 'ลบไม่สำเร็จ');
+        });
+      });
+    }
+
+    function openGradeModal(row) {
+      $id('g-id').value = row.id;
+      $id('g-title').textContent = `ตรวจงาน #${row.id} · ${row.full_name}`;
+      $id('g-meta').innerHTML = `รหัสนักศึกษา: <b>${esc(row.student_id)}</b> · กลุ่มเรียน: <b>${esc(row.section || '—')}</b> · ส่งเมื่อ: ${esc(row.submitted_at)}`;
+      $id('g-comp-text').textContent = `ผ่าน ${row.completed_count}/${row.total_modules} (คะแนนระบบ ${row.auto_score}%)`;
+
+      let payload = {};
+      try { payload = JSON.parse(row.payload_json || '{}'); } catch {}
+      const completed = payload.completed || {};
+      const attempts = payload.attempts || {};
+
+      const pillsEl = $id('g-pills');
+      pillsEl.replaceChildren();
+      Object.keys(MODULES).forEach((k) => {
+        const span = document.createElement('span');
+        const ok = !!completed[k];
+        const att = attempts[k] ? ` (${attempts[k]} ครั้ง)` : '';
+        span.className = 'submit-pill' + (ok ? ' done' : '');
+        span.textContent = (ok ? '✓ ' : '') + MODULES[k] + att;
+        pillsEl.appendChild(span);
+      });
+
+      let noteHtml = row.student_note
+        ? `<div class="history-feedback"><b>บันทึก / คำตอบอัตนัยจากนักศึกษา:</b><br>${esc(row.student_note).replace(/\n/g, '<br>')}</div>`
+        : '<span style="color:#8a9bb0">นักศึกษาไม่ได้ระบุบันทึกเพิ่มเติม</span>';
+
+      const semiMap = (payload.snapshot && payload.snapshot.semi_answers) ? payload.snapshot.semi_answers : {};
+      const semiKeys = Object.keys(semiMap).filter((k) => {
+        const entry = semiMap[k];
+        return entry && ((Array.isArray(entry.seq) && entry.seq.length > 0) || String(entry.note || '').trim() !== '');
+      });
+      if (semiKeys.length > 0) {
+        noteHtml += '<div style="margin-top:8px;display:flex;flex-direction:column;gap:8px">';
+        semiKeys.forEach((k) => {
+          const entry = semiMap[k];
+          const seqList = Array.isArray(entry.seq) && entry.seq.length > 0
+            ? '<ol style="margin:4px 0 6px;padding-left:20px">' + entry.seq.map((s) => `<li>${esc(s)}</li>`).join('') + '</ol>'
+            : '<div><i>(ยังไม่ได้จัดลำดับบล็อก)</i></div>';
+          const noteTxt = String(entry.note || '').trim()
+            ? `<div><b>เหตุผลอัตนัย:</b> ${esc(entry.note).replace(/\n/g, '<br>')}</div>`
+            : '';
+          noteHtml += `<div class="history-feedback" style="border-left-color:#d97706;background:#fffbf2"><b>กึ่งจัดบล็อก + อัตนัย (${esc(MODULES[k] || k)}):</b>${seqList}${noteTxt}</div>`;
+        });
+        noteHtml += '</div>';
+      }
+
+      const subjMap = (payload.snapshot && payload.snapshot.subjective_answers) ? payload.snapshot.subjective_answers : {};
+      const subjKeys = Object.keys(subjMap).filter((k) => String(subjMap[k] || '').trim() !== '');
+      if (subjKeys.length > 0) {
+        noteHtml += '<div style="margin-top:8px;display:flex;flex-direction:column;gap:6px">';
+        subjKeys.forEach((k) => {
+          noteHtml += `<div class="history-feedback" style="border-left-color:#d97706;background:#fffbf2"><b>คำตอบอัตนัย (${esc(MODULES[k] || k)}):</b><br>${esc(subjMap[k]).replace(/\n/g, '<br>')}</div>`;
+        });
+        noteHtml += '</div>';
+      }
+      $id('g-student-note').innerHTML = noteHtml;
+      $id('g-ai-box').innerHTML = renderTeacherAiBox(row.ai_score, row.ai_rubric_json, row.ai_feedback, row.ai_model);
+
+      $id('g-json').textContent = JSON.stringify(payload, null, 2);
+      const fallbackScore = row.ai_score !== null && row.ai_score !== undefined ? row.ai_score : row.auto_score;
+      $id('g-score').value = row.teacher_score !== null ? row.teacher_score : fallbackScore;
+      $id('g-status').value = row.status === 'submitted' ? 'graded' : row.status;
+      $id('g-feedback').value = row.teacher_feedback || row.ai_feedback || '';
+      $id('g-fb').textContent = '';
+      $id('g-fb').className = 'feedback';
+      $id('grade-dialog').showModal();
+    }
+
+    $id('t-login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const pin = $id('t-pin').value.trim();
+      const res = await fetch('api/admin.php?action=login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        $id('t-login-fb').className = 'feedback bad';
+        $id('t-login-fb').textContent = data.error || 'เข้าสู่ระบบไม่สำเร็จ';
+        return;
+      }
+      $id('t-login-fb').textContent = '';
+      checkAuth();
+    });
+
+    $id('t-logout-btn').addEventListener('click', async () => {
+      await fetch('api/admin.php?action=logout', { method: 'POST' });
+      checkAuth();
+    });
+
+    $id('f-apply').addEventListener('click', loadSubmissions);
+    $id('f-refresh').addEventListener('click', loadSubmissions);
+    ['f-student', 'f-module', 'f-section', 'f-status'].forEach((id) => {
+      $id(id).addEventListener('change', () => {
+        if (id === 'f-module') {
+          const val = $id('f-module').value;
+          document.querySelectorAll('#cat-pills .cat-pill').forEach((p) => {
+            p.classList.toggle('active', p.getAttribute('data-cat') === val);
+          });
+        }
+        loadSubmissions();
+      });
+    });
+
+    document.querySelectorAll('#cat-pills .cat-pill').forEach((pill) => {
+      pill.addEventListener('click', () => {
+        const cat = pill.getAttribute('data-cat');
+        document.querySelectorAll('#cat-pills .cat-pill').forEach((p) => p.classList.toggle('active', p === pill));
+        $id('f-module').value = cat;
+        loadSubmissions();
+      });
+    });
+
+    let currentRoster = [];
+
+    async function loadRoster() {
+      const tbody = $id('t-roster-tbody');
+      tbody.innerHTML = '<tr><td colspan="10" class="muted-cell">กำลังโหลดรายชื่อ...</td></tr>';
+      const res = await fetch('api/admin.php?action=roster');
+      const data = await res.json();
+      if (!data.ok || !data.roster) return;
+      currentRoster = data.roster;
+      tbody.replaceChildren();
+      currentRoster.forEach((r, idx) => {
+        const tr = document.createElement('tr');
+        const stBadge = r.submit_count > 0
+          ? badgeHtml(r.latest_status)
+          : '<span class="badge" style="background:#f1f4f8;color:#7a8ca3">ยังไม่ส่งงาน</span>';
+        tr.innerHTML = `
+          <td>${idx + 1}</td>
+          <td><b>${esc(r.student_id)}</b></td>
+          <td>${esc(r.full_name)}</td>
+          <td>${esc(r.section)}</td>
+          <td>${r.submit_count}</td>
+          <td>${r.latest_completed !== null ? r.latest_completed + '/9' : '—'}</td>
+          <td><b>${r.latest_score !== null ? r.latest_score : '—'}</b></td>
+          <td>${stBadge}</td>
+          <td style="white-space:nowrap">${esc(r.last_submitted_at || '—')}</td>
+          <td style="white-space:nowrap">
+            <div class="btn-row">
+              <button type="button" class="btn btn-small btn-primary" data-view-sub="${esc(r.student_id)}">ดูงานที่ส่ง</button>
+              <button type="button" class="btn btn-small btn-outline" data-edit-st="${esc(r.student_id)}">แก้ไข</button>
+              <button type="button" class="btn btn-small btn-quiet" style="color:#c53030" data-del-st="${esc(r.student_id)}">ลบ</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      tbody.querySelectorAll('[data-view-sub]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const sid = btn.getAttribute('data-view-sub');
+          $id('f-student').value = sid;
+          document.querySelectorAll('[data-t-tab]').forEach((b) => {
+            b.classList.toggle('active', b.getAttribute('data-t-tab') === 'submissions');
+          });
+          $id('t-pane-submissions').hidden = false;
+          $id('t-pane-roster').hidden = true;
+          $id('t-pane-gradebook').hidden = true;
+          $id('t-pane-aireport').hidden = true;
+          $id('t-pane-answers').hidden = true;
+          loadSubmissions();
+        });
+      });
+
+      tbody.querySelectorAll('[data-edit-st]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const sid = btn.getAttribute('data-edit-st');
+          const st = currentRoster.find((x) => x.student_id === sid);
+          if (st) openStudentModal(st);
+        });
+      });
+
+      tbody.querySelectorAll('[data-del-st]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const sid = btn.getAttribute('data-del-st');
+          if (!window.confirm(`ต้องการลบนักศึกษารหัส ${sid} (รวมถึงประวัติการส่งงานทั้งหมดของรหัสนี้) ใช่หรือไม่?`)) return;
+          const res = await fetch('api/admin.php?action=student_delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ student_id: sid })
+          });
+          const data = await res.json();
+          if (data.ok) {
+            loadRoster();
+            loadSubmissions();
+          } else {
+            alert(data.error || 'ลบไม่สำเร็จ');
+          }
+        });
+      });
+    }
+
+    function openStudentModal(st) {
+      $id('st-orig-id').value = st ? st.student_id : '';
+      $id('st-modal-title').textContent = st ? `แก้ไขข้อมูล: ${st.student_id}` : 'เพิ่มนักศึกษาใหม่';
+      $id('st-id').value = st ? st.student_id : '';
+      $id('st-name').value = st ? st.full_name : '';
+      $id('st-section').value = st ? st.section : '661/วิทย์';
+      $id('st-fb').textContent = '';
+      $id('st-fb').className = 'feedback';
+      $id('student-dialog').showModal();
+    }
+
+    $id('btn-add-student').addEventListener('click', () => openStudentModal(null));
+    $id('st-close').addEventListener('click', () => $id('student-dialog').close());
+
+    $id('st-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = $id('st-save-btn');
+      btn.disabled = true;
+      const res = await fetch('api/admin.php?action=student_save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          original_id: $id('st-orig-id').value.trim(),
+          student_id: $id('st-id').value.trim(),
+          full_name: $id('st-name').value.trim(),
+          section: $id('st-section').value.trim()
+        })
+      });
+      const data = await res.json();
+      btn.disabled = false;
+      if (!res.ok || !data.ok) {
+        $id('st-fb').className = 'feedback bad';
+        $id('st-fb').textContent = data.error || 'บันทึกไม่สำเร็จ';
+        return;
+      }
+      $id('st-fb').className = 'feedback good';
+      $id('st-fb').textContent = data.message || 'บันทึกเรียบร้อยแล้ว';
+      loadRoster();
+      loadSubmissions();
+      setTimeout(() => $id('student-dialog').close(), 500);
+    });
+
+    // GitHub Backup Modal
+    $id('t-github-btn').addEventListener('click', async () => {
+      $id('gh-fb').textContent = '';
+      $id('gh-fb').className = 'feedback';
+      $id('gh-token').value = '';
+      const res = await fetch('api/admin.php?action=github_config_get');
+      const data = await res.json();
+      if (data.ok && data.config) {
+        $id('gh-repo').value = data.config.repo || '';
+        $id('gh-branch').value = data.config.branch || 'main';
+        $id('gh-folder').value = data.config.folder || 'backups';
+        if (data.config.has_token) {
+          $id('gh-token').placeholder = '•••••••• (บันทึก Token ไว้แล้ว — เว้นว่างหากไม่เปลี่ยน)';
+        }
+      }
+      $id('github-dialog').showModal();
+    });
+
+    $id('gh-close').addEventListener('click', () => $id('github-dialog').close());
+
+    $id('gh-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = $id('gh-save-btn');
+      btn.disabled = true;
+      const res = await fetch('api/admin.php?action=github_config_save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          repo: $id('gh-repo').value.trim(),
+          branch: $id('gh-branch').value.trim(),
+          folder: $id('gh-folder').value.trim(),
+          token: $id('gh-token').value.trim()
+        })
+      });
+      const data = await res.json();
+      btn.disabled = false;
+      $id('gh-fb').className = 'feedback ' + (data.ok ? 'good' : 'bad');
+      $id('gh-fb').textContent = data.ok ? data.message : (data.error || 'บันทึกไม่สำเร็จ');
+    });
+
+    $id('gh-run-btn').addEventListener('click', async () => {
+      const btn = $id('gh-run-btn');
+      btn.disabled = true;
+      btn.textContent = 'กำลังอัปโหลดขึ้น GitHub...';
+      $id('gh-fb').className = 'feedback';
+      $id('gh-fb').textContent = '';
+      try {
+        const res = await fetch('api/admin.php?action=github_backup', { method: 'POST' });
+        const data = await res.json();
+        $id('gh-fb').className = 'feedback ' + (data.ok ? 'good' : 'bad');
+        if (data.ok) {
+          $id('gh-fb').innerHTML = `${esc(data.message)}${data.commit_url ? ` · <a href="${esc(data.commit_url)}" target="_blank" rel="noopener">ดู Commit บน GitHub ↗</a>` : ''}`;
+        } else {
+          $id('gh-fb').textContent = data.error || 'Backup ไม่สำเร็จ';
+        }
+      } catch {
+        $id('gh-fb').className = 'feedback bad';
+        $id('gh-fb').textContent = 'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '☁️ Backup ข้อมูลขึ้น GitHub ทันที';
+      }
+    });
+
+    async function loadAnswers() {
+      const box = $id('t-answers-list');
+      box.innerHTML = '<div class="empty-state">กำลังโหลดเฉลย...</div>';
+      const res = await fetch('api/admin.php?action=answers');
+      const data = await res.json();
+      if (!data.ok || !data.answers) {
+        box.innerHTML = '<div class="empty-state">ไม่สามารถโหลดเฉลยได้</div>';
+        return;
+      }
+      box.replaceChildren();
+      data.answers.forEach((q, idx) => {
+        const card = document.createElement('div');
+        card.className = 'history-card';
+        card.innerHTML = `
+          <div class="history-card-top">
+            <strong>ข้อที่ ${idx + 1} · ${esc(q.topic)}</strong>
+            <span class="badge badge-graded">เฉลย: ข้อ ${esc(q.answer)}</span>
+          </div>
+          <p style="font-size:13px;font-weight:700;margin:6px 0">${esc(q.question)}</p>
+          <p style="font-size:13px;color:#147956;margin:4px 0"><b>คำตอบที่ถูกต้อง:</b> ${esc(q.answer)}. ${esc(q.options[q.answer] || '')}</p>
+          <div class="history-feedback"><b>คำอธิบายสำหรับผู้สอน:</b> ${esc(q.explanation)}</div>
+        `;
+        box.appendChild(card);
+      });
+    }
+
+    async function loadGradebook() {
+      const tbody = $id('t-gb-tbody');
+      const sec = $id('gb-section').value;
+      tbody.innerHTML = '<tr><td colspan="17" class="muted-cell">กำลังโหลดตารางคะแนนรวม...</td></tr>';
+      const params = new URLSearchParams({ action: 'gradebook', section: sec });
+      $id('gb-export-link').href = 'api/admin.php?action=export_gradebook' + (sec ? '&section=' + encodeURIComponent(sec) : '');
+      const res = await fetch('api/admin.php?' + params.toString());
+      const data = await res.json();
+      if (!data.ok || !data.rows) {
+        tbody.innerHTML = '<tr><td colspan="17" class="muted-cell">ไม่สามารถโหลดตารางคะแนนได้</td></tr>';
+        return;
+      }
+
+      const secSel = $id('gb-section');
+      const prevSec = secSel.value;
+      secSel.innerHTML = '<option value="">ทุกกลุ่มเรียน (Section)</option>';
+      (data.sections || []).forEach((s) => {
+        const opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = s;
+        secSel.appendChild(opt);
+      });
+      secSel.value = prevSec;
+
+      const mods = data.modules || [];
+      tbody.replaceChildren();
+      if (data.rows.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="17" class="muted-cell">ไม่พบข้อมูลนักศึกษา</td></tr>';
+        return;
+      }
+
+      data.rows.forEach((r, idx) => {
+        const tr = document.createElement('tr');
+        const cells = mods.map((m) => {
+          const v = r.scores ? r.scores[m] : null;
+          if (v === null || v === undefined) {
+            return '<td><span class="gb-score gb-none">—</span></td>';
+          }
+          const cls = Number(v) >= 50 ? 'gb-pass' : 'gb-warn';
+          return `<td><span class="gb-score ${cls}">${v}</span></td>`;
+        }).join('');
+        tr.innerHTML = `
+          <td>${idx + 1}</td>
+          <td><b>${esc(r.student_id)}</b></td>
+          <td style="white-space:nowrap">${esc(r.full_name)}</td>
+          <td style="white-space:nowrap">${esc(r.section || '—')}</td>
+          ${cells}
+          <td><b>${r.completed_modules}/10</b></td>
+          <td><b>${r.total_score}</b></td>
+          <td><b>${r.avg_score}%</b></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    $id('gb-section').addEventListener('change', loadGradebook);
+    $id('gb-refresh').addEventListener('click', loadGradebook);
+
+    // AI Report Tab Logic
+    async function loadAiReport(saveSnapshot) {
+      const box = $id('air-content');
+      const fb = $id('air-fb');
+      const sec = $id('air-section').value;
+      if (fb) {
+        fb.textContent = '';
+        fb.className = 'feedback';
+      }
+      box.innerHTML = '<div class="empty-state">🤖 AI กำลังรวบรวมข้อมูลและวิเคราะห์ผลการเรียน...</div>';
+
+      try {
+        const res = saveSnapshot
+          ? await fetch('api/admin.php?action=ai_report', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ section: sec, save: true })
+            })
+          : await fetch('api/admin.php?' + new URLSearchParams({ action: 'ai_report', section: sec }).toString());
+        const data = await res.json();
+        if (!res.ok || !data.ok || !data.report) {
+          box.innerHTML = `<div class="empty-state">${esc(data.error || 'ไม่สามารถสร้างรายงานได้')}</div>`;
+          return;
+        }
+
+        const secSel = $id('air-section');
+        const prevSec = secSel.value;
+        secSel.innerHTML = '<option value="">ทุกกลุ่มเรียน (ภาพรวมทั้งหมด)</option>';
+        (data.sections || []).forEach((s) => {
+          const opt = document.createElement('option');
+          opt.value = s;
+          opt.textContent = s;
+          secSel.appendChild(opt);
+        });
+        secSel.value = prevSec;
+
+        const r = data.report;
+        const k = r.kpi || {};
+        const rub = r.rubric_avg || {};
+
+        if (saveSnapshot && fb) {
+          fb.className = 'feedback good';
+          fb.textContent = `บันทึกรายงานวิเคราะห์ AI #${r.report_id || 'ล่าสุด'} ลงฐานข้อมูลเรียบร้อยแล้ว`;
+        }
+
+        const pillarsHtml = (r.pillars || []).map((p) => {
+          const pct = Math.min(100, Math.max(0, Number(p.avg_score || 0)));
+          return `
+            <div class="ai-pillar-item">
+              <div class="ai-pillar-head">
+                <span>${esc(p.label)} (${p.sample_count} รายการ)</span>
+                <b>${pct}%</b>
+              </div>
+              <div class="ai-pillar-track"><div class="ai-pillar-fill" style="width:${pct}%"></div></div>
+            </div>
+          `;
+        }).join('');
+
+        const simPct = Math.min(100, Math.round(((rub.simulation || 0) / 40) * 100));
+        const seqPct = Math.min(100, Math.round(((rub.sequencing || 0) / 35) * 100));
+        const subjPct = Math.min(100, Math.round(((rub.subjective || 0) / 25) * 100));
+
+        const modRowsHtml = (r.modules || []).map((m) => `
+          <tr>
+            <td><b>${esc(m.label)}</b></td>
+            <td>${esc(m.pillar)}</td>
+            <td>${m.submissions}</td>
+            <td><span class="gb-score ${m.avg_score >= 50 ? 'gb-pass' : (m.submissions > 0 ? 'gb-warn' : 'gb-none')}">${m.submissions > 0 ? m.avg_score + '%' : '—'}</span></td>
+            <td>${m.submissions > 0 ? m.pass_rate + '%' : '—'}</td>
+            <td>${m.distractor_hits > 0 ? `<span class="badge badge-resubmit">${m.distractor_hits} ครั้ง</span>` : '0'}</td>
+            <td>${m.missing_subj > 0 ? `${m.missing_subj} ครั้ง` : '0'}</td>
+          </tr>
+        `).join('');
+
+        const riskHtml = (r.at_risk || []).length > 0
+          ? `<table class="t-table" style="font-size:12px">
+              <thead><tr><th>รหัส</th><th>ชื่อ-นามสกุล</th><th>คะแนน</th><th>ประเด็นที่ควรติดตาม</th></tr></thead>
+              <tbody>${r.at_risk.map((s) => `
+                <tr>
+                  <td><b>${esc(s.student_id)}</b></td>
+                  <td>${esc(s.full_name)}</td>
+                  <td><span class="gb-score gb-warn">${s.avg_score}%</span></td>
+                  <td style="font-size:11px;color:#92400e">${esc(s.reason)}</td>
+                </tr>
+              `).join('')}</tbody>
+            </table>`
+          : '<div class="empty-state" style="padding:14px">ไม่มีนักศึกษากลุ่มเสี่ยงในขอบเขตนี้</div>';
+
+        const topHtml = (r.top_performers || []).length > 0
+          ? `<table class="t-table" style="font-size:12px">
+              <thead><tr><th>อันดับ</th><th>รหัส</th><th>ชื่อ-นามสกุล</th><th>โมดูล</th><th>คะแนนเฉลี่ย</th></tr></thead>
+              <tbody>${r.top_performers.map((s, i) => `
+                <tr>
+                  <td>${i + 1}</td>
+                  <td><b>${esc(s.student_id)}</b></td>
+                  <td>${esc(s.full_name)}</td>
+                  <td>${s.completed_modules}</td>
+                  <td><span class="gb-score gb-pass">${s.avg_score}%</span></td>
+                </tr>
+              `).join('')}</tbody>
+            </table>`
+          : '<div class="empty-state" style="padding:14px">ยังไม่มีผู้ทำคะแนน >= 80%</div>';
+
+        const histHtml = (data.history || []).length > 0
+          ? `<table class="t-table" style="font-size:12px">
+              <thead><tr><th>รหัสรายงาน</th><th>ขอบเขต</th><th>ผู้ส่งงาน</th><th>คะแนนเฉลี่ย</th><th>เวลาบันทึก</th></tr></thead>
+              <tbody>${data.history.map((h) => `
+                <tr>
+                  <td>#${h.id}</td>
+                  <td>${esc(h.report_scope === 'all' ? 'ทุกกลุ่มเรียน' : h.report_scope)}</td>
+                  <td>${h.submitted_students}/${h.total_students} คน</td>
+                  <td><b>${h.avg_score}%</b></td>
+                  <td>${esc(h.created_at)}</td>
+                </tr>
+              `).join('')}</tbody>
+            </table>`
+          : '<div class="empty-state" style="padding:12px">ยังไม่มีประวัติรายงานที่บันทึกไว้ (กด "🔄 สร้าง/อัปเดตรายงาน AI อัตโนมัติ" เพื่อบันทึก)</div>';
+
+        box.innerHTML = `
+          <div class="metric-grid" style="margin-top:0">
+            <div class="metric"><strong>${k.submitted_students ?? 0}/${k.total_students ?? 0}</strong><span>ผู้ส่งงาน (${k.submission_rate ?? 0}%)</span></div>
+            <div class="metric"><strong>${k.mean_score ?? 0}%</strong><span>คะแนนเฉลี่ย (S.D. ${k.sd_score ?? 0})</span></div>
+            <div class="metric"><strong>${k.min_score ?? 0}–${k.max_score ?? 0}%</strong><span>ช่วงคะแนนต่ำสุด–สูงสุด</span></div>
+            <div class="metric"><strong>${k.graded_count ?? 0}/${k.total_submissions ?? 0}</strong><span>ตรวจด้วย AI/ผู้สอนแล้ว (ครั้ง)</span></div>
+          </div>
+
+          <div class="ai-narrative-box"><strong>🤖 บทวิเคราะห์ผู้บริหารและข้อเสนอแนะเชิงวิชาการ (AI Executive Summary)</strong><br>${esc(r.narrative || '')}</div>
+
+          <div class="ai-report-grid">
+            <div class="ai-stat-card">
+              <h3>🧠 คะแนนเฉลี่ยตาม 4 เสาหลักแนวคิดเชิงคำนวณ</h3>
+              ${pillarsHtml}
+            </div>
+            <div class="ai-stat-card">
+              <h3>📊 โครงสร้างคะแนนเฉลี่ยตามเกณฑ์ Rubric (100%)</h3>
+              <div class="ai-pillar-item">
+                <div class="ai-pillar-head"><span>1. ความแม่นยำในห้องจำลอง (Simulation)</span><b>${rub.simulation ?? 0} / 40</b></div>
+                <div class="ai-pillar-track"><div class="ai-pillar-fill" style="width:${simPct}%"></div></div>
+              </div>
+              <div class="ai-pillar-item">
+                <div class="ai-pillar-head"><span>2. การจัดลำดับบล็อก (Parsons Sequencing)</span><b>${rub.sequencing ?? 0} / 35</b></div>
+                <div class="ai-pillar-track"><div class="ai-pillar-fill" style="width:${seqPct}%"></div></div>
+              </div>
+              <div class="ai-pillar-item">
+                <div class="ai-pillar-head"><span>3. การให้เหตุผลเชิงอัตนัย (CT Reasoning)</span><b>${rub.subjective ?? 0} / 25</b></div>
+                <div class="ai-pillar-track"><div class="ai-pillar-fill" style="width:${subjPct}%"></div></div>
+              </div>
+              <p style="font-size:11px;color:#64748b;margin:10px 0 0">ประมวลผลจากฐานข้อมูล ${esc((data.db_engine || '').toUpperCase())} เมื่อ ${esc(r.generated_at || '')}</p>
+            </div>
+          </div>
+
+          <div class="t-table-card" style="margin-bottom:16px">
+            <div style="padding:14px 16px 6px"><h3 style="margin:0;font-size:15px">⚙️ วิเคราะห์ความยากและจุดติดขัดรายโมดูล (Module Bottleneck Analysis)</h3></div>
+            <table class="t-table" style="font-size:12px">
+              <thead>
+                <tr>
+                  <th>โมดูล</th>
+                  <th>เสาหลัก CT</th>
+                  <th>จำนวนตรวจ</th>
+                  <th>คะแนนเฉลี่ย</th>
+                  <th>อัตราผ่าน (≥50%)</th>
+                  <th>ติดบล็อกตัวลวง</th>
+                  <th>ไม่ระบุเหตุผลอัตนัย</th>
+                </tr>
+              </thead>
+              <tbody>${modRowsHtml}</tbody>
+            </table>
+          </div>
+
+          <div class="ai-report-grid">
+            <div class="ai-stat-card">
+              <h3>⚠️ นักศึกษากลุ่มเสี่ยง / ยังไม่ส่งงาน (${(r.at_risk || []).length} คน)</h3>
+              <div style="overflow-x:auto">${riskHtml}</div>
+            </div>
+            <div class="ai-stat-card">
+              <h3>🏆 นักศึกษาผลการเรียนดีเด่น ≥ 80% (${(r.top_performers || []).length} คน)</h3>
+              <div style="overflow-x:auto">${topHtml}</div>
+            </div>
+          </div>
+
+          <div class="t-table-card">
+            <div style="padding:14px 16px 6px"><h3 style="margin:0;font-size:15px">🗄️ ประวัติรายงาน AI ที่บันทึกไว้ในฐานข้อมูล (ctlab_ai_reports)</h3></div>
+            ${histHtml}
+          </div>
+        `;
+      } catch {
+        box.innerHTML = '<div class="empty-state">เกิดข้อผิดพลาดในการสร้างรายงาน AI</div>';
+      }
+    }
+
+    $id('air-section').addEventListener('change', () => loadAiReport(false));
+    $id('air-generate-btn').addEventListener('click', () => loadAiReport(true));
+    $id('air-print-btn').addEventListener('click', () => window.print());
+
+    $id('air-demo-seed-btn').addEventListener('click', async () => {
+      if (!window.confirm('ต้องการจำลองข้อมูลการส่งงานของนักศึกษาตัวอย่างในทะเบียนและสั่งให้ AI ตรวจคะแนนอัตโนมัติใช่หรือไม่?')) return;
+      const btn = $id('air-demo-seed-btn');
+      btn.disabled = true;
+      btn.textContent = 'กำลังจำลองและให้ AI ตรวจ...';
+      try {
+        const res = await fetch('api/admin.php?action=seed_demo_submissions', { method: 'POST' });
+        const data = await res.json();
+        const fb = $id('air-fb');
+        fb.className = 'feedback ' + (data.ok ? 'good' : 'bad');
+        fb.textContent = data.message || data.error || '';
+        loadSubmissions();
+        loadAiReport(true);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🧪 จำลองข้อมูลส่งงานเพื่อทดสอบระบบ';
+      }
+    });
+
+    // AI Batch Grading Button
+    $id('t-ai-batch-btn').addEventListener('click', async () => {
+      if (!window.confirm('ต้องการให้ AI ตรวจงานและอัปเดตคะแนน Rubric + ข้อเสนอแนะทุกรายการในฐานข้อมูลใช่หรือไม่?')) return;
+      const btn = $id('t-ai-batch-btn');
+      const orig = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = '🤖 กำลังตรวจงานทั้งหมด...';
+      try {
+        const res = await fetch('api/admin.php?action=ai_grade_batch', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mode: 'all' })
+        });
+        const data = await res.json();
+        alert(data.ok ? data.message : (data.error || 'AI ตรวจงานไม่สำเร็จ'));
+        loadSubmissions();
+      } finally {
+        btn.disabled = false;
+        btn.textContent = orig;
+      }
+    });
+
+    // AI Single Regrade Button inside Grade Modal
+    $id('g-ai-regrade-btn').addEventListener('click', async () => {
+      const id = Number($id('g-id').value);
+      if (!id) return;
+      const btn = $id('g-ai-regrade-btn');
+      btn.disabled = true;
+      btn.textContent = '🤖 AI กำลังวิเคราะห์...';
+      try {
+        const res = await fetch('api/admin.php?action=ai_grade_single', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, apply_to_teacher: true })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          $id('g-fb').className = 'feedback bad';
+          $id('g-fb').textContent = data.error || 'วิเคราะห์ไม่สำเร็จ';
+          return;
+        }
+        $id('g-ai-box').innerHTML = renderTeacherAiBox(data.ai_score, data.ai_rubric, data.ai_feedback, data.ai_model);
+        $id('g-score').value = data.ai_score;
+        $id('g-status').value = data.status || 'graded';
+        $id('g-feedback').value = data.ai_feedback || '';
+        $id('g-fb').className = 'feedback good';
+        $id('g-fb').textContent = data.message;
+        loadSubmissions();
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🤖 ให้ AI วิเคราะห์และให้คะแนนใหม่';
+      }
+    });
+
+    // AI Config Modal
+    function toggleAiProviderFields() {
+      const prov = $id('aic-provider').value;
+      $id('aic-gemini-box').style.display = prov === 'gemini' ? 'block' : 'none';
+      $id('aic-ollama-box').style.display = prov === 'ollama' ? 'block' : 'none';
+    }
+    $id('aic-provider').addEventListener('change', toggleAiProviderFields);
+    $id('aic-close').addEventListener('click', () => $id('ai-config-dialog').close());
+
+    $id('t-ai-cfg-btn').addEventListener('click', async () => {
+      $id('aic-fb').textContent = '';
+      $id('aic-fb').className = 'feedback';
+      $id('aic-gemini-key').value = '';
+      const res = await fetch('api/admin.php?action=ai_config_get');
+      const data = await res.json();
+      if (data.ok && data.config) {
+        const c = data.config;
+        $id('aic-auto-submit').checked = !!c.auto_grade_on_submit;
+        $id('aic-auto-approve').checked = !!c.auto_approve;
+        $id('aic-threshold').value = c.resubmit_threshold ?? 0;
+        $id('aic-provider').value = c.provider || 'hybrid_local';
+        $id('aic-gemini-model').value = c.gemini_model || 'gemini-2.5-flash';
+        $id('aic-ollama-url').value = c.ollama_url || 'http://127.0.0.1:11434';
+        $id('aic-ollama-model').value = c.ollama_model || 'llama3.2';
+        if (c.has_gemini_key) {
+          $id('aic-gemini-key').placeholder = '•••••••• (บันทึก API Key ไว้แล้ว — เว้นว่างหากไม่เปลี่ยน)';
+        }
+        toggleAiProviderFields();
+      }
+      $id('ai-config-dialog').showModal();
+    });
+
+    $id('aic-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = $id('aic-save-btn');
+      btn.disabled = true;
+      const res = await fetch('api/admin.php?action=ai_config_save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          auto_grade_on_submit: $id('aic-auto-submit').checked,
+          auto_approve: $id('aic-auto-approve').checked,
+          resubmit_threshold: Number($id('aic-threshold').value || 0),
+          provider: $id('aic-provider').value,
+          gemini_api_key: $id('aic-gemini-key').value.trim(),
+          gemini_model: $id('aic-gemini-model').value.trim(),
+          ollama_url: $id('aic-ollama-url').value.trim(),
+          ollama_model: $id('aic-ollama-model').value.trim()
+        })
+      });
+      const data = await res.json();
+      btn.disabled = false;
+      $id('aic-fb').className = 'feedback ' + (data.ok ? 'good' : 'bad');
+      $id('aic-fb').textContent = data.ok ? data.message : (data.error || 'บันทึกไม่สำเร็จ');
+    });
+
+    document.querySelectorAll('[data-t-tab]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const tab = btn.getAttribute('data-t-tab');
+        document.querySelectorAll('[data-t-tab]').forEach((b) => b.classList.toggle('active', b === btn));
+        $id('t-pane-submissions').hidden = tab !== 'submissions';
+        $id('t-pane-roster').hidden = tab !== 'roster';
+        $id('t-pane-gradebook').hidden = tab !== 'gradebook';
+        $id('t-pane-aireport').hidden = tab !== 'aireport';
+        $id('t-pane-answers').hidden = tab !== 'answers';
+        if (tab === 'roster') loadRoster();
+        if (tab === 'gradebook') loadGradebook();
+        if (tab === 'aireport') loadAiReport(false);
+        if (tab === 'answers') loadAnswers();
+      });
+    });
+    $id('f-q').addEventListener('keydown', (e) => { if (e.key === 'Enter') loadSubmissions(); });
+    $id('g-close').addEventListener('click', () => $id('grade-dialog').close());
+
+    $id('g-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = $id('g-save-btn');
+      btn.disabled = true;
+      const res = await fetch('api/admin.php?action=grade', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: Number($id('g-id').value),
+          teacher_score: $id('g-score').value,
+          status: $id('g-status').value,
+          teacher_feedback: $id('g-feedback').value.trim()
+        })
+      });
+      const data = await res.json();
+      btn.disabled = false;
+      if (!res.ok || !data.ok) {
+        $id('g-fb').className = 'feedback bad';
+        $id('g-fb').textContent = data.error || 'บันทึกไม่สำเร็จ';
+        return;
+      }
+      $id('g-fb').className = 'feedback good';
+      $id('g-fb').textContent = data.message || 'บันทึกเรียบร้อยแล้ว';
+      loadSubmissions();
+    });
+
+    checkAuth();
+  </script>
+</body>
+</html>

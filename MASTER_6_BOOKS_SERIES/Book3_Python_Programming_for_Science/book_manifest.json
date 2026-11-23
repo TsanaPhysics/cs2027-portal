@@ -1,0 +1,67 @@
+{
+  "id": "book3",
+  "folder": "Book3_Python_Programming_for_Science",
+  "volume": 3,
+  "title_th": "วิทยาการคำนวณ 3 การเขียนโปรแกรมภาษาไพทอนและการแก้ปัญหาทางวิทยาศาสตร์",
+  "title_en": "Computing Science 3: Python Programming and Scientific Problem Solving",
+  "subtitle": "การเขียนโปรแกรมเชิงโครงสร้าง โครงสร้างข้อมูล ฟังก์ชัน การอ่านเขียนไฟล์ และการคำนวณทางวิทยาศาสตร์",
+  "accent_color": "#d97706",
+  "secondary_color": "#b45309",
+  "gradient": "linear-gradient(135deg, #78350f 0%, #b45309 50%, #d97706 100%)",
+  "source_hints": [
+    "03_การสอนเขียนโปรแกรม_Python_และการพัฒนาทักษะ",
+    "book2_chapters"
+  ],
+  "chapters": [
+    {
+      "num": 1,
+      "title": "สถาปัตยกรรมภาษาไพทอน ตัวแปร และชนิดข้อมูลมาตรฐาน",
+      "en": "Python Architecture, Variables and Data Primitives"
+    },
+    {
+      "num": 2,
+      "title": "โครงสร้างควบคุมทางเลือกและการตัดสินใจเชิงตรรกะ",
+      "en": "Conditional Branching and Logical Decisions"
+    },
+    {
+      "num": 3,
+      "title": "โครงสร้างควบคุมการวนซ้ำและการประมวลผลข้อมูลลำดับ",
+      "en": "Iterative Loops and Sequence Processing"
+    },
+    {
+      "num": 4,
+      "title": "โครงสร้างข้อมูลแถวลำดับ ลิสต์ และการสร้างลิสต์แบบรวบรัด",
+      "en": "List Structures and List Comprehensions"
+    },
+    {
+      "num": 5,
+      "title": "โครงสร้างข้อมูลขั้นสูง ทูเพิล เซต และดิกชันนารี",
+      "en": "Advanced Data Structures: Tuples, Sets and Dictionaries"
+    },
+    {
+      "num": 6,
+      "title": "การสร้างฟังก์ชัน การถ่ายทอดพารามิเตอร์ และขอบเขตตัวแปร",
+      "en": "Modular Functions, Scope and Parameter Passing"
+    },
+    {
+      "num": 7,
+      "title": "การจัดการไฟล์ การอ่านเขียนข้อมูล CSV และ JSON",
+      "en": "File I/O, CSV and JSON Analytics"
+    },
+    {
+      "num": 8,
+      "title": "การจัดการข้อผิดพลาดและข้อยกเว้นของโปรแกรม",
+      "en": "Robust Exception Handling and Debugging Tactics"
+    },
+    {
+      "num": 9,
+      "title": "การเขียนโปรแกรมเชิงวัตถุ คลาส และการสืบทอดคุณสมบัติ",
+      "en": "Object-Oriented Programming, Classes and Inheritance"
+    },
+    {
+      "num": 10,
+      "title": "การประยุกต์ใช้ไพทอนแก้โจทย์วิทยาศาสตร์ ฟิสิกส์ และคณิตศาสตร์",
+      "en": "Scientific, Mathematical and Physical Computing Capstone"
+    }
+  ]
+}

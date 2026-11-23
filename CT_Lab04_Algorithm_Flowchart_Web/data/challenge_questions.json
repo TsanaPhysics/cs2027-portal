@@ -1,0 +1,65 @@
+{
+  "ok": true,
+  "questions": [
+    {
+      "id": "q1",
+      "topic": "ISO 5807:1985 Flowchart (Preparation)",
+      "question": "จากมาตรฐาน ISO 5807:1985 สัญลักษณ์รูปหกเหลี่ยม (Preparation) ที่แสดงคำสั่ง \"INITIALISE MaxCycles ← 3\" ใช้ทำหน้าที่ใดในผังงานวิทยาศาสตร์?",
+      "options": {
+        "A": "ใช้รับค่าข้อมูลจากเซนเซอร์ผ่านหน้าจอ",
+        "B": "ใช้กำหนดค่าเริ่มต้นของตัวแปร ค่าคงที่ หรือตั้งค่ากลุ่มเงื่อนไขก่อนเข้าสู่ลูปการทำงาน",
+        "C": "ใช้แสดงจุดจบการทำงานฉุกเฉินของระบบ",
+        "D": "ใช้หน่วงเวลารอปฏิกิริยาเคมีแบบคงที่"
+      },
+      "answer": "B"
+    },
+    {
+      "id": "q2",
+      "topic": "Pseudocode (WHILE vs REPEAT-UNTIL)",
+      "question": "หากกำหนดค่าเริ่มต้น pH ← 7.5 แล้วรันชุดคำสั่งเทียบระหว่าง WHILE pH < 7.0 DO ... ENDWHILE กับ REPEAT ... UNTIL pH >= 7.0 ผลลัพธ์จำนวนรอบการทำงานจะเป็นอย่างไร?",
+      "options": {
+        "A": "WHILE ทำงาน 1 รอบ และ REPEAT-UNTIL ทำงาน 0 รอบ",
+        "B": "WHILE ทำงาน 0 รอบ (ตรวจเงื่อนไขก่อน) แต่ REPEAT-UNTIL ทำงานอย่างน้อย 1 รอบ (ตรวจเงื่อนไขท้ายลูป)",
+        "C": "ทั้งสองโครงสร้างทำงานเท่ากันคือ 1 รอบ",
+        "D": "ทั้งสองโครงสร้างเกิด Infinite Loop ทันที"
+      },
+      "answer": "B"
+    },
+    {
+      "id": "q3",
+      "topic": "Algorithm Design & Four-Tier Test Data",
+      "question": "ในการทดสอบอัลกอริทึมควบคุมอุณหภูมิช่วงปลอดภัย 35.0–40.0°C การป้อนค่า T = 34.9°C, 35.0°C และ 40.1°C จัดเป็นชุดข้อมูลทดสอบประเภทใดตามหลัก Four-Tier Test Data?",
+      "options": {
+        "A": "Normal Data (ข้อมูลปกติทั่วไป)",
+        "B": "Abnormal Data (ข้อมูลนอกย่านเซนเซอร์)",
+        "C": "Boundary Data (ข้อมูลขอบเขตเพื่อตรวจจุดเปลี่ยนเงื่อนไขและข้อผิดพลาด < กับ <=)",
+        "D": "Extreme Data (ข้อมูลค่าสุดขีดของฮาร์ดแวร์)"
+      },
+      "answer": "C"
+    },
+    {
+      "id": "q4",
+      "topic": "Trace Table (CSTR Closed-Loop Control)",
+      "question": "จาก Trace Table ถังปฏิกรณ์ CSTR (ปลอดภัย 35.0–40.0°C, pH ≥ 6.0): ใน Cycle 2 เมื่อวัดได้ Temp = 32.0°C และ pH = 6.8 อุปกรณ์ใดบ้างที่ต้องเปิดทำงาน (ON)?",
+      "options": {
+        "A": "Cooler = ON, Heater = OFF, AlkaliPump = ON",
+        "B": "Cooler = OFF, Heater = ON, AlkaliPump = OFF",
+        "C": "Cooler = OFF, Heater = OFF, AlkaliPump = OFF",
+        "D": "Cooler = ON, Heater = ON, AlkaliPump = ON"
+      },
+      "answer": "B"
+    },
+    {
+      "id": "q5",
+      "topic": "Debugging Logic Errors & Fail-Safe Loop Reset",
+      "question": "ในการออกแบบผังงานระบบควบคุมถังปฏิกรณ์ CSTR เมื่อเงื่อนไขหยุดการทำงาน (เช่น TotalCycles < 3 เป็นเท็จ) ก่อนเข้าสู่สัญลักษณ์ Terminator (จบการทำงาน) ควรใส่ขั้นตอนใดเพื่อป้องกันอันตรายทางกายภาพ?",
+      "options": {
+        "A": "Fail-Safe Default Reset: สั่งปิด Actuator ทั้งหมด (Cooler, Heater, Pump ← OFF) ก่อนจบโปรแกรม",
+        "B": "เปิด AlkaliPump ค้างไว้ตลอดเพื่อให้ pH สูงขึ้นเรื่อยๆ",
+        "C": "ลบคำสั่งอัปเดต TotalCycles ← TotalCycles + 1 ออกเพื่อลดการใช้หน่วยความจำ",
+        "D": "ไม่ต้องทำสิ่งใด ปล่อยให้สถานะขาออก (Output Pin) ค้างค่าจากรอบสุดท้ายไว้"
+      },
+      "answer": "A"
+    }
+  ]
+}

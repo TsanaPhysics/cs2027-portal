@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sim 10.1: การส่งผ่านแพ็กเก็ตข้อมูลแบบเกมส่งสาร • RBRU MOOC</title>
+  <link rel="stylesheet" href="../assets/css/mooc_master.css">
+  <script src="../assets/js/ar_mediapipe_controller.js"></script>
+  <style>
+    body {
+      padding: 16px;
+      background: #030712;
+      color: #f1f5f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .sim-card {
+      width: 100%;
+      max-width: 900px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    }
+    .sim-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 12px;
+    }
+    .sim-canvas-wrap {
+      position: relative;
+      width: 100%;
+      height: 380px;
+      background: radial-gradient(circle at center, #0a1128 0%, #02050e 100%);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+    }
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .btn-action {
+      background: rgba(56, 189, 248, 0.2);
+      border: 1px solid #38bdf8;
+      color: #38bdf8;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-action:hover {
+      background: #38bdf8;
+      color: #020617;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+    }
+    .metric-badge {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: #fde047;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .quiz-box {
+      background: rgba(2, 6, 23, 0.8);
+      border-left: 4px solid #fde047;
+      padding: 14px 18px;
+      border-radius: 0 10px 10px 0;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="sim-card">
+    <div class="sim-header">
+      <div>
+        <span style="font-size: 0.85rem; font-weight: 700; color: #f43f5e; letter-spacing: 1px;">
+          LAB SIMULATOR 10.1
+        </span>
+        <h2 style="font-size: 1.35rem; color: #fff; margin-top: 4px;">📨 การส่งผ่านแพ็กเก็ตข้อมูลแบบเกมส่งสาร</h2>
+      </div>
+      <div class="metric-badge" id="state-display">STATUS: READY</div>
+    </div>
+
+    <div class="formula-card-cyber" style="margin: 0 0 16px;">
+      <div class="formula-box">\text{Packet Switching} \quad \text{Sequence Numbers \& Ack}</div>
+      <div class="param-list">กิจกรรมส่งต่อกระดาษข้อความที่ถูกตัดแบ่งเป็นส่วนๆ พร้อมหมายเลขลำดับเพื่อประกอบคืนที่ปลายทาง</div>
+    </div>
+
+    <div class="sim-canvas-wrap">
+      <canvas id="simCanvas"></canvas>
+      <div id="hand-pointer" style="
+        position: absolute; width: 22px; height: 22px; border-radius: 50%;
+        border: 2px solid #fde047; background: rgba(253, 224, 71, 0.3);
+        pointer-events: none; transform: translate(-50%, -50%); display: none;
+        box-shadow: 0 0 15px #fde047;
+      "></div>
+    </div>
+
+    <div class="controls-row">
+      <button class="btn-action" id="btn-run" onclick="runSim()">▶ เริ่มจำลอง (Run)</button>
+      <button class="btn-action" id="btn-step" onclick="stepSim()">⏭️ ทีละสเต็ป (Step)</button>
+      <button class="btn-action" id="btn-reset" onclick="resetSim()" style="border-color: #f43f5e; color: #f43f5e;">🔄 รีเซ็ต (Reset)</button>
+      
+      <div style="flex-grow: 1; text-align: right;">
+        <label style="font-size: 0.85rem; color: #94a3b8; margin-right: 8px;">ความเร็วจำลอง:</label>
+        <input type="range" id="speed-slider" min="1" max="5" value="3" style="vertical-align: middle;">
+      </div>
+    </div>
+
+    <div class="quiz-box">
+      <div style="font-weight: 700; color: #fde047; margin-bottom: 6px;">💡 คำถามประเมินความเข้าใจรวดเร็ว (Concept Check):</div>
+      <div style="font-size: 0.92rem; color: #cbd5e1; margin-bottom: 10px;">
+        หากระบบรับค่าพารามิเตอร์ขนาด $N$ เพิ่มขึ้น 10 เท่า ประสิทธิภาพเวลาการทำงานจะเป็นไปตามสูตรใด?
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button class="btn-action" style="font-size: 0.8rem; padding: 4px 12px;" onclick="checkAnswer(true)">A) เป็นไปตามสัญกรณ์ Big-O ที่วิเคราะห์ไว้</button>
+        <button class="btn-action" style="font-size: 0.8rem; padding: 4px 12px;" onclick="checkAnswer(false)">B) เพิ่มขึ้นแบบก้าวกระโดดไร้ขอบเขต</button>
+      </div>
+      <div id="quiz-feedback" style="margin-top: 8px; font-size: 0.85rem; font-weight: 600;"></div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('simCanvas');
+    const ctx = canvas.getContext('2d');
+    const stateDisplay = document.getElementById('state-display');
+    const handPointer = document.getElementById('hand-pointer');
+
+    let simRunning = false;
+    let stepCount = 0;
+    let particles = [];
+    const chId = 10;
+    const subId = 1;
+
+    function resize() {
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+      initScene();
+    }
+    window.addEventListener('resize', resize);
+
+    function initScene() {
+      particles = [];
+      const numP = 24;
+      for (let i = 0; i < numP; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 2,
+          vy: (Math.random() - 0.5) * 2,
+          val: Math.floor(Math.random() * 90) + 10,
+          color: '#f43f5e'
+        });
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw Grid / Connectors
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.1)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const d = Math.sqrt(dx*dx + dy*dy);
+          if (d < 110) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Draw Nodes
+      for (let p of particles) {
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 8, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '10px JetBrains Mono';
+        ctx.fillText(p.val, p.x + 12, p.y + 4);
+
+        if (simRunning) {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 10 || p.x > canvas.width - 10) p.vx *= -1;
+          if (p.y < 10 || p.y > canvas.height - 10) p.vy *= -1;
+        }
+      }
+
+      // Info Overlay
+      ctx.fillStyle = 'rgba(56, 189, 248, 0.7)';
+      ctx.font = '12px Sarabun';
+      ctx.fillText(`สเต็ปการประมวลผล: ${stepCount} | พิกัดสถานะ: ${particles.length} โหนด`, 16, 24);
+
+      requestAnimationFrame(draw);
+    }
+
+    function runSim() {
+      simRunning = true;
+      stateDisplay.textContent = 'STATUS: SIMULATING...';
+      stateDisplay.style.color = '#38bdf8';
+      if (window.arController) window.arController.playSynth('action');
+    }
+
+    function stepSim() {
+      simRunning = false;
+      stepCount++;
+      stateDisplay.textContent = `STATUS: STEP ${stepCount}`;
+      stateDisplay.style.color = '#fde047';
+      for (let p of particles) {
+        p.x += p.vx * 3;
+        p.y += p.vy * 3;
+      }
+      if (window.arController) window.arController.playSynth('pinch');
+    }
+
+    function resetSim() {
+      simRunning = false;
+      stepCount = 0;
+      stateDisplay.textContent = 'STATUS: RESET';
+      stateDisplay.style.color = '#f43f5e';
+      initScene();
+      if (window.arController) window.arController.playSynth('swipe');
+    }
+
+    function checkAnswer(isCorrect) {
+      const fb = document.getElementById('quiz-feedback');
+      if (isCorrect) {
+        fb.textContent = '✅ ถูกต้องยอดเยี่ยม! ระบบทำงานสอดคล้องกับขอบเขตสัญกรณ์ Asymptotic Complexity';
+        fb.style.color = '#4ade80';
+        if (window.arController) window.arController.playSynth('action');
+      } else {
+        fb.textContent = '❌ ยังไม่ถูกต้อง ลองพิจารณาความสัมพันธ์ของฟังก์ชันในกล่องสูตรอีกครั้ง';
+        fb.style.color = '#f43f5e';
+      }
+    }
+
+    // AR MediaPipe Hands Hook
+    window.addEventListener('load', () => {
+      resize();
+      draw();
+
+      if (window.ARMediaPipeController) {
+        window.arController = new window.ARMediaPipeController({
+          onHandMove: (x, y, isPinching) => {
+            handPointer.style.display = 'block';
+            handPointer.style.left = (x * canvas.width) + 'px';
+            handPointer.style.top = (y * canvas.height) + 'px';
+
+            if (isPinching) {
+              handPointer.style.borderColor = '#38bdf8';
+              stepSim();
+            } else {
+              handPointer.style.borderColor = '#fde047';
+            }
+          },
+          onSwipe: (dir) => {
+            if (dir === 'right') stepSim();
+            else resetSim();
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

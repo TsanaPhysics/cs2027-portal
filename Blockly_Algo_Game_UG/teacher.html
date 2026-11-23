@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AlgoQuest UG (Instructor Edition) — เฉลยสำหรับอาจารย์</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Google Blockly CDN -->
+  <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+  <script src="https://unpkg.com/blockly/javascript_compressed.js"></script>
+  <script src="https://unpkg.com/blockly/python_compressed.js"></script>
+  <script src="https://unpkg.com/blockly/msg/th.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script>window.IS_TEACHER_MODE = true;</script>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Game HUD -->
+    <header class="hud-bar">
+      <div class="hud-left">
+        <div class="brand-logo" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">AQ</div>
+        <div>
+          <div class="brand-title">AlgoQuest <span class="badge-ug" style="background:rgba(245,158,11,0.2);color:#fcd34d;border-color:rgba(245,158,11,0.45)">INSTRUCTOR / เฉลย</span></div>
+          <div class="brand-sub">โหมดอาจารย์ผู้สอน — โหลดเฉลย 3 ดาว, ตรวจทุก Test Case, และดูแนวทางการสอน</div>
+        </div>
+      </div>
+
+      <div class="hud-stats">
+        <div class="stat-pill">
+          <span class="stat-label">RANK</span>
+          <span class="stat-val" id="hud-rank">Novice Coder</span>
+        </div>
+        <div class="stat-pill xp-pill">
+          <span class="stat-label">XP</span>
+          <span class="stat-val" id="hud-xp">0</span>
+        </div>
+        <div class="stat-pill star-pill">
+          <span class="stat-label">STARS</span>
+          <span class="stat-val" id="hud-stars">0 / 27</span>
+        </div>
+        <button type="button" class="btn btn-icon" id="btn-sound" title="เปิด/ปิดเสียงเอฟเฟกต์">🔊</button>
+        <span class="stat-pill" id="admin-db-badge" style="font-size:11px;color:#fcd34d">🔒 Admin: รอยืนยัน</span>
+        <a href="https://docs.google.com/spreadsheets/d/1qUFN1WhbXy9XzM7avE4wuEzJ_CSLnVec88zaKgahFSI/edit" target="_blank" class="btn btn-outline btn-sm" style="border-color:#10b981;color:#6ee7b7;text-decoration:none;">📗 Google Sheets (25 คน)</a>
+        <button type="button" class="btn btn-outline btn-sm" id="btn-class-report" style="border-color:#38bdf8;color:#7dd3fc">📊 ผลคะแนนนักศึกษา (DB)</button>
+        <button type="button" class="btn btn-outline btn-sm" id="btn-verify-all" style="border-color:#f59e0b;color:#fcd34d">🧪 ตรวจเฉลยทั้ง 10 ด่าน</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-admin-logout" title="ออกจากระบบ Admin">🔒</button>
+        <a href="index.html" class="btn btn-outline btn-sm" target="_blank">🎓 เปิดหน้าสำหรับนักศึกษา ↗</a>
+      </div>
+    </header>
+
+    <!-- Main 3-Column Game Arena -->
+    <div class="arena-grid">
+      <aside class="mission-sidebar">
+        <div class="panel-header">
+          <span>🗺️ แผนที่ภารกิจ (10 ด่าน)</span>
+          <span class="progress-mini" id="sidebar-progress">0/10 ผ่าน</span>
+        </div>
+        <div class="mission-list" id="mission-list"></div>
+      </aside>
+
+      <main class="workspace-pane">
+        <div class="mission-banner" id="mission-banner">
+          <div class="mission-meta">
+            <span class="tier-badge" id="level-tier">TIER 1</span>
+            <span class="complexity-badge" id="level-complexity">Target: O(1)</span>
+            <h1 id="level-title">กำลังโหลดภารกิจ...</h1>
+          </div>
+          <p class="mission-desc" id="level-desc"></p>
+          <div class="teacher-note-box" id="teacher-note-box">
+            <strong>📌 แนวทางการสอน (แก้ไขและบันทึกลง DB ได้):</strong>
+            <input type="text" id="teacher-note-input" class="form-input" style="margin-top:4px;font-size:12px;padding:5px 8px;" value="-">
+          </div>
+          <div class="mission-targets" style="margin-top:6px;">
+            <span>⭐ ผ่านทุก Test Case</span>
+            <span id="target-blocks">⭐⭐ ใช้บล็อก ≤ 10</span>
+            <span id="target-steps">⭐⭐⭐ ขั้นตอนการทำงานเหมาะสม</span>
+          </div>
+        </div>
+
+        <div class="workspace-toolbar">
+          <div class="toolbar-left">
+            <button type="button" class="btn btn-sm" id="btn-load-solution" style="background:#f59e0b;color:#0f172a">🔑 โหลดเฉลยจาก DB</button>
+            <button type="button" class="btn btn-sm" id="btn-save-solution-db" style="background:#8b5cf6;color:#fff">💾 บันทึกเฉลยลง DB</button>
+            <button type="button" class="btn btn-primary btn-sm" id="btn-run-tests">▶ ทดสอบ &amp; ส่งตรวจ</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-run-sandbox">⚡ ทดลองรัน</button>
+            <button type="button" class="btn btn-danger btn-sm" id="btn-stop" disabled>⏹ หยุด</button>
+          </div>
+          <div class="toolbar-right">
+            <span class="block-counter" id="block-counter">บล็อกที่ใช้: 0</span>
+            <button type="button" class="btn btn-ghost btn-sm" id="btn-hint">💡 คำใบ้</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="btn-reset">↺ ล้าง</button>
+          </div>
+        </div>
+
+        <div class="blockly-container" id="blockly-div"></div>
+      </main>
+
+      <aside class="inspector-pane">
+        <div class="tabs-header">
+          <button type="button" class="tab-btn active" data-tab="judge">🧪 ผลตรวจ</button>
+          <button type="button" class="tab-btn" data-tab="flowchart">🔀 Flowchart</button>
+          <button type="button" class="tab-btn" data-tab="code">💻 โค้ด</button>
+          <button type="button" class="tab-btn" data-tab="console">📟 Console</button>
+        </div>
+
+        <div class="tab-panel active" id="tab-judge">
+          <div class="sub-card">
+            <div class="sub-card-title">
+              <span>🎛️ ข้อมูลจำลอง (Sandbox Input)</span>
+              <button type="button" class="btn btn-ghost btn-xs" id="btn-randomize-input">🎲 สุ่มข้อมูล</button>
+            </div>
+            <div id="sandbox-controls" class="sandbox-controls"></div>
+          </div>
+
+          <div class="sub-card" id="array-viz-card" style="display:none;">
+            <div class="sub-card-title">
+              <span>📊 Array / State Visualizer</span>
+              <span class="step-badge" id="viz-steps">Steps: 0</span>
+            </div>
+            <div id="array-viz" class="array-viz"></div>
+          </div>
+
+          <div class="sub-card">
+            <div class="sub-card-title"><span>🔍 Live Variables</span></div>
+            <div id="var-watch" class="var-watch"><span class="muted">ยังไม่มีตัวแปรทำงาน</span></div>
+          </div>
+
+          <div class="sub-card">
+            <div class="sub-card-title">
+              <span>✅ Automated Test Cases</span>
+              <span id="judge-summary" class="judge-summary">รอการทดสอบ</span>
+            </div>
+            <div id="test-cases-list" class="test-cases-list"></div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-flowchart">
+          <div class="console-header">
+            <span>ISO 5807 Flowchart (อัตโนมัติ)</span>
+            <button type="button" class="btn btn-ghost btn-xs" id="btn-export-svg">⬇ ดาวน์โหลด SVG</button>
+          </div>
+          <div id="flowchart-view" style="flex:1;min-height:180px;overflow:auto;"></div>
+          <div class="sub-card" style="padding:8px 10px;">
+            <div class="sub-card-title" style="margin-bottom:6px;">
+              <span>🎬 3D Simulator (ตาม Flowchart)</span>
+              <div style="display:flex;gap:4px;">
+                <button type="button" class="btn btn-ghost btn-xs" id="btn-sim3d-run">▶ จำลอง</button>
+                <button type="button" class="btn btn-ghost btn-xs" id="btn-sim3d-replay">↺ ซ้ำ</button>
+              </div>
+            </div>
+            <div id="sim3d-status" class="muted" style="font-size:11px;margin-bottom:6px;">พร้อมจำลอง 3D</div>
+            <div id="sim3d-canvas" style="height:210px;border-radius:8px;overflow:hidden;border:1px solid #334155;background:#070d1a;"></div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-code">
+          <div class="code-lang-switch">
+            <button type="button" class="lang-pill active" data-lang="js">JavaScript</button>
+            <button type="button" class="lang-pill" data-lang="py">Python</button>
+          </div>
+          <pre class="code-preview" id="code-preview">// กด "🔑 โหลดเฉลย 3 ดาว" เพื่อดูโค้ดเฉลย</pre>
+        </div>
+
+        <div class="tab-panel" id="tab-console">
+          <div class="console-header">
+            <span>Output Log</span>
+            <button type="button" class="btn btn-ghost btn-xs" id="btn-clear-console">ล้าง</button>
+          </div>
+          <div class="console-log" id="console-log"></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Hint Modal -->
+  <div class="modal-backdrop" id="hint-modal" hidden>
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>💡 คำใบ้เชิงอัลกอริทึม</h3>
+        <button type="button" class="modal-close" data-close="hint-modal">✕</button>
+      </div>
+      <div class="modal-body" id="hint-body"></div>
+    </div>
+  </div>
+
+  <!-- Admin Login Modal -->
+  <div class="modal-backdrop" id="admin-login-modal" hidden>
+    <div class="modal-box" style="max-width:400px;">
+      <div class="modal-head">
+        <h3>🔐 เข้าสู่ระบบหลังบ้านอาจารย์ (Admin)</h3>
+      </div>
+      <div class="modal-body">
+        <p class="muted" style="margin-top:0">กรุณากรอกรหัส PIN ของอาจารย์เพื่อเข้าถึงคลังเฉลยในฐานข้อมูลและรายงานคะแนนนักศึกษา</p>
+        <label class="form-label">รหัสผ่านอาจารย์ (Teacher PIN)</label>
+        <input type="password" id="input-admin-pin" class="form-input" placeholder="กรอก PIN (เช่น physicss)">
+        <div id="admin-login-err" style="color:#f87171;font-size:12px;margin-top:6px;"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-primary" id="btn-admin-login">เข้าสู่ระบบ Admin</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Class Report Modal (DB) -->
+  <div class="modal-backdrop" id="class-report-modal" hidden>
+    <div class="modal-box" style="max-width:780px;">
+      <div class="modal-head">
+        <h3>📊 รายงานผลคะแนนนักศึกษาจากฐานข้อมูล (<span id="report-db-source">-</span>)</h3>
+        <button type="button" class="modal-close" data-close="class-report-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="report-table-wrap">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>รหัสนักศึกษา</th>
+                <th>ชื่อ-นามสกุล</th>
+                <th>หมู่เรียน</th>
+                <th>Rank</th>
+                <th>ผ่าน</th>
+                <th>ดาว</th>
+                <th>XP</th>
+              </tr>
+            </thead>
+            <tbody id="class-report-tbody">
+              <tr><td colspan="7" class="muted">กำลังโหลด...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Victory Modal -->
+  <div class="modal-backdrop" id="victory-modal" hidden>
+    <div class="modal-box victory-box">
+      <div class="victory-stars" id="victory-stars">⭐⭐⭐</div>
+      <h2 id="victory-title">ภารกิจสำเร็จ!</h2>
+      <p id="victory-msg"></p>
+      <div class="victory-metrics" id="victory-metrics"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" data-close="victory-modal">ปิด</button>
+        <button type="button" class="btn btn-primary" id="btn-next-level">ด่านถัดไป →</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="challenges.js?v=20261124"></script>
+  <script src="solutions.js?v=20261124"></script>
+  <script src="flowchart.js?v=20261124"></script>
+  <script src="sim3d.js?v=20261124"></script>
+  <script src="app.js?v=20261124"></script>
+</body>
+</html>

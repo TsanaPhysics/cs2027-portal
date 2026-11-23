@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CT-Lab 04 — การออกแบบขั้นตอนวิธี รหัสลำลอง ผังงาน และ Trace Table</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">L04</div>
+        <div>
+          <div class="brand-title">CT-Lab 04</div>
+          <div class="brand-sub">Algorithm • Pseudocode • Trace</div>
+        </div>
+      </div>
+
+      <nav class="nav-list" aria-label="เมนูบทเรียน">
+        <button type="button" class="nav-item active" data-go="overview">
+          <span>🏠 ภาพรวมบทปฏิบัติการ</span>
+        </button>
+        <button type="button" class="nav-item" data-go="algo_design">
+          <span>01 Algorithm Design</span>
+          <span class="nav-check" id="nav-chk-algo_design">—</span>
+        </button>
+        <button type="button" class="nav-item" data-go="pseudocode">
+          <span>02 รหัสลำลอง (Pseudocode)</span>
+          <span class="nav-check" id="nav-chk-pseudocode">—</span>
+        </button>
+        <button type="button" class="nav-item" data-go="flowchart">
+          <span>03 ผังงานมาตรฐาน</span>
+          <span class="nav-check" id="nav-chk-flowchart">—</span>
+        </button>
+        <button type="button" class="nav-item" data-go="lab4_tracetable">
+          <span>04 ปฏิบัติการ 4: Trace Table</span>
+          <span class="nav-check" id="nav-chk-lab4_tracetable">—</span>
+        </button>
+        <button type="button" class="nav-item" data-go="assessment">
+          <span>05 แบบทดสอบวัดผล</span>
+          <span class="nav-check" id="nav-chk-assessment">—</span>
+        </button>
+      </nav>
+
+      <div class="side-progress">
+        <div class="side-student-badge" id="side-student-badge">👤 ยังไม่ได้ระบุตัวตนผู้เรียน</div>
+        <div class="progress-head">
+          <span>ความก้าวหน้าแล็บ 4</span>
+          <span id="side-prog-text">0/4</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="side-prog-fill"></div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-wrap">
+      <header class="topbar">
+        <div class="top-left">
+          <button type="button" class="mobile-menu-btn" id="mobile-menu-btn" aria-label="เมนู">☰</button>
+          <div>
+            <strong style="font-size:14px">การออกแบบขั้นตอนวิธี รหัสลำลอง ผังงาน และ Trace Table</strong>
+            <div style="font-size:11px;color:var(--muted)">บทปฏิบัติการที่ 4 • ควบคุมการทดลองวิทยาศาสตร์ &amp; AI ตรวจงานอัตโนมัติ</div>
+          </div>
+        </div>
+        <div class="top-actions">
+          <a class="btn btn-small btn-outline" href="../portal.html">🏛️ หน้าหลัก Portal (3 เกม)</a>
+          <a class="btn btn-small btn-outline" href="https://notebooklm.link.google/IP0aexOtZhEb" target="_blank" rel="noopener">📚 คลัง NotebookLM ↗</a>
+          <button type="button" class="btn btn-small btn-outline" id="export-progress-btn">↓ ส่งออก JSON</button>
+          <button type="button" class="btn btn-small btn-primary" id="open-submit-modal">📤 ส่งงาน / ดูผลตรวจ AI</button>
+          <a class="btn btn-small btn-quiet" href="teacher.html" target="_blank" rel="noopener">🔐 Admin / รายงาน AI</a>
+        </div>
+      </header>
+
+      <main class="content">
+        <!-- OVERVIEW -->
+        <section class="page active" data-page="overview">
+          <div class="hero-card">
+            <div>
+              <div class="eyebrow">LAB 04 • ALGORITHM DESIGN &amp; TRACE TABLE</div>
+              <h1>การออกแบบขั้นตอนวิธี รหัสลำลอง และผังงานควบคุมการทดลอง</h1>
+              <p>เรียนรู้การลำดับขั้นตอนแก้ปัญหาแบบ Input → Process → Output เขียนรหัสลำลอง ออกแบบผังงานมาตรฐาน ANSI/ISO และฝึกทวนสอบความถูกต้องของการทดลองวิทยาศาสตร์ด้วย Trace Table (Dry Run) พร้อมระบบ AI ตรวจงานอัตโนมัติ</p>
+              <div class="btn-row">
+                <button type="button" class="btn btn-primary" style="background:#fff;color:#1e3a8a" data-go="algo_design">เริ่มโมดูล 01 →</button>
+                <button type="button" class="btn btn-outline" style="background:transparent;color:#fff;border-color:rgba(255,255,255,0.45)" data-go="lab4_tracetable">เข้าสู่ปฏิบัติการที่ 4 (Trace Table)</button>
+              </div>
+            </div>
+            <div class="hero-svg-box">
+              <svg viewBox="0 0 380 220" role="img" aria-label="โครงสร้างการออกแบบขั้นตอนวิธีสู่ Trace Table">
+                <rect x="20" y="16" width="150" height="40" rx="20" fill="#dbeafe" stroke="#60a5fa" stroke-width="2"/>
+                <text x="95" y="40" text-anchor="middle" font-size="12" font-weight="800" fill="#1e3a8a">1. Algorithm (IPO)</text>
+                <line x1="95" y1="56" x2="95" y2="82" stroke="#93c5fd" stroke-width="2.5"/>
+                <rect x="20" y="82" width="150" height="44" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+                <text x="95" y="108" text-anchor="middle" font-size="12" font-weight="800" fill="#92400e">2. Pseudocode</text>
+                <line x1="95" y1="126" x2="95" y2="152" stroke="#93c5fd" stroke-width="2.5"/>
+                <polygon points="95,150 170,180 95,210 20,180" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+                <text x="95" y="184" text-anchor="middle" font-size="11" font-weight="800" fill="#166534">3. Flowchart</text>
+                <path d="M170 180 H210 V110 H225" stroke="#38bdf8" stroke-width="2.5" fill="none"/>
+                <rect x="225" y="42" width="138" height="132" rx="10" fill="#fff" stroke="#38bdf8" stroke-width="2"/>
+                <text x="294" y="65" text-anchor="middle" font-size="12" font-weight="800" fill="#0f172a">4. Trace Table</text>
+                <line x1="235" y1="78" x2="353" y2="78" stroke="#cbd5e1"/>
+                <text x="294" y="98" text-anchor="middle" font-size="11" fill="#334155">Step 1 | V=0 | pH=2.0</text>
+                <text x="294" y="118" text-anchor="middle" font-size="11" fill="#334155">Step 2 | V=2 | pH=3.2</text>
+                <text x="294" y="138" text-anchor="middle" font-size="11" fill="#334155">Step 3 | V=4 | pH=4.8</text>
+                <text x="294" y="158" text-anchor="middle" font-size="11" font-weight="800" fill="#15803d">✓ Dry Run Verified</text>
+              </svg>
+            </div>
+          </div>
+
+          <div class="module-grid">
+            <div class="module-card" data-go="algo_design">
+              <div class="module-card-top">
+                <span class="eyebrow">MODULE 01</span>
+                <span class="tag soft" id="card-badge-algo_design">ยังไม่ทำ</span>
+              </div>
+              <h3>Algorithm Design: การลำดับขั้นตอนแก้ปัญหาอย่างเป็นระบบ</h3>
+              <p>วิเคราะห์โจทย์วิทยาศาสตร์ด้วย IPO Sandbox ทดสอบเงื่อนไขขอบเขต (Edge Cases) และจัดลำดับขั้นตอนวิธี</p>
+            </div>
+            <div class="module-card" data-go="pseudocode">
+              <div class="module-card-top">
+                <span class="eyebrow">MODULE 02</span>
+                <span class="tag soft" id="card-badge-pseudocode">ยังไม่ทำ</span>
+              </div>
+              <h3>การเขียนรหัสลำลอง (Pseudocode Studio)</h3>
+              <p>ทดลองโครงสร้าง Sequence, Selection (IF-ELSE), Repetition (WHILE) พร้อมตัวรันโค้ดทีละบรรทัด</p>
+            </div>
+            <div class="module-card" data-go="flowchart">
+              <div class="module-card-top">
+                <span class="eyebrow">MODULE 03</span>
+                <span class="tag soft" id="card-badge-flowchart">ยังไม่ทำ</span>
+              </div>
+              <h3>ผังงานมาตรฐาน (ANSI/ISO Flowchart)</h3>
+              <p>เรียนรู้สัญลักษณ์มาตรฐานสากล และต่อบล็อกสร้างผังงาน SVG แบบไดนามิกจากรหัสลำลอง</p>
+            </div>
+            <div class="module-card" data-go="lab4_tracetable">
+              <div class="module-card-top">
+                <span class="eyebrow">MODULE 04 • LAB 4</span>
+                <span class="tag soft" id="card-badge-lab4_tracetable">ยังไม่ทำ</span>
+              </div>
+              <h3>ปฏิบัติการที่ 4: ผังงานวิทย์ &amp; Trace Table</h3>
+              <p>ออกแบบผังงานควบคุมการทดลองเคมี ฟิสิกส์ ชีววิทยา และฝึกกรอกตาราง Trace Table ตรวจสอบความถูกต้อง</p>
+            </div>
+            <div class="module-card" data-go="assessment">
+              <div class="module-card-top">
+                <span class="eyebrow">MODULE 05 • QUIZ</span>
+                <span class="tag soft" id="card-badge-assessment">ยังไม่ทำ</span>
+              </div>
+              <h3>แบบทดสอบวัดผล 5 ข้อพร้อมภาพประกอบ</h3>
+              <p>ทดสอบความเข้าใจ IPO, Loop, สัญลักษณ์ผังงาน, Trace Table และการจับจุดผิด Infinite Loop</p>
+            </div>
+          </div>
+
+          <div class="panel" style="background:linear-gradient(135deg,#f8fbff,#eef5ff);border-color:#c7dbfb">
+            <div class="panel-top">
+              <div>
+                <span class="eyebrow">NOTEBOOKLM STUDY HUB • 51 SOURCES (CAMBRIDGE / IB / ISO 5807)</span>
+                <h3>คลังความรู้เชิงลึก FlowCharT-CS2027 (Gemini NotebookLM)</h3>
+              </div>
+              <div class="btn-row">
+                <a class="btn btn-small btn-primary" href="https://notebook.google.com/notebook/b726099e-9711-4319-9deb-d3c42c772173" target="_blank" rel="noopener">📖 เปิด Notebook เต็ม ↗</a>
+                <a class="btn btn-small btn-outline" href="https://notebooklm.link.google/IP0aexOtZhEb" target="_blank" rel="noopener">🔗 ลิงก์แชร์สาธารณะ ↗</a>
+              </div>
+            </div>
+            <p style="font-size:13px;color:#334155;margin:0 0 10px">
+              บทเรียนนี้บูรณาการจากแหล่งข้อมูล 51 แห่ง (ISO 5807:1985, Cambridge IGCSE/AS-Level, IB Computer Science, Weintrop et al., Flow2Code) พร้อมสื่อประกอบใน NotebookLM: ชุดสไลด์ <i>The Visual Language of Logic</i> (12 สไลด์), รายงานอินเทอร์แอกทีฟ <i>ถอดรหัสอัลกอริทึมสู่ Dry Run</i>, แฟลชการ์ด 50 ใบ, แผนผัง Mind Map 3 ชุด และวิดีโอสรุปตรรกะเชิงคำนวณ
+            </p>
+          </div>
+
+          <div class="panel" style="background:linear-gradient(135deg,#fffef7,#f0f7ff);border-color:#bfdbfe">
+            <div style="display:flex;flex-wrap:wrap;gap:18px;align-items:center">
+              <a href="textbook/CT_Lab04_Algorithm_Flowchart_Textbook_RBRU.pdf" target="_blank" rel="noopener" style="flex:0 0 auto">
+                <img src="textbook/figures/cover_1800x2700.png" alt="ปกตำราวิชาการ การออกแบบขั้นตอนวิธี รหัสลำลอง และผังงานมาตรฐาน" style="width:132px;height:auto;border-radius:10px;box-shadow:0 8px 20px rgba(15,23,42,0.18);display:block">
+              </a>
+              <div style="flex:1 1 280px;min-width:0">
+                <span class="eyebrow">ACADEMIC B5 XELATEX TEXTBOOK &amp; LAB MANUAL • ISBN 978-616-612-041-7</span>
+                <h3 style="margin:4px 0 6px">ตำราและคู่มือวิชาการ: การออกแบบขั้นตอนวิธี รหัสลำลอง และผังงานมาตรฐาน</h3>
+                <p style="font-size:13px;color:#334155;margin:0 0 10px">
+                  เรียบเรียงตามมาตรฐาน <b>rbru-latex-textbook-builder (B5 XeLaTeX)</b> และ <b>academic-book-cover-architect</b> ครบ 8 บทเรียน (IPO &amp; Four-Tier Test Data, รหัสลำลอง, ISO 5807 16 สัญลักษณ์, 4 Logic Error Taxonomy, กรณีศึกษา CSTR, งานวิจัยฟิสิกส์เกษตร AIoT &amp; นาโนเทคโนโลยี, การตัดเกรด/การสอนวิทย์ และคู่มือ 6 ปฏิบัติการ) พร้อมแผนผังเวกเตอร์ TikZ อภิธานศัพท์ และดัชนีคำค้นสองภาษา
+                </p>
+                <div class="btn-row">
+                  <a class="btn btn-small btn-primary" href="textbook/CT_Lab04_Algorithm_Flowchart_Textbook_RBRU.pdf" target="_blank" rel="noopener">📕 เปิดอ่าน / ดาวน์โหลดตำรา PDF (B5) ↗</a>
+                  <a class="btn btn-small btn-outline" href="textbook/PEER_REVIEW_EVALUATION_CRITERIA.md" target="_blank" rel="noopener">📋 เกณฑ์ประเมินผู้ทรงคุณวุฒิ (รศ.) ↗</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- MODULE 01: ALGORITHM DESIGN -->
+        <section class="page" data-page="algo_design">
+          <div class="page-head">
+            <div class="eyebrow">MODULE 01 • ALGORITHM DESIGN</div>
+            <h2>การลำดับขั้นตอนแก้ปัญหาอย่างเป็นระบบ (IPO &amp; Edge Cases)</h2>
+            <p>ขั้นตอนวิธีที่ดีต้องมีจุดเริ่มต้น-สิ้นสุดชัดเจน ไม่กำกวม และตรวจสอบข้อมูลนำเข้าก่อนประมวลผลเสมอ</p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-top">
+              <div>
+                <span class="eyebrow">INTERACTIVE SANDBOX 01</span>
+                <h3>เครื่องมือวิเคราะห์ Input → Validation → Process → Output (IPO)</h3>
+              </div>
+              <span class="tag" id="badge-algo_design">ทดลองให้ครบ</span>
+            </div>
+
+            <div class="field-grid">
+              <div class="field">
+                <label for="ipo-scenario">เลือกโจทย์วิทยาศาสตร์</label>
+                <select id="ipo-scenario">
+                  <option value="conc">1. คำนวณความเข้มข้นสารละลาย (C = n / V)</option>
+                  <option value="density">2. คำนวณความหนาแน่นของวัตถุ (ρ = m / V)</option>
+                  <option value="heat">3. คำนวณพลังงานความร้อน (Q = m · c · ΔT)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="ipo-val1" id="ipo-lbl1">จำนวนโมล n (mol)</label>
+                <input type="number" id="ipo-val1" step="0.1" value="2.5">
+              </div>
+              <div class="field">
+                <label for="ipo-val2" id="ipo-lbl2">ปริมาตรสารละลาย V (L)</label>
+                <input type="number" id="ipo-val2" step="0.1" value="0.5">
+              </div>
+            </div>
+
+            <div class="btn-row">
+              <button type="button" class="btn btn-primary" id="ipo-run-btn">▶ รันการวิเคราะห์ขั้นตอน IPO</button>
+              <button type="button" class="btn btn-outline btn-small" id="ipo-test-zero-btn">🧪 ทดสอบกรณีผิดปกติ (V = 0)</button>
+            </div>
+
+            <div class="ipo-grid" id="ipo-pipeline">
+              <div class="ipo-box" id="ipo-step-in">
+                <div class="ipo-box-title">1. Input</div>
+                <div class="ipo-box-body">รอรับค่าตัวแปร...</div>
+              </div>
+              <div class="ipo-box" id="ipo-step-val">
+                <div class="ipo-box-title">2. Validation (Edge Check)</div>
+                <div class="ipo-box-body">ตรวจสอบเงื่อนไขขอบเขต...</div>
+              </div>
+              <div class="ipo-box" id="ipo-step-proc">
+                <div class="ipo-box-title">3. Process</div>
+                <div class="ipo-box-body">รอประมวลผลสูตร...</div>
+              </div>
+              <div class="ipo-box" id="ipo-step-out">
+                <div class="ipo-box-title">4. Output</div>
+                <div class="ipo-box-body">รอแสดงผลลัพธ์...</div>
+              </div>
+            </div>
+            <div id="ipo-feedback" class="feedback"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-top">
+              <div>
+                <span class="eyebrow">FOUR-TIER TEST DATA VALIDATION (CAMBRIDGE / IGCSE)</span>
+                <h3>ทดสอบชุดข้อมูล 4 ระดับ (Normal / Extreme / Boundary / Abnormal)</h3>
+              </div>
+              <span class="tag soft" id="tier-badge">ช่วงปลอดภัย CSTR: 35.0 – 40.0 °C (รับค่าเซนเซอร์ 0 – 100 °C)</span>
+            </div>
+            <p style="font-size:13px;color:var(--muted);margin-top:0">
+              ตามหลักการตรวจสอบอัลกอริทึมใน NotebookLM ควรทดสอบทั้งข้อมูลปกติ ข้อมูลสุดขอบ ข้อมูลประชิดขอบเขต และข้อมูลผิดพลาด เพื่อป้องกันความผิดพลาดเชิงตรรกะ
+            </p>
+            <div class="field-grid">
+              <div class="field">
+                <label for="tier-temp-input">ค่าอุณหภูมิทดสอบ T (°C)</label>
+                <input type="number" id="tier-temp-input" step="0.1" value="37.5">
+              </div>
+              <div class="field">
+                <label for="tier-guess">ระบุประเภทชุดข้อมูลทดสอบ</label>
+                <select id="tier-guess">
+                  <option value="normal">Normal Data (ข้อมูลปกติในช่วงทำงาน 35.0–40.0)</option>
+                  <option value="extreme">Extreme Data (ข้อมูลสุดขอบที่เป็นไปได้ เช่น 0 หรือ 100)</option>
+                  <option value="boundary">Boundary Data (ข้อมูลประชิดขอบเขต เช่น 34.9, 35.0, 40.0, 40.1, -0.1)</option>
+                  <option value="abnormal">Abnormal Data (ข้อมูลผิดปกติ/นอกช่วงเซนเซอร์ &lt;0 หรือ &gt;100)</option>
+                </select>
+              </div>
+            </div>
+            <div class="btn-row">
+              <button type="button" class="btn btn-primary btn-small" id="tier-check-btn">✓ ทดสอบจำแนกชุดข้อมูล</button>
+              <button type="button" class="btn btn-outline btn-small" data-tier-preset="37.5|normal">ปกติ (37.5°C)</button>
+              <button type="button" class="btn btn-outline btn-small" data-tier-preset="34.9|boundary">ประชิดขอบ (34.9°C)</button>
+              <button type="button" class="btn btn-outline btn-small" data-tier-preset="100|extreme">สุดขอบ (100°C)</button>
+              <button type="button" class="btn btn-outline btn-small" data-tier-preset="-5|abnormal">ผิดพลาด (-5°C)</button>
+            </div>
+            <div id="tier-feedback" class="feedback"></div>
+          </div>
+        </section>
+
+        <!-- MODULE 02: PSEUDOCODE -->
+        <section class="page" data-page="pseudocode">
+          <div class="page-head">
+            <div class="eyebrow">MODULE 02 • PSEUDOCODE STUDIO</div>
+            <h2>การเขียนรหัสลำลอง (Pseudocode) และโครงสร้างควบคุม 3 รูปแบบ</h2>
+            <p>รหัสลำลองใช้คำสั่งกึ่งภาษาอังกฤษมาตรฐาน (READ, SET, IF-ELSE, WHILE, PRINT) เพื่ออธิบายตรรกะก่อนเขียนโค้ดจริง</p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-top">
+              <div>
+                <span class="eyebrow">INTERACTIVE STEP RUNNER</span>
+                <h3>ห้องทดลองรันรหัสลำลองทีละบรรทัด</h3>
+              </div>
+              <span class="tag" id="badge-pseudocode">ทดลองรันครบ 1 ตัวอย่าง</span>
+            </div>
+
+            <div class="sub-tabs" id="pseudo-mode-tabs">
+              <button type="button" class="sub-tab active" data-pmode="sequence">1. ลำดับ (Sequence)</button>
+              <button type="button" class="sub-tab" data-pmode="selection">2. ทางเลือก (IF-ELSE)</button>
+              <button type="button" class="sub-tab" data-pmode="repetition">3. วนซ้ำก่อนตรวจ (WHILE)</button>
+              <button type="button" class="sub-tab" data-pmode="repeat_until">4. ทำก่อนตรวจ (REPEAT-UNTIL)</button>
+            </div>
+
+            <div class="pseudo-grid">
+              <div>
+                <div class="code-box" id="pseudo-code-view"></div>
+                <div class="btn-row" style="margin-top:12px">
+                  <button type="button" class="btn btn-primary btn-small" id="pseudo-step-btn">▷ ขั้นถัดไป (Step)</button>
+                  <button type="button" class="btn btn-outline btn-small" id="pseudo-auto-btn">▶ รันอัตโนมัติ</button>
+                  <button type="button" class="btn btn-quiet btn-small" id="pseudo-reset-btn">↺ รีเซ็ต</button>
+                </div>
+              </div>
+              <div class="watch-card">
+                <div class="eyebrow" style="margin-bottom:8px">VARIABLE WATCH &amp; TRACE</div>
+                <div id="pseudo-watch-vars"></div>
+                <div style="margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0;font-size:12px;color:#334155" id="pseudo-step-note">
+                  กด "▷ ขั้นถัดไป" เพื่อติดตามการทำงานทีละบรรทัด
+                </div>
+              </div>
+            </div>
+            <div id="pseudo-feedback" class="feedback"></div>
+
+            <div style="margin-top:16px;padding:12px 14px;border-radius:12px;background:#f8fbff;border:1px solid #dbe6f6;font-size:12px;color:#334155">
+              <b>สรุปมาตรฐาน Pseudocode (NotebookLM ISO/Cambridge):</b> ใช้ Keywords ตัวพิมพ์ใหญ่ (`INITIALISE`, `INPUT`, `OUTPUT`, `PROCEDURE`/`CALL`), ใช้ <code>←</code> แทนการกำหนดค่า (Assignment) ซึ่งต่างจาก <code>=</code> หรือ <code>==</code> ที่ใช้เปรียบเทียบ, โดย `FOR` ใช้เมื่อรู้จำนวนรอบ, `WHILE` ตรวจเงื่อนไขก่อนทำ (0 หรือหลายรอบ), และ `REPEAT...UNTIL` ทำก่อนตรวจเงื่อนไข (ทำอย่างน้อย 1 รอบเสมอ)
+            </div>
+          </div>
+        </section>
+
+        <!-- MODULE 03: STANDARD FLOWCHART -->
+        <section class="page" data-page="flowchart">
+          <div class="page-head">
+            <div class="eyebrow">MODULE 03 • STANDARD FLOWCHART (ANSI/ISO 5807)</div>
+            <h2>ผังงานมาตรฐานและการแปลงรหัสลำลองเป็นผังงาน</h2>
+            <p>เลือกใช้สัญลักษณ์ผังงานมาตรฐานให้ตรงตามหน้าที่และต่อลำดับทิศทางการไหลของงานให้ถูกต้อง</p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-top">
+              <div>
+                <span class="eyebrow">SYMBOL REFERENCE</span>
+                <h3>สัญลักษณ์ผังงานมาตรฐาน ANSI/ISO</h3>
+              </div>
+            </div>
+            <div class="svg-stage">
+              <svg viewBox="0 0 860 120" role="img" aria-label="สัญลักษณ์ผังงานมาตรฐาน ISO 5807:1985">
+                <g transform="translate(10,15)">
+                  <rect x="4" y="10" width="96" height="38" rx="19" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+                  <text x="52" y="34" text-anchor="middle" font-size="11" font-weight="800" fill="#1e3a8a">Terminator</text>
+                  <text x="52" y="72" text-anchor="middle" font-size="10" font-weight="700" fill="#334155">เริ่ม / จบ (วงรี)</text>
+                </g>
+                <g transform="translate(120,15)">
+                  <polygon points="22,10 86,10 104,29 86,48 22,48 4,29" fill="#f3e8ff" stroke="#7c3aed" stroke-width="2"/>
+                  <text x="54" y="33" text-anchor="middle" font-size="11" font-weight="800" fill="#5b21b6">Preparation</text>
+                  <text x="54" y="72" text-anchor="middle" font-size="10" font-weight="700" fill="#334155">ตั้งค่าเริ่ม (หกเหลี่ยม)</text>
+                </g>
+                <g transform="translate(238,15)">
+                  <polygon points="18,10 106,10 90,48 2,48" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+                  <text x="54" y="34" text-anchor="middle" font-size="11" font-weight="800" fill="#0c4a6e">Data I/O</text>
+                  <text x="54" y="72" text-anchor="middle" font-size="10" font-weight="700" fill="#334155">รับ/แสดง (ด้านขนาน)</text>
+                </g>
+                <g transform="translate(358,15)">
+                  <rect x="4" y="10" width="98" height="38" rx="4" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+                  <text x="53" y="34" text-anchor="middle" font-size="11" font-weight="800" fill="#14532d">Process</text>
+                  <text x="53" y="72" text-anchor="middle" font-size="10" font-weight="700" fill="#334155">คำนวณ/ประมวลผล</text>
+                </g>
+                <g transform="translate(472,4)">
+                  <polygon points="55,6 106,40 55,74 4,40" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+                  <text x="55" y="44" text-anchor="middle" font-size="11" font-weight="800" fill="#92400e">Decision</text>
+                  <text x="55" y="88" text-anchor="middle" font-size="10" font-weight="700" fill="#334155">เงื่อนไข (2+ ทาง)</text>
+                </g>
+                <g transform="translate(592,15)">
+                  <rect x="4" y="10" width="96" height="38" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/>
+                  <line x1="16" y1="10" x2="16" y2="48" stroke="#4338ca" stroke-width="2"/>
+                  <line x1="88" y1="10" x2="88" y2="48" stroke="#4338ca" stroke-width="2"/>
+                  <text x="52" y="34" text-anchor="middle" font-size="10" font-weight="800" fill="#312e81">Subroutine</text>
+                  <text x="52" y="72" text-anchor="middle" font-size="10" font-weight="700" fill="#334155">โปรแกรมย่อย</text>
+                </g>
+                <g transform="translate(706,15)">
+                  <path d="M8,10 H46 A19,19 0 0,1 46,48 H8 Z" fill="#ffedd5" stroke="#ea580c" stroke-width="2"/>
+                  <text x="34" y="34" text-anchor="middle" font-size="11" font-weight="800" fill="#9a3412">Delay</text>
+                  <text x="36" y="72" text-anchor="middle" font-size="10" font-weight="700" fill="#334155">หน่วงเวลา</text>
+                </g>
+                <g transform="translate(784,15)">
+                  <circle cx="30" cy="29" r="16" fill="#f1f5f9" stroke="#475569" stroke-width="2"/>
+                  <text x="30" y="33" text-anchor="middle" font-size="11" font-weight="800" fill="#0f172a">A</text>
+                  <text x="30" y="72" text-anchor="middle" font-size="10" font-weight="700" fill="#334155">Connector</text>
+                </g>
+              </svg>
+            </div>
+            <details style="margin-top:12px">
+              <summary style="cursor:pointer;font-size:12px;font-weight:800;color:var(--blue)">ดูตารางสัญลักษณ์มาตรฐาน ISO 5807:1985 ครบทั้ง 16 สัญลักษณ์ (จาก NotebookLM Deep Research)</summary>
+              <div class="trace-wrap" style="margin-top:8px">
+                <table class="trace-table" style="font-size:12px">
+                  <thead><tr><th>สัญลักษณ์</th><th>รูปทรง</th><th>หน้าที่การใช้งานมาตรฐาน ISO 5807</th></tr></thead>
+                  <tbody>
+                    <tr><td><b>Terminator</b></td><td>วงรี / สี่เหลี่ยมมุมมน</td><td>กำหนดจุดเริ่มต้น (START) หรือจุดสิ้นสุด (END)</td></tr>
+                    <tr><td><b>Preparation</b></td><td>หกเหลี่ยมแนวนอน (Hexagon)</td><td>ตั้งค่าเริ่มต้นตัวแปร สวิตช์ หรือตัวนับก่อนเข้ากระบวนการหลัก</td></tr>
+                    <tr><td><b>Process</b></td><td>สี่เหลี่ยมผืนผ้า</td><td>การคำนวณ กำหนดค่าตัวแปร (←) หรือควบคุมอุปกรณ์</td></tr>
+                    <tr><td><b>Decision</b></td><td>สี่เหลี่ยมข้าวหลามตัด</td><td>จุดทดสอบเงื่อนไขตรรกศาสตร์ มีเส้นทางออกอย่างน้อย 2 ทาง</td></tr>
+                    <tr><td><b>Data (I/O)</b></td><td>สี่เหลี่ยมด้านขนาน</td><td>รับข้อมูลเข้า หรือแสดงผลลัพธ์ออกโดยไม่จำกัดอุปกรณ์</td></tr>
+                    <tr><td><b>Predefined Process</b></td><td>สี่เหลี่ยมมีเส้นแนวตั้งขนาบข้าง</td><td>เรียกใช้ฟังก์ชันหรือโปรแกรมย่อย (Subroutine)</td></tr>
+                    <tr><td><b>Manual Input / Operation</b></td><td>สี่เหลี่ยมขอบบนเอียง / คางหมูกลับหัว</td><td>ป้อนข้อมูลด้วยมือมนุษย์ / ปฏิบัติงานด้วยมือไม่ผ่านคอมพิวเตอร์</td></tr>
+                    <tr><td><b>Document / Stored Data / DB</b></td><td>ขอบล่างคลื่น / โค้งบาน / ทรงกระบอก</td><td>รายงานเอกสาร / สื่อบันทึกทั่วไป / ฐานข้อมูล Direct Access</td></tr>
+                    <tr><td><b>Sequential Access / Delay</b></td><td>ม้วนเทปมีหาง / รูปตัว D</td><td>จัดเก็บแบบลำดับ / การหน่วงเวลาพักคอย (เช่น DELAY 5 SECONDS)</td></tr>
+                    <tr><td><b>On-Page / Off-Page Connector</b></td><td>วงกลมเล็ก / ห้าเหลี่ยมรูปบ้าน</td><td>จุดเชื่อมต่อในหน้าเดียวกัน / จุดเชื่อมต่อข้ามหน้า + เส้น Flowline</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </details>
+          </div>
+
+          <div class="panel">
+            <div class="panel-top">
+              <div>
+                <span class="eyebrow">DYNAMIC SVG FLOWCHART BUILDER</span>
+                <h3 id="fc3-scen-title">ต่อบล็อกสร้างผังงานมาตรฐาน ISO 5807 (เลือกโจทย์ได้ 4 บริบท)</h3>
+              </div>
+              <span class="tag" id="badge-flowchart">ต่อให้ครบและตรวจ</span>
+            </div>
+
+            <div class="sub-tabs" id="fc3-scenario-tabs" style="margin-bottom:10px">
+              <button type="button" class="sub-tab active" data-fcscen="water">3.1 วิทยาศาสตร์: คุณภาพน้ำ (TDS)</button>
+              <button type="button" class="sub-tab" data-fcscen="smartfarm">3.2 เกษตรอัจฉริยะ: ให้น้ำ-ปุ๋ย (Smart Farm)</button>
+              <button type="button" class="sub-tab" data-fcscen="grading">3.3 การตัดเกรด: หลายทางเลือก (Grading)</button>
+              <button type="button" class="sub-tab" data-fcscen="pedagogy">3.4 การสอนวิทย์: ซ่อมเสริมอัตโนมัติ (Subroutine)</button>
+            </div>
+            <p id="fc3-scen-desc" style="font-size:13px;color:var(--muted);margin:0 0 12px"></p>
+
+            <div class="lab4-split">
+              <div>
+                <div class="semi-col-title">คลังบล็อกมาตรฐาน (แตะเพื่อเพิ่มเข้าผังงาน)</div>
+                <div class="semi-bank" id="fc3-bank"></div>
+                <div style="margin-top:12px" class="semi-col-title">ลำดับผังงานของคุณ</div>
+                <div class="semi-seq" id="fc3-seq"></div>
+                <div class="btn-row" style="margin-top:12px">
+                  <button type="button" class="btn btn-primary btn-small" id="fc3-check-btn">✓ ตรวจความถูกต้องผังงาน</button>
+                  <button type="button" class="btn btn-quiet btn-small" id="fc3-reset-btn">↺ ล้างใหม่</button>
+                </div>
+                <div id="fc3-feedback" class="feedback"></div>
+                <div id="fc3-scen-summary" style="margin-top:10px;font-size:12px;color:#475569"></div>
+              </div>
+              <div class="svg-stage">
+                <div class="semi-col-title">แผนภาพผังงาน SVG แบบเรียลไทม์ (ลาก-วางปรับตำแหน่งได้)</div>
+                <div class="svg-toolbar">
+                  <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+                    <label class="fc3-chk-label"><input type="checkbox" id="fc3-snap-chk" checked> ดูดเข้าตาราง Snap 10px</label>
+                    <label class="fc3-chk-label"><input type="checkbox" id="fc3-autosort-chk" checked> เรียงลำดับตามแกน Y อัตโนมัติ</label>
+                  </div>
+                  <div style="display:flex;gap:5px;align-items:center">
+                    <button type="button" class="btn btn-outline btn-small" id="fc3-align-btn">⊞ จัดเรียงตรงกลาง</button>
+                    <button type="button" class="btn btn-quiet btn-small" id="fc3-zoom-out" title="ซูมออก">－</button>
+                    <button type="button" class="btn btn-quiet btn-small" id="fc3-zoom-in" title="ซูมเข้า">＋</button>
+                  </div>
+                </div>
+                <div id="fc3-svg-preview"></div>
+                <div id="fc3-drag-status" class="fc3-drag-hint">💡 คลิกค้างที่สัญลักษณ์ในผังงานเพื่อลากเลื่อนตำแหน่ง (x, y) หรือลากบล็อกจากคลังซ้ายมาวางลงในผังงาน</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-top">
+              <div>
+                <span class="eyebrow">INTERACTIVE MULTI-BRANCH FLOWCHART SIMULATOR</span>
+                <h3>จำลองเส้นทางผังงานมาตรฐานแบบหลายทางเลือก (IF–ELSEIF–ELSE / AIoT / Dichotomous Key)</h3>
+              </div>
+              <span class="tag soft" id="badge-fc3-sim">ทดลองจำลองเส้นทาง</span>
+            </div>
+            <p style="font-size:13px;color:var(--muted);margin-top:0">
+              ปรับค่าข้อมูลเข้า (Input) เพื่อสังเกตว่าเส้นไหล (Flowline) ในผังงานมาตรฐาน ISO 5807 เดินทางผ่านสัญลักษณ์ใดบ้างแบบเรียลไทม์
+            </p>
+            <div class="sub-tabs" id="fc3-sim-tabs">
+              <button type="button" class="sub-tab active" data-fcsim="sim_grading">1. ระบบตัดเกรดวิชาวิทย์ (IF–ELSEIF–ELSE)</button>
+              <button type="button" class="sub-tab" data-fcsim="sim_smartfarm">2. เกษตรอัจฉริยะ AIoT (Decision + Subroutine + Delay)</button>
+              <button type="button" class="sub-tab" data-fcsim="sim_science_key">3. การสอนวิทย์: กุญแจจำแนกพืช (Dichotomous Key)</button>
+            </div>
+
+            <div class="lab4-split" style="margin-top:12px">
+              <div>
+                <div class="semi-col-title">แผงปรับค่า Input เพื่อทดสอบเส้นทาง</div>
+                <div id="fc3-sim-controls"></div>
+                <div id="fc3-branch-explain" class="feedback good" style="display:block;margin-top:12px"></div>
+              </div>
+              <div class="svg-stage">
+                <div class="semi-col-title">แผนภาพผังงานมาตรฐาน ISO 5807:1985 (เส้นทางทำงานจริง)</div>
+                <div id="fc3-branch-svg"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- MODULE 04: LAB 4 & TRACE TABLE -->
+        <section class="page" data-page="lab4_tracetable">
+          <div class="page-head">
+            <div class="eyebrow">MODULE 04 • LAB 04 SCIENTIFIC FLOWCHART &amp; TRACE TABLE</div>
+            <h2>ปฏิบัติการที่ 4: ออกแบบผังงานควบคุมการทดลองวิทยาศาสตร์ &amp; Trace Table</h2>
+            <p>เลือกการทดลองวิทยาศาสตร์ เกษตรอัจฉริยะ หรือระบบตัดเกรด/การสอน ศึกษาผังงานควบคุม SVG และฝึกตรวจสอบด้วย Trace Table (Dry Run) ทีละรอบ</p>
+          </div>
+
+          <div class="sub-tabs" id="lab4-exp-tabs">
+            <button type="button" class="sub-tab active" data-exp="cstr">4.0 ถังปฏิกรณ์เคมี CSTR (Case Study)</button>
+            <button type="button" class="sub-tab" data-exp="titration">4.1 เคมี: ไทเทรตกรด-เบส</button>
+            <button type="button" class="sub-tab" data-exp="pendulum">4.2 ฟิสิกส์: คาบเพนดูลัม</button>
+            <button type="button" class="sub-tab" data-exp="incubator">4.3 ชีววิทยา: ตู้บ่มเชื้อ</button>
+            <button type="button" class="sub-tab" data-exp="smartfarm">4.4 เกษตรอัจฉริยะ: น้ำ-ปุ๋ย AIoT</button>
+            <button type="button" class="sub-tab" data-exp="grading_edu">4.5 การสอนวิทย์: ตัดเกรด &amp; ซ่อมเสริม</button>
+          </div>
+
+          <div class="panel">
+            <div class="panel-top">
+              <div>
+                <span class="eyebrow" id="lab4-exp-eyebrow">EXPERIMENT 4.0 • CSTR CLOSED-LOOP CONTROL</span>
+                <h3 id="lab4-exp-title">ระบบควบคุมอุณหภูมิและค่า pH ถังปฏิกรณ์เคมีอัตโนมัติ (CSTR)</h3>
+              </div>
+              <span class="tag" id="badge-lab4_tracetable">ตรวจ Trace Table อย่างน้อย 1 การทดลอง</span>
+            </div>
+            <p id="lab4-exp-desc" style="font-size:13px;color:var(--muted);margin-top:0"></p>
+
+            <div class="lab4-split">
+              <div>
+                <div class="semi-col-title">แผนภาพผังงานควบคุมการทดลอง (ANSI/ISO SVG)</div>
+                <div class="svg-stage" id="lab4-svg-stage"></div>
+                <div style="margin-top:12px">
+                  <div class="semi-col-title">รหัสลำลองคู่ขนาน (Pseudocode)</div>
+                  <div class="code-box" id="lab4-pseudo-box"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="semi-col-title">ตารางทวนสอบ Trace Table (Dry Run) — กรอกช่องว่างให้ถูกต้อง</div>
+                <div class="trace-wrap">
+                  <table class="trace-table" id="lab4-trace-table"></table>
+                </div>
+                <div class="btn-row" style="margin-top:12px">
+                  <button type="button" class="btn btn-primary btn-small" id="lab4-check-trace">✓ ตรวจตาราง Trace Table</button>
+                  <button type="button" class="btn btn-outline btn-small" id="lab4-step-trace">▷ จำลอง Trace ทีละขั้น</button>
+                  <button type="button" class="btn btn-quiet btn-small" id="lab4-reset-trace">↺ ล้างช่องคำตอบ</button>
+                </div>
+                <div id="lab4-trace-fb" class="feedback"></div>
+                <div id="lab4-trace-summary" style="margin-top:10px;font-size:12px;color:#475569"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-top">
+              <div>
+                <span class="eyebrow">DEBUGGING • 4 LOGIC ERROR TAXONOMY (NOTEBOOKLM)</span>
+                <h3>อนุกรมความผิดพลาดเชิงตรรกะ 4 รูปแบบที่พบบ่อยใน Trace Table</h3>
+              </div>
+              <span class="tag soft">Fail-Safe &amp; Dry Run Rules</span>
+            </div>
+            <div class="ipo-grid">
+              <div class="ipo-box err">
+                <div class="ipo-box-title">1. Off-by-One Error</div>
+                <div class="ipo-box-body" style="font-weight:600;font-size:12px">ใช้ <code>&lt;=</code> แทน <code>&lt;</code> ทำให้ลูปเกิน/ขาด 1 รอบ จ่ายสารเคมีเกินขนาด</div>
+              </div>
+              <div class="ipo-box err">
+                <div class="ipo-box-title">2. Uninitialized / Reset</div>
+                <div class="ipo-box-body" style="font-weight:600;font-size:12px">ลืมกำหนดค่าในบล็อก Preparation (หกเหลี่ยม) หรือวาง <code>total ← 0</code> ในลูป</div>
+              </div>
+              <div class="ipo-box err">
+                <div class="ipo-box-title">3. Infinite Loop</div>
+                <div class="ipo-box-body" style="font-weight:600;font-size:12px">ลืมอัปเดตตัวแปรควบคุมลูป (<code>TotalCycles ← TotalCycles + 1</code>) ทำให้ปั๊มทำงานค้าง</div>
+              </div>
+              <div class="ipo-box" style="background:#fff7e6;border-color:#fde68a">
+                <div class="ipo-box-title" style="color:#b45309">4. Actuator Chatter</div>
+                <div class="ipo-box-body" style="font-weight:600;font-size:12px">สลับ ON/OFF ถี่ที่ค่าขอบเขต แก้ด้วยช่วง Deadband (35–40°C) + Fail-Safe Reset OFF</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- MODULE 05: ASSESSMENT -->
+        <section class="page" data-page="assessment">
+          <div class="page-head">
+            <div class="eyebrow">MODULE 05 • SERVER-SIDE ASSESSMENT</div>
+            <h2>แบบทดสอบวัดผลเรื่องขั้นตอนวิธี รหัสลำลอง ผังงาน และ Trace Table</h2>
+            <p>เลือกสาขาและชื่อนักศึกษา แล้วตอบคำถามให้ครบทั้ง 5 ข้อ ระบบจะส่งตรวจและประเมินผลด้วย AI ฝั่งเซิร์ฟเวอร์</p>
+          </div>
+
+          <form id="ch-form">
+            <div class="panel">
+              <div class="field-grid">
+                <div class="field">
+                  <label for="ch-section-select">1. เลือกสาขา / กลุ่มเรียน *</label>
+                  <select id="ch-section-select" required>
+                    <option value="">-- กรุณาเลือกสาขา / กลุ่มเรียน --</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="ch-student-select">2. เลือกรหัสและชื่อ-นามสกุล *</label>
+                  <select id="ch-student-select" required disabled>
+                    <option value="">-- กรุณาเลือกสาขาก่อน --</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div id="ch-questions">
+              <div class="empty-state">กำลังโหลดโจทย์แบบทดสอบ...</div>
+            </div>
+
+            <div class="panel">
+              <div class="field">
+                <label for="ch-note">สรุปแนวคิดหรือสิ่งที่ได้เรียนรู้จากปฏิบัติการที่ 4 (เพิ่มคะแนนสะท้อนคิดจาก AI)</label>
+                <textarea id="ch-note" rows="3" placeholder="อธิบายความเชื่อมโยงระหว่าง Pseudocode, Flowchart และ Trace Table..."></textarea>
+              </div>
+              <div id="ch-feedback" class="feedback"></div>
+              <button type="submit" class="btn btn-primary btn-block" id="ch-submit-btn" style="margin-top:10px">📤 ส่งคำตอบให้อาจารย์และ AI ตรวจ</button>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="mobile-overlay" id="mobile-overlay"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- STUDENT SUBMISSION MODAL -->
+  <dialog id="submit-dialog" class="submit-dialog" aria-labelledby="submit-dialog-title">
+    <div class="dialog-head">
+      <div>
+        <div class="eyebrow">STUDENT SUBMISSION &amp; AI AUTO-GRADING</div>
+        <h2 id="submit-dialog-title">ส่งงานและดูผลการตรวจจาก AI</h2>
+      </div>
+      <button type="button" class="icon-btn" id="sub-close-btn" aria-label="ปิด">✕</button>
+    </div>
+
+    <div class="submit-tabs">
+      <button type="button" class="active" data-sub-tab="form">📤 ส่งงานให้อาจารย์และ AI ตรวจ</button>
+      <button type="button" data-sub-tab="history">📋 ประวัติการส่ง &amp; ผลตรวจ AI</button>
+    </div>
+
+    <div id="sub-pane-form">
+      <form id="sub-form">
+        <div class="field-grid">
+          <div class="field">
+            <label for="sub-section-select">1. เลือกสาขา / กลุ่มเรียน *</label>
+            <select id="sub-section-select" required>
+              <option value="">-- กรุณาเลือกสาขา --</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="sub-student-select">2. เลือกรหัสนักศึกษา *</label>
+            <select id="sub-student-select" required disabled>
+              <option value="">-- กรุณาเลือกสาขาก่อน --</option>
+            </select>
+          </div>
+        </div>
+        <input type="hidden" id="sub-student-id">
+        <input type="hidden" id="sub-full-name">
+        <input type="hidden" id="sub-section">
+
+        <div class="field" style="margin-bottom:10px">
+          <label for="sub-scope">ขอบเขตงานที่ส่ง</label>
+          <select id="sub-scope">
+            <option value="all">ภาพรวมทั้งหมด (4 โมดูล)</option>
+            <option value="algo_design">01 Algorithm Design</option>
+            <option value="pseudocode">02 รหัสลำลอง (Pseudocode)</option>
+            <option value="flowchart">03 ผังงานมาตรฐาน (Flowchart)</option>
+            <option value="lab4_tracetable">04 ปฏิบัติการที่ 4: Trace Table</option>
+          </select>
+        </div>
+
+        <div class="submit-summary-box">
+          <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:800">
+            <span>ความคืบหน้าปัจจุบัน</span>
+            <span id="sub-progress-count">สำเร็จ 0 / 4 โมดูล</span>
+          </div>
+          <div class="submit-module-pills" id="sub-module-pills"></div>
+        </div>
+
+        <div class="field" style="margin-bottom:10px">
+          <label for="sub-note">บันทึกสรุปแนวคิดเพิ่มเติมถึงอาจารย์ / AI</label>
+          <textarea id="sub-note" rows="3" placeholder="สรุปสิ่งที่ได้จากการทำ Trace Table และการออกแบบผังงาน..."></textarea>
+        </div>
+
+        <div id="sub-feedback" class="feedback"></div>
+        <div id="sub-ai-result"></div>
+        <button type="submit" class="btn btn-primary btn-block" id="sub-submit-btn" style="margin-top:10px">📤 ส่งงานให้ AI ตรวจและบันทึกผล</button>
+      </form>
+    </div>
+
+    <div id="sub-pane-history" hidden>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <span style="font-size:12px;color:#64748b">แสดงประวัติการส่งงานและผลตรวจ AI จากฐานข้อมูล</span>
+        <button type="button" class="btn btn-small btn-outline" id="sub-refresh-history">↻ รีเฟรช</button>
+      </div>
+      <div id="sub-history-list" class="history-list"></div>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>

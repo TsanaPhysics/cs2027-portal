@@ -1,0 +1,68 @@
+{
+  "id": "book6",
+  "folder": "Book6_Computational_Physics_and_Spatial_Computing",
+  "volume": 6,
+  "title_th": "วิทยาการคำนวณ 6 ฟิสิกส์เชิงคำนวณ นวัตกรรมจำลองระบบ และคอมพิวเตอร์เชิงพื้นที่",
+  "title_en": "Computing Science 6: Computational Physics, Simulation and Spatial Computing",
+  "subtitle": "การจำลองทางฟิสิกส์ด้วยคอมพิวเตอร์ ระเบียบวิธีเชิงตัวเลข WebGL Three.js และแล็บเสมือนจริง AR",
+  "accent_color": "#06b6d4",
+  "secondary_color": "#0e7490",
+  "gradient": "linear-gradient(135deg, #164e63 0%, #0e7490 50%, #06b6d4 100%)",
+  "source_hints": [
+    "06_ฟิสิกส์เชิงคำนวณ_และ_Spatial_Computing",
+    "simulators",
+    "book3_chapters"
+  ],
+  "chapters": [
+    {
+      "num": 1,
+      "title": "ระเบียบวิธีเชิงตัวเลขในงานวิทยาศาสตร์และฟิสิกส์",
+      "en": "Numerical Methods, Finite Differences and Physics Discretization"
+    },
+    {
+      "num": 2,
+      "title": "การแก้สมการเชิงอนุพันธ์และการเคลื่อนที่แบบพลวัต",
+      "en": "Ordinary Differential Equations, Euler and Runge-Kutta Dynamics"
+    },
+    {
+      "num": 3,
+      "title": "การจำลองการแกว่ง คลื่น และการสั่นสะเทือน",
+      "en": "Simulating Harmonic Oscillators, Resonance and Wave Propagation"
+    },
+    {
+      "num": 4,
+      "title": "การจำลองสนามแม่เหล็กไฟฟ้าและทัศนศาสตร์เชิงตัวเลข",
+      "en": "Electromagnetic Fields, Ray Tracing and Numerical Optics"
+    },
+    {
+      "num": 5,
+      "title": "ระบบมอนติคาร์โลและแบบจำลองสุ่มทางสถิติ",
+      "en": "Monte Carlo Methods, Random Walks and Statistical Ensembles"
+    },
+    {
+      "num": 6,
+      "title": "การสร้างแบบจำลองเซลลูลาร์ออโตมาตาและระบบซับซ้อน",
+      "en": "Cellular Automata, Game of Life and Complex Emergent Systems"
+    },
+    {
+      "num": 7,
+      "title": "กราฟิกคอมพิวเตอร์ 3 มิติและการเรนเดอร์ด้วย WebGL และ Three.js",
+      "en": "3D Web Graphics, WebGL Shaders and Three.js Pipeline"
+    },
+    {
+      "num": 8,
+      "title": "สถาปัตยกรรมคอมพิวเตอร์เชิงพื้นที่และการตรวจจับมือด้วย MediaPipe Hands",
+      "en": "Spatial Computing, Skeletal Tracking and Touchless Gestures"
+    },
+    {
+      "num": 9,
+      "title": "การพัฒนาห้องปฏิบัติการฟิสิกส์เสมือนจริงไร้สัมผัส",
+      "en": "Touchless AR Virtual Laboratory Engineering"
+    },
+    {
+      "num": 10,
+      "title": "การบูรณาการ IoT เซนเซอร์ฟิสิกส์เกษตร และระบบการคำนวณอัจฉริยะ",
+      "en": "Edge AIoT Telemetry, AgriPhysics Sensors and Capstone Cyber-Physical Systems"
+    }
+  ]
+}

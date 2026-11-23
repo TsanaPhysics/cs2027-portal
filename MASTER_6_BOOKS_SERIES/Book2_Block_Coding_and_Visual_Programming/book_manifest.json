@@ -1,0 +1,67 @@
+{
+  "id": "book2",
+  "folder": "Book2_Block_Coding_and_Visual_Programming",
+  "volume": 2,
+  "title_th": "วิทยาการคำนวณ 2 บล็อกโค้ดดิ้งและการแก้ปัญหาเชิงภาพ",
+  "title_en": "Computing Science 2: Visual and Block-Based Programming",
+  "subtitle": "การเขียนโปรแกรมเชิงภาพ บล็อกต่อความคิด แอนิเมชัน เกม และการประยุกต์ใช้ AI ขั้นต้น",
+  "accent_color": "#10b981",
+  "secondary_color": "#047857",
+  "gradient": "linear-gradient(135deg, #064e3b 0%, #047857 50%, #10b981 100%)",
+  "source_hints": [
+    "05_วิทยาการคำนวณสำหรับเด็ก_และ_Block_Coding",
+    "book1_chapters"
+  ],
+  "chapters": [
+    {
+      "num": 1,
+      "title": "รากฐานการโปรแกรมเชิงภาพและสภาพแวดล้อมบล็อกโค้ดดิ้ง",
+      "en": "Foundations of Visual Programming and Block Environments"
+    },
+    {
+      "num": 2,
+      "title": "ระบบพิกัด การเคลื่อนที่ และการควบคุมตัวละคร",
+      "en": "Coordinate Systems, Motion and Sprite Controllers"
+    },
+    {
+      "num": 3,
+      "title": "การทำงานตามลำดับและเหตุการณ์กระตุ้น",
+      "en": "Sequencing and Event-Driven Paradigms"
+    },
+    {
+      "num": 4,
+      "title": "การวนซ้ำและโครงสร้างควบคุมแบบลูป",
+      "en": "Loops, Iteration and Repetitive Logic"
+    },
+    {
+      "num": 5,
+      "title": "โครงสร้างทางเลือกและเงื่อนไขการตัดสินใจ",
+      "en": "Conditionals, Branching and Boolean Predicates"
+    },
+    {
+      "num": 6,
+      "title": "ตัวแปร ตัวดำเนินการคณิตศาสตร์ และการจัดเก็บคะแนน",
+      "en": "Variables, Operators and State Storage"
+    },
+    {
+      "num": 7,
+      "title": "การสร้างฟังก์ชันและบล็อกส่วนตัว",
+      "en": "Custom Blocks, Procedures and Modularization"
+    },
+    {
+      "num": 8,
+      "title": "การตรวจจับการชน เสียง และการสื่อสารระหว่างตัวละคร",
+      "en": "Sensing, Audio Synthesis and Message Broadcasting"
+    },
+    {
+      "num": 9,
+      "title": "บล็อกโค้ดดิ้งผสาน AI เบื้องต้น การจดจำใบหน้าและท่าทาง",
+      "en": "Block AI Extensions: Face Detection and Pose Tracking"
+    },
+    {
+      "num": 10,
+      "title": "โครงงานสร้างสรรค์เกม แอนิเมชัน และสื่อนวัตกรรมการศึกษา",
+      "en": "Creative Educational Games and Animation Capstone"
+    }
+  ]
+}

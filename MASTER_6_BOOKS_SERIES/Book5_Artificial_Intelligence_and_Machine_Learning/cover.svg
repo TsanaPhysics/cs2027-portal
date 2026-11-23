@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1130" width="800" height="1130">
+  <defs>
+    <linearGradient id="bgGrad5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0f1d" />
+      <stop offset="45%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+    <linearGradient id="accentGrad5" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ec4899" />
+      <stop offset="100%" stop-color="#ffffff" />
+    </linearGradient>
+    <linearGradient id="badgeGrad5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ec4899" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#1e293b" stop-opacity="0.9" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.6" />
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="800" height="1130" fill="url(#bgGrad5)" />
+
+  <!-- Subtle Cyber Grids & Geometric Accents -->
+  <g opacity="0.08" stroke="#ffffff" stroke-width="1">
+    <path d="M0,100 H800 M0,200 H800 M0,300 H800 M0,400 H800 M0,500 H800 M0,600 H800 M0,700 H800 M0,800 H800 M0,900 H800 M0,1000 H800" />
+    <path d="M100,0 V1130 M200,0 V1130 M300,0 V1130 M400,0 V1130 M500,0 V1130 M600,0 V1130 M700,0 V1130" />
+  </g>
+
+  <!-- Glowing Orb / Core Geometric Feature -->
+  <circle cx="650" cy="220" r="180" fill="#ec4899" opacity="0.12" filter="blur(40px)" />
+  <circle cx="150" cy="850" r="220" fill="#ec4899" opacity="0.08" filter="blur(60px)" />
+
+  <!-- Outer Luxury Border -->
+  <rect x="30" y="30" width="740" height="1070" rx="16" fill="none" stroke="#ec4899" stroke-width="2" stroke-opacity="0.4" />
+  <rect x="42" y="42" width="716" height="1046" rx="10" fill="none" stroke="#ffffff" stroke-width="0.75" stroke-opacity="0.15" />
+
+  <!-- Top Series Category Header -->
+  <g transform="translate(60, 90)">
+    <rect x="0" y="0" width="310" height="38" rx="19" fill="url(#badgeGrad5)" />
+    <text x="20" y="24" fill="#ffffff" font-family="'Sarabun', 'Noto Sans Thai', sans-serif" font-size="14" font-weight="bold" letter-spacing="1.5">
+      COMPUTING SCIENCE MASTER SERIES • VOL. 5
+    </text>
+  </g>
+
+  <!-- Academic Standard Accreditation -->
+  <text x="730" y="115" text-anchor="end" fill="#94a3b8" font-family="'Sarabun', sans-serif" font-size="13" font-weight="500">
+    มาตรฐานหลักสูตรวิทยาการคำนวณระดับอุดมศึกษา
+  </text>
+
+  <!-- Prominent Volume Badge -->
+  <g transform="translate(60, 160)" filter="url(#shadow)">
+    <rect x="0" y="0" width="130" height="130" rx="20" fill="#ec4899" fill-opacity="0.2" stroke="#ec4899" stroke-width="2" />
+    <text x="65" y="55" text-anchor="middle" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="16" font-weight="600" letter-spacing="2">VOLUME</text>
+    <text x="65" y="108" text-anchor="middle" fill="#ffffff" font-family="'Inter', sans-serif" font-size="52" font-weight="800">05</text>
+  </g>
+
+  <!-- Thai Main Title -->
+  <g transform="translate(60, 360)">
+    <text x="0" y="0" fill="#ffffff" font-family="'Sarabun', 'Noto Sans Thai', sans-serif" font-size="40" font-weight="800" line-height="1.2">
+      วิทยาการคำนวณ 5 ปัญญาประดิษฐ์และการเรียนรู้ของเครื่อง
+    </text>
+  </g>
+
+  <!-- English Prominent Title -->
+  <g transform="translate(60, 430)">
+    <text x="0" y="0" fill="url(#accentGrad5)" font-family="'Outfit', 'Inter', sans-serif" font-size="28" font-weight="700">
+      Computing Science 5: Artificial Intelligence and Machine Learning
+    </text>
+  </g>
+
+  <!-- Horizontal Divider Line -->
+  <line x1="60" y1="480" x2="740" y2="480" stroke="#ec4899" stroke-width="3" stroke-linecap="round" />
+
+  <!-- Subtitle Description -->
+  <g transform="translate(60, 520)">
+    <text x="0" y="0" fill="#cbd5e1" font-family="'Sarabun', sans-serif" font-size="18" font-weight="400">
+      รากฐาน AI, Machine Learning, Deep Learning, Computer Vision, Prompt Engineering และ AI Ethics
+    </text>
+  </g>
+
+  <!-- 10 Chapters Bulleted Preview Box -->
+  <g transform="translate(60, 580)">
+    <rect x="0" y="0" width="680" height="340" rx="14" fill="#0b1329" fill-opacity="0.75" stroke="#334155" stroke-width="1.5" />
+    <text x="24" y="36" fill="#ec4899" font-family="'Sarabun', sans-serif" font-size="16" font-weight="bold">
+      สาระการเรียนรู้แกนกลาง 10 บทวิชาการ (10 Core Chapters)
+    </text>
+    <line x1="24" y1="48" x2="656" y2="48" stroke="#334155" stroke-width="1" />
+    <circle cx="30" cy="75" r="3" fill="#ec4899" />
+    <text x="42" y="80" fill="#f1f5f9" font-family="'Sarabun', sans-serif" font-size="13" font-weight="500">บทที่ 1 กำเนิดและวิวัฒนาการของปัญญาประดิ...</text>
+    <circle cx="30" cy="125" r="3" fill="#ec4899" />
+    <text x="42" y="130" fill="#f1f5f9" font-family="'Sarabun', sans-serif" font-size="13" font-weight="500">บทที่ 2 การแทนความรู้และระบบผู้เชี่ยวชาญ</text>
+    <circle cx="30" cy="175" r="3" fill="#ec4899" />
+    <text x="42" y="180" fill="#f1f5f9" font-family="'Sarabun', sans-serif" font-size="13" font-weight="500">บทที่ 3 รากฐานการเรียนรู้ของเครื่องและกา...</text>
+    <circle cx="30" cy="225" r="3" fill="#ec4899" />
+    <text x="42" y="230" fill="#f1f5f9" font-family="'Sarabun', sans-serif" font-size="13" font-weight="500">บทที่ 4 การเรียนรู้แบบมีผู้สอน การจำแนกป...</text>
+    <circle cx="30" cy="275" r="3" fill="#ec4899" />
+    <text x="42" y="280" fill="#f1f5f9" font-family="'Sarabun', sans-serif" font-size="13" font-weight="500">บทที่ 5 การเรียนรู้แบบไม่มีผู้สอน การจัด...</text>
+    <circle cx="356" cy="75" r="3" fill="#ec4899" />
+    <text x="368" y="80" fill="#f1f5f9" font-family="'Sarabun', sans-serif" font-size="13" font-weight="500">บทที่ 6 โครงข่ายประสาทเทียมและการเรียนรู...</text>
+    <circle cx="356" cy="125" r="3" fill="#ec4899" />
+    <text x="368" y="130" fill="#f1f5f9" font-family="'Sarabun', sans-serif" font-size="13" font-weight="500">บทที่ 7 คอมพิวเตอร์วิทัศน์และการตรวจจับว...</text>
+    <circle cx="356" cy="175" r="3" fill="#ec4899" />
+    <text x="368" y="180" fill="#f1f5f9" font-family="'Sarabun', sans-serif" font-size="13" font-weight="500">บทที่ 8 การประมวลผลภาษาธรรมชาติและโมเดลภ...</text>
+    <circle cx="356" cy="225" r="3" fill="#ec4899" />
+    <text x="368" y="230" fill="#f1f5f9" font-family="'Sarabun', sans-serif" font-size="13" font-weight="500">บทที่ 9 เอเจนต์ปัญญาประดิษฐ์และการตัดสิน...</text>
+    <circle cx="356" cy="275" r="3" fill="#ec4899" />
+    <text x="368" y="280" fill="#f1f5f9" font-family="'Sarabun', sans-serif" font-size="13" font-weight="500">บทที่ 10 จริยธรรมปัญญาประดิษฐ์ ความเป็นธร...</text>
+  </g>
+
+  <!-- Footer Author & Affiliation Section -->
+  <g transform="translate(60, 970)">
+    <rect x="0" y="0" width="680" height="90" rx="12" fill="#0f172a" fill-opacity="0.9" stroke="#ec4899" stroke-width="1" />
+    <text x="30" y="38" fill="#ffffff" font-family="'Sarabun', sans-serif" font-size="18" font-weight="bold">
+      ผู้ช่วยศาสตราจารย์ ดร.ชีวะ ทัศนา
+    </text>
+    <text x="30" y="64" fill="#94a3b8" font-family="'Sarabun', sans-serif" font-size="14">
+      สาขาวิชาฟิสิกส์ คณะวิทยาศาสตร์และเทคโนโลยี มหาวิทยาลัยราชภัฏรำไพพรรณี
+    </text>
+    <rect x="540" y="24" width="115" height="42" rx="6" fill="#ec4899" fill-opacity="0.2" stroke="#ec4899" stroke-width="1" />
+    <text x="597" y="50" text-anchor="middle" fill="#ffffff" font-family="'Inter', sans-serif" font-size="14" font-weight="bold">
+      EDITION 2027
+    </text>
+  </g>
+</svg>

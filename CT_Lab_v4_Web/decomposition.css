@@ -1,0 +1,64 @@
+/* CT-Lab v2: Decomposition Labs — responsive, dependency-free, designed for offline use. */
+.decomp-tabs{display:flex;gap:8px;align-items:stretch;flex-wrap:wrap;margin:0 0 18px}
+.decomp-tab{background:#fff;border:1px solid #dce5f1;border-radius:12px;padding:11px 13px;display:inline-flex;align-items:center;gap:6px;font-weight:750;color:#667f9b;min-height:46px;transition:.18s}
+.decomp-tab:hover{border-color:#a3bfe7;background:#f7fbff}
+.decomp-tab.selected{background:#eaf2ff;border-color:#3f77eb;color:#2459bf;box-shadow:inset 0 -2px #3974ef}
+.decomp-tab.completed:after{content:'✓';background:#dbf8ee;color:#108561;font-size:11px;padding:0 5px;border-radius:50px;margin-left:2px}
+.decomp-content{display:none}.decomp-content.active{display:block;animation:enter .25s ease}
+.bike-scene{background:linear-gradient(180deg,#eff9ff,#f9fcff);border:1px solid #e2edf7;border-radius:14px;overflow:hidden;min-height:240px}
+.bike-scene svg{display:block;width:100%;height:auto;max-height:390px;overflow:visible}
+.bike-scene .bike-piece{animation:bike-appear .24s ease-out both}
+@keyframes bike-appear{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.decomp-part-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
+.decomp-part{border:1px solid #e0e7f1;border-radius:12px;background:#fff;min-height:91px;padding:12px;text-align:left;display:flex;flex-direction:column;justify-content:center;gap:3px;color:#435e7e;transition:.15s}
+.decomp-part:hover{border-color:#7ca8ed;transform:translateY(-1px)}
+.decomp-part.chosen{border:2px solid #37b39e;background:#effdf8;padding:11px}
+.decomp-part .part-emoji{font-size:20px;line-height:1.3}
+.decomp-part strong{font-size:12px}.decomp-part small{font-size:10px;color:#8394a9}
+.decomp-part.chosen small{color:#147e6d}
+.decomp-insight{background:#f1f7ff;border-radius:10px;padding:12px 14px;font-size:12px;color:#4a6787;line-height:1.8;min-height:64px}
+.inno-scene{display:grid;grid-template-columns:130px minmax(0,1fr);align-items:center;gap:20px;min-height:170px;padding:20px;background:linear-gradient(110deg,#f1f7ff,#e8fbf7);border:1px solid #e0eefa;border-radius:14px}
+.inno-illustration{width:122px;height:122px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:3px;text-align:center;background:white;border:1px solid #dceaf7;border-radius:27px;font-size:39px;box-shadow:0 12px 26px #325a7b14;line-height:1.1;padding:10px}
+.inno-scene h3{font-size:18px;margin:6px 0 7px}.inno-scene p{font-size:12px;color:#69829d}.inno-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
+.inno-tags span{background:white;border:1px solid #d5e9f5;color:#3b658c;border-radius:6px;padding:4px 8px;font-size:10px;font-weight:700}
+.section-subhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:20px;color:#405b75}.section-subhead span{color:#95a4b8;font-size:11px}
+.inno-grid{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:10px}
+.decomp-field{margin-top:18px}.decomp-field select,.decomp-field input{display:block;width:100%;background:#fff;border:1px solid #d8e2ee;border-radius:10px;padding:10px 12px;color:#203c58;font-size:13px}
+.decomp-field input:focus,.decomp-daily-add input:focus{outline:3px solid #c9dafa;outline-offset:1px}
+.journey-route{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid #dae9f5;background:linear-gradient(180deg,#f5fbff,#eaf6ff);border-radius:14px;padding:18px;margin-bottom:18px}
+.journey-point{display:flex;flex-direction:column;align-items:center;flex:0 0 84px;gap:2px}.journey-point span{font-size:42px}.journey-point b{font-size:12px;color:#4f6680}
+.journey-line{flex:1;height:8px;border-radius:9px;background:repeating-linear-gradient(90deg,#91b8da 0 24px,#c5dcef 24px 42px);position:relative}.journey-line #decomp-bus-marker{position:absolute;left:0;top:50%;transform:translate(-50%,-52%);font-size:31px;transition:left .45s ease}
+.decomp-tree{display:flex;flex-direction:column;gap:10px}
+.decomp-tree-group{border:1px solid #e0e8f2;border-radius:12px;overflow:hidden}
+.decomp-tree-head{border:0;background:#f4f8fd;width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;padding:13px 14px;color:#305071;font-weight:850}
+.decomp-tree-head .count{font-size:11px;color:#748ea6;white-space:nowrap}
+.decomp-tree-items{display:flex;flex-direction:column;gap:0;padding:3px 14px 9px;background:#fff}
+.decomp-tree-items label{display:flex;align-items:flex-start;gap:10px;padding:10px 3px;font-size:12px;color:#4b6780;border-bottom:1px solid #eff3f7;cursor:pointer}
+.decomp-tree-items label:last-child{border-bottom:0}
+.decomp-tree-items input{accent-color:#159b7d;width:17px;height:17px;margin:0;flex:0 0 auto}
+.decomp-tree-items .checked{color:#889bac;text-decoration:line-through}
+.decomp-tree-items .step-id{font:700 11px ui-monospace,Consolas,monospace;color:#4d79ac;min-width:28px}
+.decomp-tree-items .added-note{font-size:10px;color:#a18a57}
+.decomp-case-head{display:flex;gap:12px;align-items:center;margin-bottom:10px}.decomp-case-head label{font-size:12px;font-weight:800;color:#617d9a;white-space:nowrap}
+.decomp-case-head select{flex:1;border:1px solid #dce6f1;border-radius:9px;padding:10px;max-width:100%;min-width:0}
+.decomp-case-desc{font-size:12px;color:#687f98;background:#f6f9fd;padding:13px;border-radius:10px}
+.decomp-evidence-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.decomp-evidence-card{border:1px solid #e0e7f0;border-radius:10px;background:#fff;min-height:85px;padding:12px;text-align:left;font-size:12px;font-weight:700;color:#4c6783;position:relative}
+.decomp-evidence-card:hover{border-color:#a1bfe5}.decomp-evidence-card.active{border:2px solid #3978e6;padding:11px;background:#f1f7ff}
+.decomp-evidence-card span{display:block;color:#8397ae;font-size:10px;font-weight:600;margin-top:5px}
+.decomp-sort-actions{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0}.decomp-sort-actions .btn{flex:1 1 135px;white-space:normal;min-height:44px}
+.decomp-daily-list{display:flex;flex-direction:column;gap:8px;margin-top:15px}
+.decomp-daily-item{display:flex;align-items:center;gap:7px;background:#f8fbff;border:1px solid #e2eaf3;border-radius:10px;padding:8px}
+.decomp-daily-item .daily-check{appearance:none;width:20px;height:20px;border:2px solid #98b0c5;border-radius:6px;cursor:pointer;flex:0 0 auto;margin:0}
+.decomp-daily-item .daily-check:checked{background:#15b28f;border-color:#15b28f}
+.decomp-daily-item .daily-check:checked::after{content:'✓';color:white;display:block;text-align:center;line-height:16px;font-weight:900;font-size:13px}
+.decomp-daily-item .daily-index{color:#7694ab;font-weight:900;font-size:12px;width:22px;text-align:center;flex:0 0 22px}
+.decomp-daily-item input[type=text]{width:100%;min-width:0;flex:1;border:0;background:transparent;padding:6px;color:#274762;font-size:12px}
+.decomp-daily-item input[type=text]:focus{outline:2px solid #bfdaff;border-radius:5px}
+.decomp-daily-item.done input[type=text]{text-decoration:line-through;color:#93a5b7}
+.decomp-daily-item button{border:0;background:white;border-radius:7px;width:27px;height:30px;flex:0 0 27px;color:#6685a2;font-size:12px}
+.decomp-daily-item button:hover{background:#edf3fb}.decomp-daily-add{display:flex;gap:9px;align-items:stretch;margin-top:14px}
+.decomp-daily-add input{width:100%;min-width:0;flex:1;border:1px solid #dae5f0;border-radius:9px;padding:8px 12px;font-size:12px}
+.decomp-daily-add button{white-space:nowrap}
+@media(max-width:1250px){.decomp-tab{padding:10px 9px;font-size:11px}.decomp-part-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:690px){.decomp-tabs{gap:6px}.decomp-tab{flex:1 1 45%;justify-content:center;padding:9px 7px;font-size:11px}.decomp-content .panel-top{margin-bottom:12px}.inno-scene{grid-template-columns:1fr;justify-items:center;text-align:center;padding:15px}.inno-tags{justify-content:center}.decomp-part-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.decomp-evidence-cards{grid-template-columns:1fr}.section-subhead{align-items:flex-start;flex-direction:column;gap:0}.decomp-case-head{flex-direction:column;align-items:stretch}.decomp-sort-actions .btn{font-size:11px}.decomp-daily-item{gap:4px;padding:5px}.decomp-daily-item button{width:24px;flex-basis:24px}.decomp-daily-add{flex-direction:column}.journey-point{flex-basis:62px}.journey-point span{font-size:28px}}

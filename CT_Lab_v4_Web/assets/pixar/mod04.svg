@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
+  <defs>
+    <linearGradient id="bg4" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e0f2fe"/><stop offset="100%" stop-color="#bae6fd"/></linearGradient>
+    <linearGradient id="isl" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#86efac"/><stop offset="100%" stop-color="#22c55e"/></linearGradient>
+    <filter id="sh4" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.2"/></filter>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg4)"/>
+  <g filter="url(#sh4)">
+    <rect x="75" y="75" width="490" height="225" rx="28" fill="#f8fafc" stroke="#fff" stroke-width="5"/>
+    <path d="M95 110 Q210 90 320 140 T545 130 L545 280 L95 280 Z" fill="url(#isl)" opacity="0.3"/>
+    <path d="M140 220 C210 120, 310 245, 390 150 S485 160, 505 215" fill="none" stroke="#3b82f6" stroke-width="10" stroke-linecap="round" stroke-dasharray="16,12"/>
+    <g fill="#ef4444"><circle cx="140" cy="220" r="18"/><circle cx="305" cy="182" r="18"/><circle cx="395" cy="148" r="18"/><circle cx="505" cy="215" r="20" fill="#10b981"/></g>
+    <g fill="#fff" font-size="14" font-weight="900" text-anchor="middle">
+      <text x="140" y="225">A</text><text x="305" y="187">B</text><text x="395" y="153">C</text><text x="505" y="220">D</text>
+    </g>
+  </g>
+</svg>

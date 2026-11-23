@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RBRU MOOC • วิทยาการคำนวณ ๑ การคิดเชิงคำนวณและกิจกรรมอันปลั๊ก</title>
+  <link rel="stylesheet" href="assets/css/mooc_master.css">
+  <script src="assets/js/ar_mediapipe_controller.js"></script>
+</head>
+<body>
+  <div class="mooc-container">
+    <header class="mooc-header">
+      <div class="mooc-badge">RBRU MOOC MASTERCLASS • 60 FPS 3D &amp; AR EDITION</div>
+      <h1 class="mooc-title">วิทยาการคำนวณ ๑ การคิดเชิงคำนวณและกิจกรรมอันปลั๊ก</h1>
+      <p class="mooc-subtitle">
+        หลักสูตรออนไลน์เชิงปฏิบัติการตามกรอบ OBE และ Bloom's Taxonomy • รหัสวิชา 4011101 การคิดเชิงคำนวณและขั้นตอนวิธีพื้นฐาน • รองรับการสั่งการ 3 มิติไร้สัมผัส AR MediaPipe Hands
+      </p>
+      <div class="course-meta-pills">
+        <span class="meta-pill">👨‍🏫 ผู้ช่วยศาสตราจารย์ ดร.ชีวะ ทัศนา</span>
+        <span class="meta-pill">🏛️ มหาวิทยาลัยราชภัฏรำไพพรรณี</span>
+        <span class="meta-pill">📚 10 บทเรียน • 50 Interactive Labs</span>
+        <span class="meta-pill">🎓 พ.ศ. ๒๕๗๐</span>
+      </div>
+    </header>
+
+    <!-- Chapter Navigation Tabs -->
+    <div class="chapter-nav-bar" id="chapterTabs">
+      <!-- Generated via JS -->
+    </div>
+
+    <!-- Active Chapter 3D Animated SVG Cover -->
+    <div class="cover-svg-wrapper" id="coverContainer">
+      <!-- Injected via JS -->
+    </div>
+
+    <!-- Active Chapter Topic Cards Grid -->
+    <div class="topics-grid-3d" id="topicsGrid">
+      <!-- Injected via JS -->
+    </div>
+
+    <!-- Interactive Simulator Iframe Viewer -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+      <h3 style="font-size: 1.25rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px;">
+        <span style="color: #38bdf8;">🔬</span> ห้องปฏิบัติการจำลองเสมือนจริง (Interactive Live Simulator)
+      </h3>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-enter-lesson" style="padding: 6px 14px; font-size: 0.8rem;" onclick="toggleFullscreenSim()">
+          ⛶ เต็มจอ (Fullscreen)
+        </button>
+      </div>
+    </div>
+
+    <div class="sim-embed-wrap" id="simWrapper">
+      <iframe id="mainSimIframe" src="simulators/sim_1_1.html" allow="camera; autoplay;"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const courseData = [
+  {
+    "num": 1,
+    "title": "ศาสตร์แห่งวิทยาการคำนวณและกระบวนทัศน์การคิดในศตวรรษที่ 21",
+    "theme": "state_space_and_logic",
+    "accent": "#00f0ff",
+    "formula": "S_0 \\xrightarrow{\\mathcal{T}} S_G \\quad \\text{Optimal 7 Steps}",
+    "subtopics": [
+      {
+        "num": 1,
+        "title": "ปริศนาข้ามแม่น้ำเชิงตรรกะและการสำรวจปริภูมิสถานะ",
+        "formula": "Danger = (W \\land S \\land \\neg M) \\lor (S \\land C \\land \\neg M)",
+        "desc": "การจำลองการค้นหาเส้นทางในปริภูมิสถานะ (State Space Search) และการตั้งเงื่อนไขบูลีนป้องกันอันตราย",
+        "icon": "🌊"
+      },
+      {
+        "num": 2,
+        "title": "ผังต้นไม้ย่อยปัญหาและสถาปัตยกรรมเชิงโมดูล",
+        "formula": "\\text{System} = \\bigoplus_{i=1}^k \\text{Module}_i",
+        "desc": "การสลายระบบใหญ่ให้เป็นโมดูลย่อยที่มีขอบเขตหน้าที่ชัดเจนตามหลักการสถาปัตยกรรมซอฟต์แวร์",
+        "icon": "🌳"
+      },
+      {
+        "num": 3,
+        "title": "เครื่องวิเคราะห์แบบรูปและสกัดคุณลักษณะไม่แปรเปลี่ยน",
+        "formula": "I(x) = \\mathcal{F}(\\phi(x)) \\quad \\text{Invariant Feature}",
+        "desc": "การตรวจจับแนวโน้ม ความคล้ายคลึง และคุณสมบัติคงตัวในชุดข้อมูลเพื่อการลดรูปปัญหา",
+        "icon": "🔍"
+      },
+      {
+        "num": 4,
+        "title": "การกรองสาระสำคัญเชิงนามธรรมและแบบจำลองกล่องดำ",
+        "formula": "\\mathcal{A}: \\mathcal{X} \\to \\mathcal{Z} \\quad (|\\mathcal{Z}| \\ll |\\mathcal{X}|)",
+        "desc": "การซ่อนรายละเอียดส่วนเกินและคงไว้เฉพาะตัวแปรสาระสำคัญสำหรับการแก้ปัญหาเชิงระบบ",
+        "icon": "📦"
+      },
+      {
+        "num": 5,
+        "title": "สตูดิโอออกแบบโฟลว์ชาร์ตและเครื่องทดสอบขั้นตอนวิธี",
+        "formula": "T(n) = \\mathcal{O}(n) \\quad \\text{Loop Invariant}",
+        "desc": "การจำลองการทำงานของผังงานเชิงโต้ตอบ การตรวจสอบเงื่อนไข และการพิสูจน์จุดสิ้นสุดของอัลกอริทึม",
+        "icon": "⚡"
+      }
+    ]
+  },
+  {
+    "num": 2,
+    "title": "เสาหลักที่ 1 การแยกส่วนประกอบและการย่อยปัญหา",
+    "theme": "decomposition",
+    "accent": "#10b981",
+    "formula": "\\mathcal{P} = \\{p_1, p_2, \\dots, p_k\\} \\quad \\text{Divide and Conquer}",
+    "subtopics": [
+      {
+        "num": 1,
+        "title": "การย่อยระบบคอมพิวเตอร์และวงจรอิเล็กทรอนิกส์",
+        "formula": "\\text{CPU} = \\text{ALU} \\cup \\text{CU} \\cup \\text{Registers}",
+        "desc": "การจำลองการแยกชิ้นส่วนฮาร์ดแวร์คอมพิวเตอร์เพื่อทำความเข้าใจปฏิสัมพันธ์ระหว่างบัสข้อมูลและหน่วยประมวลผล",
+        "icon": "💻"
+      },
+      {
+        "num": 2,
+        "title": "การสลายปัญหาทางฟิสิกส์และการแยกแยะเวกเตอร์แรง",
+        "formula": "\\vec{F} = F_x\\hat{i} + F_y\\hat{j} \\quad (F_x = F\\cos\\theta)",
+        "desc": "การวิเคราะห์แรงบนพื้นเอียงและการจำลองการเคลื่อนที่สองมิติด้วยการแยกส่วนประกอบพิกัดฉาก",
+        "icon": "⚖️"
+      },
+      {
+        "num": 3,
+        "title": "การย่อยฟังก์ชันและขั้นตอนการทำงานแบบโมดูลาร์",
+        "formula": "f(x) = g(h(x)) \\quad \\text{Functional Decomposition}",
+        "desc": "การแปลงงานขนาดใหญ่เป็นฟังก์ชันอิสระที่มีพารามิเตอร์ส่งผ่านและค่าส่งกลับที่รัดกุม",
+        "icon": "🧩"
+      },
+      {
+        "num": 4,
+        "title": "การสลายขั้นตอนการแก้โจทย์คณิตศาสตร์เชิงคำนวณ",
+        "formula": "\\nabla^2 \\phi = \\frac{\\partial^2 \\phi}{\\partial x^2} + \\frac{\\partial^2 \\phi}{\\partial y^2}",
+        "desc": "การแบ่งโจทย์สมการอนุพันธ์ให้กลายเป็นระเบียบวิธีผลต่างอันตะ (Finite Difference) ย่อยๆ",
+        "icon": "📐"
+      },
+      {
+        "num": 5,
+        "title": "ห้องปฏิบัติการย่อยระบบสมาร์ตฟาร์มพืชผล",
+        "formula": "\\text{Farm IoT} = \\text{Sensor} + \\text{Edge AI} + \\text{Actuator}",
+        "desc": "การจำลองระบบเกษตรแม่นยำและการแยกแยะวงจรควบคุมปั๊มน้ำ โซลินอยด์วาล์ว และการวัดธาตุอาหาร",
+        "icon": "🌱"
+      }
+    ]
+  },
+  {
+    "num": 3,
+    "title": "เสาหลักที่ 2 การหารูปแบบและความสัมพันธ์ของข้อมูล",
+    "theme": "pattern_recognition",
+    "accent": "#f59e0b",
+    "formula": "F_n = F_{n-1} + F_{n-2} \\quad \\lim_{n\\to\\infty} \\frac{F_n}{F_{n-1}} = \\phi",
+    "subtopics": [
+      {
+        "num": 1,
+        "title": "การตรวจจับแบบรูปอนุกรมตัวเลขและลำดับฟีโบนัชชี",
+        "formula": "a_n = a_1 + (n-1)d \\quad a_n = a_1 r^{n-1}",
+        "desc": "การสำรวจลำดับตัวเลขทางคณิตศาสตร์ สัดส่วนทองคำ และการค้นพบกฎเกณฑ์การเพิ่มขึ้นของข้อมูล",
+        "icon": "🔢"
+      },
+      {
+        "num": 2,
+        "title": "การวิเคราะห์แนวโน้มข้อมูลสภาพอากาศและอุณหภูมิ",
+        "formula": "y = mx + c \\quad R^2 = 1 - \\frac{SS_{res}}{SS_{tot}}",
+        "desc": "การตรวจจับความสัมพันธ์ของความชื้นและอุณหภูมิในแปลงเพาะปลูกด้วยการถดถอยเชิงเส้น",
+        "icon": "📈"
+      },
+      {
+        "num": 3,
+        "title": "การจำแนกแบบรูปทรงเรขาคณิตและแฟร็กทัล",
+        "formula": "D = \\frac{\\log N}{\\log(1/r)} \\quad \\text{Fractal Dimension}",
+        "desc": "การสร้างและการวิเคราะห์โครงสร้างเรขาคณิตคล้ายตนเอง (Self-similarity) เช่น สามเหลี่ยมเซียร์พินสกี",
+        "icon": "❄️"
+      },
+      {
+        "num": 4,
+        "title": "การจับคู่รูปแบบข้อความและขั้นตอนวิธีเคเอ็มพี",
+        "formula": "\\pi[q] = \\max \\{k : P_k \\sqsupset P_q\\} \\quad \\mathcal{O}(N+M)",
+        "desc": "การค้นหาคำและรูปแบบสายอักขระด้วยตารางฟังก์ชันพาย (Prefix Function) โดยไม่ต้องถอยกลับ",
+        "icon": "🔤"
+      },
+      {
+        "num": 5,
+        "title": "ห้องปฏิบัติการปัญญาประดิษฐ์จำแนกรูปแบบภาพ",
+        "formula": "\\hat{y} = \\text{softmax}(W \\mathbf{x} + b)",
+        "desc": "การทดลองจำลองระบบคอมพิวเตอร์วิทัศน์ตรวจจับจุดเด่นของวัตถุและจำแนกท่าทางมือ MediaPipe",
+        "icon": "👁️"
+      }
+    ]
+  },
+  {
+    "num": 4,
+    "title": "เสาหลักที่ 3 การคิดเชิงนามธรรมและการกรองสาระสำคัญ",
+    "theme": "abstraction",
+    "accent": "#8b5cf6",
+    "formula": "G = (V, E) \\quad \\text{Topological Invariance}",
+    "subtopics": [
+      {
+        "num": 1,
+        "title": "การตัดรายละเอียดส่วนเกินของแผนที่รถไฟฟ้า",
+        "formula": "\\text{Topology}(G) \\equiv \\text{Connectivity}(V, E)",
+        "desc": "การแปลงแผนที่ภูมิศาสตร์ที่มีความโค้งซับซ้อนให้กลายเป็นผังเชื่อมต่อเชิงทอพอโลยีที่เข้าใจง่าย",
+        "icon": "🗺️"
+      },
+      {
+        "num": 2,
+        "title": "การสร้างโมเดลตัวแปรและสมการแทนสถานการณ์จริง",
+        "formula": "\\frac{dQ}{dt} = k A \\frac{\\Delta T}{\\Delta x} \\quad \\text{Fourier's Law}",
+        "desc": "การจำลองการถ่ายเทความร้อนและการไหลของของเหลวโดยลดรูปวัตถุจริงให้เหลือเพียงพารามิเตอร์แกน",
+        "icon": "📊"
+      },
+      {
+        "num": 3,
+        "title": "การออกแบบชนิดข้อมูลนามธรรมสแต็กและคิว",
+        "formula": "\\text{LIFO (Stack)} \\quad \\text{FIFO (Queue)}",
+        "desc": "การกำหนดพฤติกรรมการจัดเก็บข้อมูลแบบนามธรรมและการทดสอบการทำงานของหน่วยความจำ",
+        "icon": "🥞"
+      },
+      {
+        "num": 4,
+        "title": "การกรองสัญญาณรบกวนด้วยฟิลเตอร์ค่าเฉลี่ยเคลื่อนที่",
+        "formula": "\\bar{y}_t = \\frac{1}{K} \\sum_{i=0}^{K-1} x_{t-i} \\quad \\text{Noise Reduction}",
+        "desc": "การขจัดสัญญาณรบกวนสุ่มออกจากค่าอ่านเซนเซอร์เพื่อสกัดแนวโน้มทางกายภาพที่แท้จริง",
+        "icon": "🎛️"
+      },
+      {
+        "num": 5,
+        "title": "ห้องปฏิบัติการจำลองแบบจำลองฟิสิกส์วัตถุลดทอน",
+        "formula": "m \\frac{d^2 x}{dt^2} + c \\frac{dx}{dt} + k x = 0",
+        "desc": "การจำลองการสั่นของมวล-สปริงโดยถือว่าวัตถุเป็นจุดมวลเดี่ยว (Point Mass) ในระบบ 3 มิติ",
+        "icon": "🎯"
+      }
+    ]
+  },
+  {
+    "num": 5,
+    "title": "เสาหลักที่ 4 การออกแบบขั้นตอนวิธีและตรรกศาสตร์เบื้องต้น",
+    "theme": "algorithms",
+    "accent": "#ec4899",
+    "formula": "T(n) = a T(n/b) + f(n) \\quad \\text{Master Theorem}",
+    "subtopics": [
+      {
+        "num": 1,
+        "title": "ตัวจำลองเกตตรรกะบูลีนและตารางค่าความจริง",
+        "formula": "Y = (A \\land B) \\lor (\\neg A \\land C)",
+        "desc": "การจำลองตรรกศาสตร์บูลีนระดับเกต AND, OR, NOT, XOR, NAND และการพิสูจน์พีชคณิตบูลีน",
+        "icon": "🔲"
+      },
+      {
+        "num": 2,
+        "title": "การออกแบบโครงสร้างเลือกทำเชิงเงื่อนไข",
+        "formula": "\\text{if } (x > 0) \\text{ then } f(x) \\text{ else } g(x)",
+        "desc": "การจำลองการตัดสินใจแบบหลายทางเลือก (Multi-way Branching) และการวิเคราะห์กิ่งเงื่อนไข",
+        "icon": "🔀"
+      },
+      {
+        "num": 3,
+        "title": "เครื่องทดสอบการวนซ้ำและการตรวจจับลูปอนันต์",
+        "formula": "\\forall k, \\quad P(k) \\implies P(k+1) \\quad \\text{Induction}",
+        "desc": "การทำความเข้าใจลูป for, while, do-while พร้อมการพิสูจน์การสิ้นสุดด้วยตัวแปรลดลง (Variant)",
+        "icon": "🔄"
+      },
+      {
+        "num": 4,
+        "title": "รหัสเทียมและการแปลงสู่คำสั่งคอมพิวเตอร์",
+        "formula": "\\text{Algorithm: } \\text{Input} \\to \\text{Execution} \\to \\text{Output}",
+        "desc": "การเขียนรหัสเทียมที่เป็นทางการตามมาตรฐานสากลและการเชื่อมโยงสู่ภาษาโปรแกรมจริง",
+        "icon": "📝"
+      },
+      {
+        "num": 5,
+        "title": "ห้องปฏิบัติการออกแบบอัลกอริทึมพาหุ่นยนต์เดินเขาวงกต",
+        "formula": "\\text{Right-Hand Rule} \\quad \\mathcal{O}(V + E) \\text{ BFS/DFS}",
+        "desc": "การเขียนขั้นตอนวิธีนำทางหุ่นยนต์ค้นหาทางออกจากเขาวงกตด้วยกฎมือขวาและการค้นหาตามแนวกว้าง",
+        "icon": "🤖"
+      }
+    ]
+  },
+  {
+    "num": 6,
+    "title": "กิจกรรมอันปลั๊ก 1 ระบบตรรกะ ตารางความจริง และวงจรสวิตช์กระดาษ",
+    "theme": "unplugged_circuits",
+    "accent": "#06b6d4",
+    "formula": "V = IR \\quad \\text{Boolean Paper Circuits}",
+    "subtopics": [
+      {
+        "num": 1,
+        "title": "วงจรสวิตช์กระดาษเทปทองแดงอนุกรมแบบ AND",
+        "formula": "I > 0 \\iff S_1 = 1 \\land S_2 = 1",
+        "desc": "การทดลองประดิษฐ์สวิตช์กระดาษต่ออนุกรม ไฟ LED จะติดเมื่อกดสวิตช์ทั้งสองตัวพร้อมกัน",
+        "icon": "💡"
+      },
+      {
+        "num": 2,
+        "title": "วงจรสวิตช์กระดาษขนานแบบ OR และตัวกลับสัญญาณ NOT",
+        "formula": "I > 0 \\iff S_1 = 1 \\lor S_2 = 1",
+        "desc": "การต่อวงจรแบบขนานและการสร้างสวิตช์ปิดเปิดแบบ Normal-Closed เพื่อทำหน้าที่เป็นเกต NOT",
+        "icon": "🔌"
+      },
+      {
+        "num": 3,
+        "title": "วงจรบวกเลขฐานสองครึ่งตัวเชิงกล",
+        "formula": "Sum = A \\oplus B, \\quad Carry = A \\land B",
+        "desc": "การประกอบเกต XOR และ AND เข้าด้วยกันบนแผ่นกระดาษเพื่อสร้างวงจรบวกเลขบิตเดี่ยว",
+        "icon": "➕"
+      },
+      {
+        "num": 4,
+        "title": "บอร์ดเกมปริศนาตรรกศาสตร์ไขรหัสลับ",
+        "formula": "C = P_1 \\land P_2 \\land \\dots \\land P_n",
+        "desc": "กิจกรรมถอดรหัสกล่องสมบัติโดยอาศัยเบาะแสตรรกศาสตร์บูลีนและการตัดตัวเลือก",
+        "icon": "🎲"
+      },
+      {
+        "num": 5,
+        "title": "ปฏิบัติการจำลองสถานีเตือนภัยน้ำท่วมระบบตรรกะอันปลั๊ก",
+        "formula": "Alarm = (Level_{high} \\land Rain_{heavy}) \\lor Manual",
+        "desc": "การจำลองสถานีแจ้งเตือนภัยธรรมชาติด้วยสวิตช์ทุ่นลอยน้ำและกลไกสวิตช์กระดาษ",
+        "icon": "🚨"
+      }
+    ]
+  },
+  {
+    "num": 7,
+    "title": "กิจกรรมอันปลั๊ก 2 การแทนรหัสข้อมูล รหัสไบนารี และพิกเซลภาพ",
+    "theme": "binary_pixels",
+    "accent": "#3b82f6",
+    "formula": "N = \\sum_{i=0}^{n-1} b_i 2^i \\quad \\text{Binary Weight Expansion}",
+    "subtopics": [
+      {
+        "num": 1,
+        "title": "การ์ดเปิดปิดบิตเลขฐานสอง 8-4-2-1",
+        "formula": "13_{10} = 1\\cdot 8 + 1\\cdot 4 + 0\\cdot 2 + 1\\cdot 1 = 1101_2",
+        "desc": "การใช้การ์ดจุดตัวเลข 1, 2, 4, 8, 16 เพื่อฝึกแปลงตัวเลขฐานสิบเป็นฐานสองอย่างเห็นภาพจริง",
+        "icon": "🃏"
+      },
+      {
+        "num": 2,
+        "title": "เครื่องถอดรหัส ASCII สร้อยข้อมือเลขฐานสอง",
+        "formula": "'A' = 65_{10} = 01000001_2",
+        "desc": "การร้อยลูกปัดสีดำ-ขาวแทนบิต 0 และ 1 เพื่อเข้ารหัสชื่อตนเองเป็นรหัสมาตรฐาน ASCII",
+        "icon": "📿"
+      },
+      {
+        "num": 3,
+        "title": "ตารางกริดบีบอัดข้อมูลแบบ Run-Length Encoding",
+        "formula": "W, B, W, W, W \\implies 1W 1B 3W",
+        "desc": "การทดลองบีบอัดข้อมูลข้อความและแถบภาพด้วยการนับจำนวนความยาวช่วงข้อมูลซ้ำ",
+        "icon": "🗜️"
+      },
+      {
+        "num": 4,
+        "title": "การแทนค่าภาพดิจิทัลและพิกเซลภาพสี RGB",
+        "formula": "Pixel = (R, G, B) \\in [0, 255]^3",
+        "desc": "การระบายสีบนตารางกริดตามรหัสตัวเลขพิกเซลเพื่อทำความเข้าใจการแสดงผลบนจอภาพ",
+        "icon": "🎨"
+      },
+      {
+        "num": 5,
+        "title": "ปฏิบัติการกู้คืนข้อมูลพิกเซลที่สูญหายด้วยพาริตี",
+        "formula": "P = \\bigoplus_{i=1}^n b_i \\quad \\text{Even Parity Check}",
+        "desc": "มายากลการ์ดตารางบิตพาริตีสองมิติที่สามารถระบุตำแหน่งและแก้ไขการ์ดที่ถูกพลิกได้ 100%",
+        "icon": "✨"
+      }
+    ]
+  },
+  {
+    "num": 8,
+    "title": "กิจกรรมอันปลั๊ก 3 ขั้นตอนวิธีการค้นหาและการเรียงลำดับด้วยการ์ดเกม",
+    "theme": "sorting_searching",
+    "accent": "#6366f1",
+    "formula": "\\mathcal{O}(\\log n) \\quad \\text{vs} \\quad \\mathcal{O}(n^2) \\quad \\text{Complexity}",
+    "subtopics": [
+      {
+        "num": 1,
+        "title": "เกมไพ่ค้นหาเชิงเส้นเทียบกับการค้นหาแบบทวิภาค",
+        "formula": "T_{linear} = \\mathcal{O}(n), \\quad T_{binary} = \\mathcal{O}(\\log_2 n)",
+        "desc": "การจำลองค้นหาตัวเลขในไพ่ที่เรียงแล้วเทียบกับไพ่ที่สลับมั่วเพื่อประเมินความเร็วในการค้นหา",
+        "icon": "🎴"
+      },
+      {
+        "num": 2,
+        "title": "ตาชั่งสองแขนจำลองและการเรียงลำดับแบบฟอง",
+        "formula": "\\text{Comparisons} = \\frac{n(n-1)}{2} \\quad \\text{Bubble Sort}",
+        "desc": "การเปรียบเทียบน้ำหนักสิ่งของทีละคู่บนตาชั่งสองแขนและสลับตำแหน่งจนกว่าจะเรียงจากเบาไปหนัก",
+        "icon": "⚖️"
+      },
+      {
+        "num": 3,
+        "title": "การเรียงลำดับแบบแทรกด้วยการจัดสำรับไพ่",
+        "formula": "\\text{Best} = \\mathcal{O}(n), \\quad \\text{Worst} = \\mathcal{O}(n^2)",
+        "desc": "การหยิบการ์ดทีละใบแล้วนำไปแทรกลงในตำแหน่งที่ถูกต้องในมือ เลียนแบบพฤติกรรม Insertion Sort",
+        "icon": "🖐️"
+      },
+      {
+        "num": 4,
+        "title": "การแข่งขันขั้นตอนวิธีเรียงลำดับแบบผสาน",
+        "formula": "T(n) = 2T(n/2) + \\mathcal{O}(n) = \\mathcal{O}(n \\log n)",
+        "desc": "การแบ่งกองการ์ดออกเป็นครึ่งหนึ่งเรื่อยๆ แล้วนำกลับมารวมกันอย่างมีระเบียบตามแนวคิด Divide & Conquer",
+        "icon": "🏆"
+      },
+      {
+        "num": 5,
+        "title": "ปฏิบัติการเปรียบเทียบจำนวนครั้งการเปรียบเทียบ",
+        "formula": "\\text{Benchmark Matrix}: \\text{Comparisons} \\& \\text{Swaps}",
+        "desc": "การบันทึกสถิติและสร้างกราฟเปรียบเทียบประสิทธิภาพของอัลกอริทึมเรียงลำดับในสภาพจริง",
+        "icon": "📊"
+      }
+    ]
+  },
+  {
+    "num": 9,
+    "title": "กิจกรรมอันปลั๊ก 4 โครงข่าย การนำทาง และกราฟในชีวิตประจำวัน",
+    "theme": "graph_networks",
+    "accent": "#14b8a6",
+    "formula": "G = (V, E) \\quad \\sum_{v\\in V} \\deg(v) = 2|E| \\quad \\text{Handshaking Lemma}",
+    "subtopics": [
+      {
+        "num": 1,
+        "title": "ปริศนาสะพานทั้งเจ็ดแห่งเมืองโคนิกส์แบร์ก",
+        "formula": "\\text{Eulerian Path} \\iff \\text{Odd Degree Vertices} \\in \\{0, 2\\}",
+        "desc": "การพิสูจน์การเดินผ่านสะพานทุกแห่งเพียงครั้งเดียวของเลอ็อนฮาร์ท ออยเลอร์ จุดกำเนิดทฤษฎีกราฟ",
+        "icon": "🌉"
+      },
+      {
+        "num": 2,
+        "title": "การหาเส้นทางสั้นที่สุดด้วยขั้นตอนวิธีไดจ์กสตรา",
+        "formula": "d(v) = \\min(d(v), d(u) + w(u, v)) \\quad \\text{Dijkstra Algorithm}",
+        "desc": "การใช้เส้นเชือกดึงระหว่างหมุดจุดยอดเพื่อหาเส้นทางที่สั้นที่สุดทางกายภาพในเครือข่าย",
+        "icon": "🧶"
+      },
+      {
+        "num": 3,
+        "title": "ต้นไม้ทอดข้ามต่ำสุดของพริมเพื่อวางท่อน้ำประปา",
+        "formula": "\\text{MST Weight} = \\min \\sum_{e\\in T} w(e) \\quad \\text{Greedy Prim/Kruskal}",
+        "desc": "การคำนวณเชื่อมต่อท่อน้ำไปยังบ้านทุกหลังด้วยต้นทุนรวมของความยาวท่อที่ประหยัดที่สุด",
+        "icon": "🚰"
+      },
+      {
+        "num": 4,
+        "title": "แผนผังเส้นทางขนส่งผลไม้ทุเรียนเมืองจันทบุรี",
+        "formula": "\\min \\sum c_{ij} x_{ij} \\quad \\text{Logistics Routing Optimization}",
+        "desc": "การจำลองเส้นทางกระจายผลผลิตจากสวนสู่โรงคัดบรรจุและตลาดส่งออกด้วยผังกราฟถ่วงน้ำหนัก",
+        "icon": "🚚"
+      },
+      {
+        "num": 5,
+        "title": "ปฏิบัติการจำลองการล่มสลายและกู้คืนเครือข่ายสื่อสาร",
+        "formula": "\\text{Node Connectivity } \\kappa(G) \\quad \\text{Fault-Tolerance}",
+        "desc": "การทดสอบการตัดโหนดเราเตอร์ในเครือข่ายและสังเกตการเปลี่ยนเส้นทางส่งข้อมูลสำรองอัตโนมัติ",
+        "icon": "📡"
+      }
+    ]
+  },
+  {
+    "num": 10,
+    "title": "กิจกรรมอันปลั๊ก 5 การจำลองการสื่อสารและโครงงานอันปลั๊กแก้ปัญหาชุมชน",
+    "theme": "protocols_capstone",
+    "accent": "#f43f5e",
+    "formula": "\\text{Packet} = [\\text{Header} \\mid \\text{Payload} \\mid \\text{Checksum}]",
+    "subtopics": [
+      {
+        "num": 1,
+        "title": "การส่งผ่านแพ็กเก็ตข้อมูลแบบเกมส่งสาร",
+        "formula": "\\text{Packet Switching} \\quad \\text{Sequence Numbers \\& Ack}",
+        "desc": "กิจกรรมส่งต่อกระดาษข้อความที่ถูกตัดแบ่งเป็นส่วนๆ พร้อมหมายเลขลำดับเพื่อประกอบคืนที่ปลายทาง",
+        "icon": "📨"
+      },
+      {
+        "num": 2,
+        "title": "การตรวจจับและแก้ข้อผิดพลาดด้วยพาริตีตาราง 2 มิติ",
+        "formula": "H(x) = \\text{Error Syndrome} \\implies \\text{Single Bit Correction}",
+        "desc": "การสร้างการ์ดตรวจสอบพาริตีแถวและคอลัมน์เพื่อตรวจจับและชี้ตำแหน่งบิตที่ถูกดัดแปลง",
+        "icon": "🛡️"
+      },
+      {
+        "num": 3,
+        "title": "วงล้อถอดรหัสลับซีซาร์และรหัสลับแทนที่",
+        "formula": "C = (P + k) \\pmod{26}, \\quad P = (C - k) \\pmod{26}",
+        "desc": "การประดิษฐ์วงล้อกระดาษสองชั้นหมุนเลื่อนตัวอักษรเพื่อเรียนรู้รากฐานการเข้ารหัสลับ (Cryptography)",
+        "icon": "🔐"
+      },
+      {
+        "num": 4,
+        "title": "โครงงานจำลองระบบจัดการน้ำและดินอัจฉริยะอันปลั๊ก",
+        "formula": "\\text{Smart Logic} = f(\\text{Soil Moisture}, \\text{Rainfall}, \\text{Crop Stage})",
+        "desc": "การออกแบบขั้นตอนวิธีแก้ปัญหาภัยแล้งและน้ำท่วมในชุมชนด้วยผังตรรกะแบบไม่ใช้ไฟฟ้า",
+        "icon": "🌾"
+      },
+      {
+        "num": 5,
+        "title": "มหกรรมโครงงานนวัตกรรมอันปลั๊กและการเชื่อมต่อสู่โลกโค้ด",
+        "formula": "\\text{Unplugged Concept} \\xrightarrow{\\text{Translation}} \\text{Python / C++ Implementation}",
+        "desc": "การแปลงกิจกรรมอันปลั๊กทั้งหมดที่เรียนรู้มาให้กลายเป็นโค้ดโปรแกรมจริงในคอมพิวเตอร์และระบบสมองกล",
+        "icon": "🚀"
+      }
+    ]
+  }
+];
+    let currentChIndex = 0;
+
+    function initNav() {
+      const nav = document.getElementById('chapterTabs');
+      nav.innerHTML = '';
+      courseData.forEach((ch, idx) => {
+        const btn = document.createElement('div');
+        btn.className = `chapter-nav-item ${idx === 0 ? 'active' : ''}`;
+        btn.textContent = `บทที่ ${ch.num} ${ch.title[:20]}...`;
+        btn.onclick = () => selectChapter(idx);
+        nav.appendChild(btn);
+      });
+      renderChapter(0);
+    }
+
+    function selectChapter(idx) {
+      currentChIndex = idx;
+      document.querySelectorAll('.chapter-nav-item').forEach((el, i) => {
+        el.classList.toggle('active', i === idx);
+      });
+      renderChapter(idx);
+      if (window.arController) window.arController.playSynth('action');
+    }
+
+    async function renderChapter(idx) {
+      const ch = courseData[idx];
+      
+      // Load SVG Cover
+      try {
+        const res = await fetch(`covers/cover_ch${String(ch.num).padStart(2, '0')}.svg`);
+        const svgText = await res.text();
+        document.getElementById('coverContainer').innerHTML = svgText;
+      } catch (e) {
+        console.warn('Load cover error', e);
+      }
+
+      // Render 5 Topic Cards
+      const grid = document.getElementById('topicsGrid');
+      grid.innerHTML = '';
+      ch.subtopics.forEach(sub => {
+        const card = document.createElement('div');
+        card.className = 'topic-card-3d';
+        card.innerHTML = `
+          <div>
+            <div class="card-top-header">
+              <div class="card-icon-3d">${sub.icon}</div>
+              <div class="topic-badge">${ch.num}.${sub.num}</div>
+            </div>
+            <h3 class="topic-title">${sub.title}</h3>
+            <div class="formula-badge">${sub.formula}</div>
+            <p class="topic-summary">${sub.desc}</p>
+          </div>
+          <button class="btn-enter-lesson" onclick="loadSimulator(${ch.num}, ${sub.num})">
+            <span>🚀 เข้าสู่บทเรียน &amp; ปฏิบัติการ</span>
+            <span class="arrow-icon">→</span>
+          </button>
+        `;
+        grid.appendChild(card);
+      });
+
+      // Auto load first simulator of this chapter
+      loadSimulator(ch.num, 1);
+    }
+
+    function loadSimulator(chNum, subNum) {
+      const iframe = document.getElementById('mainSimIframe');
+      iframe.src = `simulators/sim_${chNum}_${subNum}.html?v=2027`;
+      document.getElementById('simWrapper').scrollIntoView({ behavior: 'smooth' });
+      if (window.arController) window.arController.playSynth('pinch');
+    }
+
+    function toggleFullscreenSim() {
+      const elem = document.getElementById('simWrapper');
+      if (!document.fullscreenElement) {
+        elem.requestFullscreen().catch(err => alert(err.message));
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    window.addEventListener('load', () => {
+      initNav();
+      if (window.ARMediaPipeController) {
+        window.arController = new window.ARMediaPipeController({
+          onSwipe: (dir) => {
+            if (dir === 'right') {
+              selectChapter((currentChIndex + 1) % courseData.length);
+            } else {
+              selectChapter((currentChIndex - 1 + courseData.length) % courseData.length);
+            }
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

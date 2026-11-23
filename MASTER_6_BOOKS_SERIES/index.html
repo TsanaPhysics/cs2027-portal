@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ชุดตำราวิทยาการคำนวณและปัญญาประดิษฐ์ 6 เล่ม - RBRU Academic Press</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap">
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --card-bg: rgba(15, 23, 42, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 40px 20px 80px;
+      line-height: 1.6;
+    }
+    .header {
+      max-width: 1200px;
+      margin: 0 auto 50px;
+      text-align: center;
+      position: relative;
+    }
+    .badge {
+      display: inline-block;
+      padding: 6px 18px;
+      background: linear-gradient(135deg, #0284c7, #6366f1);
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      background: linear-gradient(to right, #ffffff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+    .subtitle {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .author-info {
+      margin-top: 20px;
+      font-size: 1rem;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 32px;
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+    .book-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .book-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(56, 189, 248, 0.4);
+      box-shadow: 0 20px 40px rgba(2, 132, 199, 0.25);
+    }
+    .cover-container {
+      width: 100%;
+      height: 280px;
+      overflow: hidden;
+      background-color: #020617;
+      position: relative;
+    }
+    .cover-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      transition: transform 0.5s ease;
+    }
+    .book-card:hover .cover-container img {
+      transform: scale(1.04);
+    }
+    .book-details {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    .vol-tag {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: #38bdf8;
+      margin-bottom: 6px;
+    }
+    .book-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+    .book-en {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+    }
+    .book-desc {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      margin-top: auto;
+    }
+    .btn {
+      flex: 1;
+      text-align: center;
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #0369a1, #1d4ed8);
+    }
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: #cbd5e1;
+    }
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+    .footer {
+      max-width: 1200px;
+      margin: 60px auto 0;
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid var(--card-border);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="badge">RBRU Academic Publication Series 2027</div>
+    <h1>ชุดตำราวิทยาการคำนวณและปัญญาประดิษฐ์ 6 เล่ม</h1>
+    <p class="subtitle">สถาปัตยกรรมหลักสูตรและการเรียนรู้เชิงรุก (Active Learning & OBE) ตั้งแต่รากฐานการคิดเชิงคำนวณ กิจกรรมอันปลั๊ก การเขียนโปรแกรม จนถึงปัญญาประดิษฐ์และฟิสิกส์เชิงคำนวณ</p>
+    <div class="author-info">ผู้ช่วยศาสตราจารย์ ดร.ชีวะ ทัศนา • คณะวิทยาศาสตร์และเทคโนโลยี มหาวิทยาลัยราชภัฏรำไพพรรณี</div>
+    <div style="margin-top: 20px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+      <a href="../CS_LABORATORY_MANUAL_180_EXPERIMENTS/index.html" class="btn" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: 1px solid #34d399; color: #ffffff; font-weight: 700; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.5);">🧪 คู่มือปฏิบัติการ ๑๘๐ การทดลอง</a>
+      <a href="../CS_MASTER_OMNIBUS_TEXTBOOK/index.html" class="btn" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border: 1px solid #38bdf8; color: #ffffff; font-weight: 700; box-shadow: 0 4px 15px rgba(2, 132, 199, 0.5);">📚 เอกสารคำสอน ฉบับรวมเล่มสมบูรณ์ (Omnibus B5)</a>
+      <a href="../RBRU_MOOC_CS_VOL1/index.html" class="btn" style="background: rgba(56, 189, 248, 0.2); border: 1px solid #38bdf8; color: #38bdf8; font-weight: 700;">🎓 RBRU MOOC Course (CS_Vol1)</a>
+      <a href="../00_MASTER_COVERS_SHOWCASE_1800x2700/index.html" class="btn" style="background: rgba(253, 224, 71, 0.15); border: 1px solid #fde047; color: #fde047;">🎨 3D Covers Showcase</a>
+      <a href="../ACADEMIC_DOSSIER_FOR_ASSOCIATE_PROFESSOR.html" class="btn" style="background: rgba(168, 85, 247, 0.2); border: 1px solid #a855f7; color: #d8b4fe;">📑 แฟ้มขอตำแหน่ง รศ.</a>
+    </div>
+  </header>
+
+  <main class="books-grid">
+
+    <!-- Book 1 -->
+    <div class="book-card">
+      <div class="cover-container">
+        <img src="Book1_Computational_Thinking_and_Unplugged/cover.svg" alt="Cover Volume 1">
+      </div>
+      <div class="book-details">
+        <div class="vol-tag">VOLUME 01 • FOUNDATIONS</div>
+        <div class="book-title">วิทยาการคำนวณ 1 การคิดเชิงคำนวณและกิจกรรมอันปลั๊ก</div>
+        <div class="book-en">Computational Thinking and Unplugged Coding</div>
+        <p class="book-desc">เสาหลัก 4 ด้านของการคิดเชิงคำนวณ (Decomposition, Pattern Recognition, Abstraction, Algorithm) ตรรกศาสตร์ ไบนารี และกิจกรรมอันปลั๊ก 5 มิติ</p>
+        <div class="btn-group" style="flex-wrap: wrap;">
+          <a href="Book1_Computational_Thinking_and_Unplugged/index.html" class="btn btn-primary">📖 เปิดอ่านตำรา</a>
+          <a href="../RBRU_MOOC_CS_VOL1/index.html" class="btn" style="background: rgba(56, 189, 248, 0.18); border: 1px solid #38bdf8; color: #38bdf8; font-weight: 700;">🎓 RBRU MOOC Course (AR)</a>
+          <a href="../LATEX_TEXTBOOKS_6_VOLUMES/CS_Vol1_Computational_Thinking_Unplugged/main.pdf" target="_blank" class="btn btn-outline" style="border-color: #fde047; color: #fde047;">📕 PDF (66 หน้า)</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Book 2 -->
+    <div class="book-card">
+      <div class="cover-container">
+        <img src="Book2_Block_Coding_and_Visual_Programming/cover.svg" alt="Cover Volume 2">
+      </div>
+      <div class="book-details">
+        <div class="vol-tag">VOLUME 02 • VISUAL CODING</div>
+        <div class="book-title">วิทยาการคำนวณ 2 บล็อกโค้ดดิ้งและการแก้ปัญหาเชิงภาพ</div>
+        <div class="book-en">Visual and Block-Based Programming</div>
+        <p class="book-desc">การเขียนโปรแกรมเชิงภาพ Scratch, Blockly, ระบบพิกัด, ลูป, ตัวแปร, การสร้างฟังก์ชันบล็อกส่วนตัว และส่วนขยาย AI Face/Pose Tracking</p>
+        <div class="btn-group">
+          <a href="Book2_Block_Coding_and_Visual_Programming/index.html" class="btn btn-primary">📖 เปิดอ่านตำรา</a>
+          <a href="Book2_Block_Coding_and_Visual_Programming/master_manuscript.md" class="btn btn-outline">📄 Markdown</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Book 3 -->
+    <div class="book-card">
+      <div class="cover-container">
+        <img src="Book3_Python_Programming_for_Science/cover.svg" alt="Cover Volume 3">
+      </div>
+      <div class="book-details">
+        <div class="vol-tag">VOLUME 03 • PYTHON SCIENCE</div>
+        <div class="book-title">วิทยาการคำนวณ 3 การเขียนโปรแกรมภาษาไพทอนและการแก้ปัญหาทางวิทยาศาสตร์</div>
+        <div class="book-en">Python Programming and Scientific Problem Solving</div>
+        <p class="book-desc">ไพทอนเชิงโครงสร้าง โครงสร้างข้อมูล List, Dict, Set ฟังก์ชันโมดูล การอ่านเขียนไฟล์ CSV/JSON และการคำนวณแก้โจทย์วิทยาศาสตร์</p>
+        <div class="btn-group">
+          <a href="Book3_Python_Programming_for_Science/index.html" class="btn btn-primary">📖 เปิดอ่านตำรา</a>
+          <a href="Book3_Python_Programming_for_Science/master_manuscript.md" class="btn btn-outline">📄 Markdown</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Book 4 -->
+    <div class="book-card">
+      <div class="cover-container">
+        <img src="Book4_Data_Structures_Algorithms_and_Data/cover.svg" alt="Cover Volume 4">
+      </div>
+      <div class="book-details">
+        <div class="vol-tag">VOLUME 04 • ALGORITHMS & DATA</div>
+        <div class="book-title">วิทยาการคำนวณ 4 ขั้นตอนวิธี โครงสร้างข้อมูล และการจัดการข้อมูลดิจิทัล</div>
+        <div class="book-en">Data Structures, Algorithms & Digital Information Management</div>
+        <p class="book-desc">การวิเคราะห์ความซับซ้อน บิ๊กโอ, Searching, Sorting, Stacks, Queues, ฐานข้อมูล SQL, วิทยาการรหัสลับ ความมั่นคงไซเบอร์ และ PDPA</p>
+        <div class="btn-group">
+          <a href="Book4_Data_Structures_Algorithms_and_Data/index.html" class="btn btn-primary">📖 เปิดอ่านตำรา</a>
+          <a href="Book4_Data_Structures_Algorithms_and_Data/master_manuscript.md" class="btn btn-outline">📄 Markdown</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Book 5 -->
+    <div class="book-card">
+      <div class="cover-container">
+        <img src="Book5_Artificial_Intelligence_and_Machine_Learning/cover.svg" alt="Cover Volume 5">
+      </div>
+      <div class="book-details">
+        <div class="vol-tag">VOLUME 05 • AI & ML</div>
+        <div class="book-title">วิทยาการคำนวณ 5 ปัญญาประดิษฐ์และการเรียนรู้ของเครื่อง</div>
+        <div class="book-en">Artificial Intelligence and Machine Learning</div>
+        <p class="book-desc">รากฐาน AI, Machine Learning (Supervised/Unsupervised), Deep Learning, Computer Vision MediaPipe, Prompt Engineering, LLM และ AI Ethics</p>
+        <div class="btn-group">
+          <a href="Book5_Artificial_Intelligence_and_Machine_Learning/index.html" class="btn btn-primary">📖 เปิดอ่านตำรา</a>
+          <a href="Book5_Artificial_Intelligence_and_Machine_Learning/master_manuscript.md" class="btn btn-outline">📄 Markdown</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Book 6 -->
+    <div class="book-card">
+      <div class="cover-container">
+        <img src="Book6_Computational_Physics_and_Spatial_Computing/cover.svg" alt="Cover Volume 6">
+      </div>
+      <div class="book-details">
+        <div class="vol-tag">VOLUME 06 • PHYSICS & AR LAB</div>
+        <div class="book-title">วิทยาการคำนวณ 6 ฟิสิกส์เชิงคำนวณ นวัตกรรมจำลองระบบ และคอมพิวเตอร์เชิงพื้นที่</div>
+        <div class="book-en">Computational Physics, Simulation & Spatial Computing</div>
+        <p class="book-desc">ระเบียบวิธีเชิงตัวเลข, สมการเชิงอนุพันธ์, การจำลองคลื่น, 3D WebGL Three.js, MediaPipe Hands AR Virtual Lab และ Edge AIoT สำหรับฟิสิกส์เกษตร</p>
+        <div class="btn-group">
+          <a href="Book6_Computational_Physics_and_Spatial_Computing/index.html" class="btn btn-primary">📖 เปิดอ่านตำรา</a>
+          <a href="Book6_Computational_Physics_and_Spatial_Computing/master_manuscript.md" class="btn btn-outline">📄 Markdown</a>
+        </div>
+      </div>
+    <!-- Comprehensive Lab Manual (180 Labs) -->
+    <div class="book-card" style="border: 2px solid rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.05);">
+      <div class="cover-container">
+        <img src="../CS_LABORATORY_MANUAL_180_EXPERIMENTS/figures/cover_lab_manual_1800x2700.png" alt="180 Labs Manual Cover" style="object-fit: cover;">
+      </div>
+      <div class="book-details">
+        <div class="vol-tag" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border-color: rgba(16, 185, 129, 0.4);">LAB MANUAL • 180 EXPERIMENTS</div>
+        <div class="book-title" style="color: #34d399;">คู่มือปฏิบัติการวิทยาการคำนวณและปัญญาประดิษฐ์บูรณาการ ๑๘๐ ปฏิบัติการ</div>
+        <div class="book-en">Comprehensive Laboratory Manual for CS & AI (180 Experiments)</div>
+        <p class="book-desc">คู่มือปฏิบัติการฉบับสมบูรณ์ (บทละ ๓ การทดลอง $\times$ ๖๐ บท) ตามลำดับขั้นพุทธิพิสัย (C3 มโนทัศน์พื้นฐาน, C4 ลงมือโค้ดดิ้ง, C5/C6 โครงงานแก้ปัญหาในโลกจริง) พร้อมตาราง Data Sheet และรูบริกส์ประเมินผล</p>
+        <div class="btn-group" style="flex-wrap: wrap;">
+          <a href="../CS_LABORATORY_MANUAL_180_EXPERIMENTS/index.html" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981, #059669); color: #fff;">🧪 เว็บพอร์ทัล ๑๘๐ แล็บ</a>
+          <a href="pdf_downloads/CS_LABORATORY_MANUAL_180_EXPERIMENTS.pdf" target="_blank" class="btn btn-outline" style="border-color: #34d399; color: #34d399;">📕 PDF (202 หน้า)</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Master Omnibus Edition (400 Pages) -->
+    <div class="book-card" style="border: 2px solid rgba(2, 132, 199, 0.4); background: rgba(2, 132, 199, 0.05);">
+      <div class="cover-container">
+        <img src="../CS_MASTER_OMNIBUS_TEXTBOOK/figures/cover_omnibus_1800x2700.png" alt="Master Omnibus Cover" style="object-fit: cover;">
+      </div>
+      <div class="book-details">
+        <div class="vol-tag" style="background: rgba(2, 132, 199, 0.2); color: #38bdf8; border-color: rgba(2, 132, 199, 0.4);">OMNIBUS EDITION • 60 CHAPTERS</div>
+        <div class="book-title" style="color: #38bdf8;">เอกสารคำสอน ฉบับรวมเล่มสมบูรณ์ (Omnibus Comprehensive Edition)</div>
+        <div class="book-en">Computing Science and Artificial Intelligence Master Omnibus Textbook</div>
+        <p class="book-desc">ฉบับรวมเล่มสมบูรณ์บริบูรณ์ ๔๐๐ หน้า Academic B5 บูรณาการเนื้อหาเข้มข้นทั้ง ๖๐ บทเรียน ตั้งแต่การคิดเชิงคำนวณ ไพทอน โครงสร้างข้อมูล ไอโอที ปัญญาประดิษฐ์ จนถึงคอมพิวเตอร์เชิงพื้นที่ WebAR</p>
+        <div class="btn-group" style="flex-wrap: wrap;">
+          <a href="../CS_MASTER_OMNIBUS_TEXTBOOK/index.html" class="btn btn-primary" style="background: linear-gradient(135deg, #0284c7, #0369a1); color: #fff;">📚 เว็บพอร์ทัลฉบับรวมเล่ม</a>
+          <a href="pdf_downloads/CS_MASTER_OMNIBUS_COMPREHENSIVE_EDITION.pdf" target="_blank" class="btn btn-outline" style="border-color: #38bdf8; color: #38bdf8;">📕 PDF (400 หน้า)</a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p>© 2027 สาขาวิชาฟิสิกส์ คณะวิทยาศาสตร์และเทคโนโลยี มหาวิทยาลัยราชภัฏรำไพพรรณี • พัฒนาด้วยมาตรฐาน Academic Content Architect</p>
+  </footer>
+
+</body>
+</html>

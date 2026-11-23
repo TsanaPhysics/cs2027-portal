@@ -1,0 +1,68 @@
+{
+  "id": "book1",
+  "folder": "Book1_Computational_Thinking_and_Unplugged",
+  "volume": 1,
+  "title_th": "วิทยาการคำนวณ 1 การคิดเชิงคำนวณและกิจกรรมอันปลั๊ก",
+  "title_en": "Computing Science 1: Computational Thinking and Unplugged Coding",
+  "subtitle": "รากฐาน 4 เสาหลักของการคิดเชิงคำนวณ ตรรกศาสตร์ และกิจกรรมแก้ปัญหาโดยไม่ใช้คอมพิวเตอร์",
+  "accent_color": "#0284c7",
+  "secondary_color": "#0369a1",
+  "gradient": "linear-gradient(135deg, #0c4a6e 0%, #0369a1 50%, #0284c7 100%)",
+  "source_hints": [
+    "02_แนวคิดเชิงคำนวณ_และ_Unplugged_Coding",
+    "book1_chapters",
+    "01_หลักสูตรและตำรา_วิทยาการคำนวณ_Computing_Science"
+  ],
+  "chapters": [
+    {
+      "num": 1,
+      "title": "ศาสตร์แห่งวิทยาการคำนวณและกระบวนทัศน์การคิดในศตวรรษที่ 21",
+      "en": "Computing Science and 21st Century Thinking Paradigms"
+    },
+    {
+      "num": 2,
+      "title": "เสาหลักที่ 1 การแยกส่วนประกอบและการย่อยปัญหา",
+      "en": "Pillar 1: Problem Decomposition and System Analysis"
+    },
+    {
+      "num": 3,
+      "title": "เสาหลักที่ 2 การหารูปแบบและความสัมพันธ์ของข้อมูล",
+      "en": "Pillar 2: Pattern Recognition and Data Invariance"
+    },
+    {
+      "num": 4,
+      "title": "เสาหลักที่ 3 การคิดเชิงนามธรรมและการกรองสาระสำคัญ",
+      "en": "Pillar 3: Abstraction and Core Synthesis"
+    },
+    {
+      "num": 5,
+      "title": "เสาหลักที่ 4 การออกแบบขั้นตอนวิธีและตรรกศาสตร์เบื้องต้น",
+      "en": "Pillar 4: Algorithmic Design and Foundational Logic"
+    },
+    {
+      "num": 6,
+      "title": "กิจกรรมอันปลั๊ก 1 ระบบตรรกะ ตารางความจริง และวงจรสวิตช์กระดาษ",
+      "en": "Unplugged 1: Logic Systems, Truth Tables and Paper Switches"
+    },
+    {
+      "num": 7,
+      "title": "กิจกรรมอันปลั๊ก 2 การแทนรหัสข้อมูล รหัสไบนารี และพิกเซลภาพ",
+      "en": "Unplugged 2: Data Representation, Binary and Pixel Graphics"
+    },
+    {
+      "num": 8,
+      "title": "กิจกรรมอันปลั๊ก 3 ขั้นตอนวิธีการค้นหาและการเรียงลำดับด้วยการ์ดเกม",
+      "en": "Unplugged 3: Search and Sorting Algorithms via Card Games"
+    },
+    {
+      "num": 9,
+      "title": "กิจกรรมอันปลั๊ก 4 โครงข่าย การนำทาง และกราฟในชีวิตประจำวัน",
+      "en": "Unplugged 4: Networks, Routing and Everyday Graph Theory"
+    },
+    {
+      "num": 10,
+      "title": "กิจกรรมอันปลั๊ก 5 การจำลองการสื่อสารและโครงงานอันปลั๊กแก้ปัญหาชุมชน",
+      "en": "Unplugged 5: Communication Protocols and Community Capstone"
+    }
+  ]
+}

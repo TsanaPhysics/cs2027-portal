@@ -1,0 +1,67 @@
+{
+  "id": "book5",
+  "folder": "Book5_Artificial_Intelligence_and_Machine_Learning",
+  "volume": 5,
+  "title_th": "วิทยาการคำนวณ 5 ปัญญาประดิษฐ์และการเรียนรู้ของเครื่อง",
+  "title_en": "Computing Science 5: Artificial Intelligence and Machine Learning",
+  "subtitle": "รากฐาน AI, Machine Learning, Deep Learning, Computer Vision, Prompt Engineering และ AI Ethics",
+  "accent_color": "#ec4899",
+  "secondary_color": "#be185d",
+  "gradient": "linear-gradient(135deg, #831843 0%, #be185d 50%, #ec4899 100%)",
+  "source_hints": [
+    "04_AI_Coding_และ_Machine_Learning",
+    "book3_chapters"
+  ],
+  "chapters": [
+    {
+      "num": 1,
+      "title": "กำเนิดและวิวัฒนาการของปัญญาประดิษฐ์",
+      "en": "Foundations, History and Paradigms of Artificial Intelligence"
+    },
+    {
+      "num": 2,
+      "title": "การแทนความรู้และระบบผู้เชี่ยวชาญ",
+      "en": "Knowledge Representation, Ontologies and Expert Systems"
+    },
+    {
+      "num": 3,
+      "title": "รากฐานการเรียนรู้ของเครื่องและการเตรียมข้อมูล",
+      "en": "Machine Learning Pipelines, Feature Engineering and Preprocessing"
+    },
+    {
+      "num": 4,
+      "title": "การเรียนรู้แบบมีผู้สอน การจำแนกประเภทและการถดถอย",
+      "en": "Supervised Learning: Classification and Regression Analysis"
+    },
+    {
+      "num": 5,
+      "title": "การเรียนรู้แบบไม่มีผู้สอน การจัดกลุ่มและการลดมิติข้อมูล",
+      "en": "Unsupervised Learning: Clustering and Dimensionality Reduction"
+    },
+    {
+      "num": 6,
+      "title": "โครงข่ายประสาทเทียมและการเรียนรู้เชิงลึก",
+      "en": "Artificial Neural Networks, Backpropagation and Deep Learning"
+    },
+    {
+      "num": 7,
+      "title": "คอมพิวเตอร์วิทัศน์และการตรวจจับวัตถุด้วย MediaPipe และ OpenCV",
+      "en": "Computer Vision, Facial Landmarks and Gesture Detection"
+    },
+    {
+      "num": 8,
+      "title": "การประมวลผลภาษาธรรมชาติและโมเดลภาษาขนาดใหญ่",
+      "en": "Natural Language Processing, Large Language Models and Prompt Engineering"
+    },
+    {
+      "num": 9,
+      "title": "เอเจนต์ปัญญาประดิษฐ์และการตัดสินใจอัตโนมัติ",
+      "en": "Autonomous AI Agents, Multi-Agent Systems and Tool Use"
+    },
+    {
+      "num": 10,
+      "title": "จริยธรรมปัญญาประดิษฐ์ ความเป็นธรรม และผลกระทบต่อสังคม",
+      "en": "AI Ethics, Algorithmic Bias, Safety and Governance"
+    }
+  ]
+}

@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CT-Lab: ห้องทดลองแนวคิดเชิงคำนวณแบบโต้ตอบ 9 กิจกรรม ครอบคลุมแนวคิดเชิงคำนวณ การย่อยปัญหา การค้นหา ขั้นตอนวิธี และผังงาน">
+  <title>CT-Lab v4.0 — Computational Thinking Interactive Simulator</title>
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="decomposition.css">
+<link rel="stylesheet" href="searching.css">
+<link rel="stylesheet" href="new_modules.css">
+<link rel="stylesheet" href="submit.css">
+<link rel="stylesheet" href="motion_3d.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><div class="brand-mark">C<span>T</span></div><div><strong>CT-Lab</strong><small>INTERACTIVE LEARNING</small></div></div>
+      <div class="side-caption">COURSE WORKSPACE</div>
+      <nav class="module-nav" aria-label="เมนูการเรียนรู้">
+        <button class="nav-item is-active" data-target="overview"><span class="nav-icon">⌂</span><span>ภาพรวมและคู่มือ</span></button>
+        <button class="nav-item" data-target="survival"><span class="nav-icon">🌲</span><span>สถานการณ์ชวนคิด</span><span class="nav-num">01</span></button>
+        <button class="nav-item" data-target="books"><span class="nav-icon">📚</span><span>แนะนำหนังสือ</span><span class="nav-num">02</span></button>
+        <button class="nav-item" data-target="house"><span class="nav-icon">⌗</span><span>บ้านตามพิกัด</span><span class="nav-num">03</span></button>
+        <button class="nav-item" data-target="routes"><span class="nav-icon">◇</span><span>ไปให้ครบทุกที่</span><span class="nav-num">04</span></button>
+        <button class="nav-item" data-target="gcd"><span class="nav-icon">∑</span><span>หา ห.ร.ม.</span><span class="nav-num">05</span></button>
+        <button class="nav-item" data-target="decomposition"><span class="nav-icon">🧩</span><span>การย่อยปัญหา</span><span class="nav-num">06</span></button>
+        <button class="nav-item" data-target="searching"><span class="nav-icon">🔎</span><span>การค้นหาข้อมูล</span><span class="nav-num">07</span></button>
+        <button class="nav-item" data-target="algorithms"><span class="nav-icon">⚙️</span><span>การออกแบบขั้นตอนวิธี</span><span class="nav-num">08</span></button>
+        <button class="nav-item" data-target="flowcharts"><span class="nav-icon">🧩</span><span>เกมเรียงผังงาน</span><span class="nav-num">09</span></button>
+        <button class="nav-item" data-target="challenge"><span class="nav-icon">🖼️</span><span>แบบฝึกหัดภาพประกอบ</span><span class="nav-num">10</span></button>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div class="side-progress"><div class="side-progress-label"><span>LEARNING PROGRESS</span><b id="side-percent">0%</b></div><div class="meter"><span id="side-meter" style="width:0%"></span></div><small id="side-completed">สำเร็จ 0 จาก 9 กิจกรรม</small></div>
+      <button class="side-foot" id="teacher-open">☷ &nbsp; แนวทางสำหรับผู้สอน</button>
+      <div class="side-credit">Designed for Computational Thinking<br>Based on the uploaded IPST teaching materials</div>
+    </aside>
+    <div class="main-column">
+      <header class="topbar">
+        <div class="crumb"><button class="mobile-menu icon-btn" id="menu-open" aria-label="เปิดเมนู">☰</button><span>ห้องเรียนดิจิทัล</span><span class="slash">/</span><b id="page-crumb">ภาพรวม</b></div>
+        <div class="top-actions"><span class="status-pill"><span class="status-dot"></span> Offline-ready</span><a class="btn btn-small btn-outline" href="../CT_Lab04_Algorithm_Flowchart_Web/index.html">📘 ปฏิบัติการที่ 4 (Flowchart &amp; Trace Table)</a><button class="btn btn-small btn-outline" id="export-progress">↓ ส่งออกผลการเรียน</button><button class="btn btn-small btn-primary" id="open-submit-modal">📤 ส่งงาน / ผลตรวจ</button><a class="btn btn-small btn-quiet" href="teacher.html" target="_blank" rel="noopener">🔐 Admin</a></div>
+      </header>
+      <main id="main-content">
+        <section class="page active" data-page="overview">
+          <div class="hero"><div class="hero-copy"><div class="eyebrow light">COMPUTATIONAL THINKING • INTERACTIVE LAB</div><h1>คิดเป็นขั้นตอน<br><em>เรียนรู้ผ่านการทดลอง</em></h1><p>ทดลอง ปรับตัวแปร และสังเกตผลของขั้นตอนวิธีแบบทันที ผ่านกิจกรรมจากเอกสารสอนเรื่องแนวคิดเชิงคำนวณ</p><button class="btn btn-white" data-go="survival">เริ่มการเรียนรู้ <span aria-hidden="true">↗</span></button></div><div class="hero-art" aria-hidden="true"><div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div><div class="hero-core">&lt;/&gt;</div><div class="hero-float float-a">01<span>Input</span></div><div class="hero-float float-b">02<span>Process</span></div><div class="hero-float float-c">03<span>Output</span></div></div></div>
+          <div class="metric-grid"><div class="metric"><strong>10</strong><span>Interactive Modules</span></div><div class="metric"><strong>50</strong><span>สไลด์/หน้า/ใบงาน</span></div><div class="metric"><strong>100%</strong><span>ทำงานในเบราว์เซอร์</span></div><div class="metric"><strong id="overview-done">0/10</strong><span>ภารกิจที่ผ่านแล้ว</span></div></div>
+          <div class="section-heading"><div><div class="eyebrow">LEARNING PATH</div><h2>เลือกโมดูลการทดลอง</h2><p>ทุกกิจกรรมมีตัวแปรที่ปรับได้ การแสดงผลทันที และเกณฑ์ตรวจสอบความเข้าใจ</p></div></div>
+          <div class="module-grid">
+            <button class="module-card" data-go="survival"><span class="module-emoji green">🌲</span><span class="module-card-num">01 · DECISION MAKING</span><strong>สถานการณ์ชวนคิด</strong><span>สร้างชุดการตัดสินใจจากเหตุการณ์ในป่า</span><span class="module-card-foot">เปิดห้องทดลอง <b id="done-survival">↗</b></span></button>
+            <button class="module-card" data-go="books"><span class="module-emoji blue">📚</span><span class="module-card-num">02 · PATTERN RECOGNITION</span><strong>ระบบแนะนำหนังสือ</strong><span>ทดลองค้นหาความคล้ายคลึงจากข้อมูล 0/1</span><span class="module-card-foot">เปิดห้องทดลอง <b id="done-books">↗</b></span></button>
+            <button class="module-card" data-go="house"><span class="module-emoji violet">⌗</span><span class="module-card-num">03 · COORDINATES</span><strong>บ้านตามพิกัด x,y</strong><span>เขียนชุดคำสั่งแล้วดูการวาดทีละขั้น</span><span class="module-card-foot">เปิดห้องทดลอง <b id="done-house">↗</b></span></button>
+            <button class="module-card" data-go="routes"><span class="module-emoji orange">🧭</span><span class="module-card-num">04 · ROUTE PLANNING</span><strong>ไปให้ครบทุกที่</strong><span>ทดลองจัดลำดับจุดหมายและเปรียบเทียบระยะทาง</span><span class="module-card-foot">เปิดห้องทดลอง <b id="done-routes">↗</b></span></button>
+            <button class="module-card" data-go="gcd"><span class="module-emoji teal">∑</span><span class="module-card-num">05 · EUCLIDEAN ALGORITHM</span><strong>หา ห.ร.ม. ง่ายกว่าที่คิด</strong><span>ติดตามการหารเอาเศษจนเข้าสู่เงื่อนไขหยุด</span><span class="module-card-foot">เปิดห้องทดลอง <b id="done-gcd">↗</b></span></button>
+            <button class="module-card" data-go="decomposition"><span class="module-emoji orange">🧩</span><span class="module-card-num">06 · DECOMPOSITION</span><strong>การแยกส่วนประกอบและการย่อยปัญหา</strong><span>ทดลอง 5 ห้องย่อย: จักรยาน นวัตกรรม การเดินทาง หลักฐาน และภารกิจประจำวัน</span><span class="module-card-foot">เปิดห้องทดลอง <b id="done-decomposition">↗</b></span></button>
+<button class="module-card" data-go="searching"><span class="module-emoji blue">🔎</span><span class="module-card-num">07 · SEARCHING ALGORITHMS</span><strong>การค้นหาข้อมูล</strong><span>ตามหาตัวเลขแบบลำดับและทวิภาค เปรียบเทียบความเร็ว และฝึกคิดค่ากลาง</span><span class="module-card-foot">เปิดห้องทดลอง <b id="done-searching">↗</b></span></button>
+<button class="module-card" data-go="algorithms"><span class="module-emoji teal">⚙️</span><span class="module-card-num">08 · ALGORITHM DESIGN</span><strong>การออกแบบขั้นตอนวิธี</strong><span>จำลองรดน้ำต้นไม้ การหาค่า Min ตารางค่าความจริง และการวนซ้ำนับสินค้า</span><span class="module-card-foot">เปิดห้องทดลอง <b id="done-algorithms">↗</b></span></button>
+<button class="module-card" data-go="flowcharts"><span class="module-emoji violet">🧩</span><span class="module-card-num">09 · FLOWCHART CHALLENGE</span><strong>เกมเรียงผังงาน</strong><span>จัดบล็อกผังงาน 5 ด่านจากไฟล์ Excel พร้อมตรวจคำตอบและสาธิตเส้นทาง</span><span class="module-card-foot">เปิดห้องทดลอง <b id="done-flowcharts">↗</b></span></button>
+            <button class="module-card" data-go="challenge"><span class="module-emoji green">🖼️</span><span class="module-card-num">10 · ILLUSTRATED ASSESSMENT</span><strong>แบบฝึกหัดพร้อมภาพประกอบ</strong><span>วิเคราะห์ภาพจำลอง 5 สถานการณ์และส่งคำตอบให้อาจารย์ตรวจ (ไม่มีเฉลยฝั่งผู้เรียน)</span><span class="module-card-foot">เปิดห้องทดลอง <b id="done-challenge">↗</b></span></button>
+          </div>
+          <div class="source-note"><b>เอกสารอ้างอิง &amp; คลังความรู้เชื่อมโยง:</b> 01_ComputationalThinking.pptx (15 สไลด์), 02_Decomposition.pdf (10 หน้า), 07_searching.pptx (6 สไลด์), 02 ขั้นตอนวิธี.pptx (14 สไลด์) และ โปรแกรมเรียงผังงาน ด่าน 2.xlsx (5 แผ่นงาน) จาก สสวท. • ต่อยอดสู่ <a href="../CT_Lab04_Algorithm_Flowchart_Web/index.html"><b>ปฏิบัติการที่ 4: Algorithm Design, Pseudocode, ISO 5807 Flowchart &amp; CSTR Trace Table ↗</b></a> และคลังวิจัย <a href="https://notebooklm.link.google/IP0aexOtZhEb" target="_blank" rel="noopener"><b>NotebookLM Study Hub (FlowCharT-CS2027, 51 แหล่ง) ↗</b></a> · <a href="https://notebook.google.com/notebook/b726099e-9711-4319-9deb-d3c42c772173" target="_blank" rel="noopener">Open Notebook Workspace ↗</a></div>
+        </section>
+
+        <section class="page" data-page="survival">
+          <div class="page-head"><div class="eyebrow">MODULE 01 <span class="sep">/</span> ALGORITHMIC DECISION</div><h1>สถานการณ์ชวนคิด: ทางออกจากป่า</h1><p>จัดลำดับการตัดสินใจจากสถานการณ์ในสไลด์ 2 ซึ่งมีเพื่อน 3 คน มีด ไฟฉาย กระต่าย น้ำผึ้ง และพบหมีระหว่างทาง</p></div>
+          <div class="lab-layout"><div class="lab-primary"><div class="panel"><div class="panel-top"><div><h2>🌲 Forest Decision Simulator</h2><span>สถานการณ์สมมติสำหรับฝึกคิดเชิงขั้นตอน ไม่ใช่คู่มือการรับมือสัตว์ป่าจริง</span></div><span class="tag">SCENARIO</span></div><div class="forest-art" id="forest-art"><svg viewBox="0 0 760 320" role="img" aria-label="ภาพจำลองป่าสไตล์ 3D Pixar Ghibli พร้อมอนิเมชัน">
+  <defs>
+    <linearGradient id="gh-sky2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#87d8f7"/>
+      <stop offset="55%" stop-color="#c9f2e3"/>
+      <stop offset="100%" stop-color="#fef3c7"/>
+    </linearGradient>
+    <radialGradient id="gh-sun" cx="22%" cy="18%" r="45%">
+      <stop offset="0%" stop-color="#fffbeb" stop-opacity="0.95"/>
+      <stop offset="45%" stop-color="#fde68a" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#fde68a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gh-hill1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#86efac"/><stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+    <linearGradient id="gh-hill2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#15803d"/>
+    </linearGradient>
+    <radialGradient id="bear-body" cx="38%" cy="32%" r="65%">
+      <stop offset="0%" stop-color="#b6805c"/><stop offset="65%" stop-color="#85563a"/><stop offset="100%" stop-color="#5a3723"/>
+    </radialGradient>
+    <radialGradient id="bear-snout" cx="45%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#f6dec4"/><stop offset="100%" stop-color="#cfa882"/>
+    </radialGradient>
+    <radialGradient id="stu-skin" cx="40%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ffe0c4"/><stop offset="100%" stop-color="#eab68d"/>
+    </radialGradient>
+    <filter id="gh-soft" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#14532d" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+
+  <!-- Sky & Volumetric Sunbeams -->
+  <rect width="760" height="320" fill="url(#gh-sky2)"/>
+  <circle cx="170" cy="60" r="190" fill="url(#gh-sun)"/>
+  <polygon class="gh-sunbeam" points="120,0 240,0 410,320 210,320" fill="#fffbeb" opacity="0.22"/>
+  <polygon class="gh-sunbeam2" points="250,0 330,0 560,320 420,320" fill="#fef3c7" opacity="0.16"/>
+
+  <!-- Fluffy Ghibli Clouds -->
+  <g class="gh-cloud" fill="#ffffff" opacity="0.88">
+    <ellipse cx="480" cy="54" rx="46" ry="20"/><ellipse cx="515" cy="48" rx="34" ry="22"/><ellipse cx="448" cy="58" rx="28" ry="15"/>
+    <ellipse cx="145" cy="68" rx="36" ry="16"/><ellipse cx="172" cy="62" rx="26" ry="17"/>
+  </g>
+
+  <!-- Distant Rolling Hills -->
+  <path d="M0 220 Q180 155 370 215 T760 198 V320 H0Z" fill="url(#gh-hill1)"/>
+  <path d="M0 258 Q250 205 490 258 T760 236 V320 H0Z" fill="url(#gh-hill2)"/>
+
+  <!-- Sunlit Trail -->
+  <path d="M90 320 Q255 250 385 262 T690 208 L760 242 Q550 302 320 320Z" fill="#f3d999" opacity="0.92"/>
+
+  <!-- Swaying Ghibli Trees -->
+  <g class="gh-tree-sway" style="transform-origin:95px 255px" filter="url(#gh-soft)">
+    <rect x="87" y="195" width="16" height="65" rx="6" fill="#6b442a"/>
+    <circle cx="95" cy="150" r="52" fill="#22c55e"/><circle cx="72" cy="168" r="36" fill="#16a34a"/><circle cx="118" cy="166" r="35" fill="#4ade80"/>
+  </g>
+  <g class="gh-tree-sway2" style="transform-origin:660px 250px" filter="url(#gh-soft)">
+    <rect x="651" y="180" width="18" height="75" rx="6" fill="#6b442a"/>
+    <circle cx="660" cy="130" r="58" fill="#16a34a"/><circle cx="628" cy="152" r="40" fill="#22c55e"/><circle cx="690" cy="148" r="38" fill="#4ade80"/>
+  </g>
+
+  <!-- Cute 3D Pixar-Ghibli Bear (Breathing + Ear Wiggle + Eye Blink) -->
+  <g transform="translate(475,148)" filter="url(#gh-soft)">
+    <ellipse cx="68" cy="128" rx="62" ry="12" fill="#14532d" opacity="0.24"/>
+    <g class="gh-bear-breathe" style="transform-origin:68px 115px">
+      <ellipse cx="74" cy="86" rx="56" ry="42" fill="url(#bear-body)"/>
+      <rect x="34" y="106" width="22" height="24" rx="10" fill="#6d432b"/>
+      <rect x="88" y="106" width="22" height="24" rx="10" fill="#6d432b"/>
+      <!-- Bear Head -->
+      <g transform="translate(0,0)">
+        <circle class="gh-ear-l" cx="18" cy="24" r="14" fill="#73482f"/><circle cx="18" cy="24" r="7" fill="#dba982"/>
+        <circle class="gh-ear-r" cx="68" cy="24" r="14" fill="#73482f"/><circle cx="68" cy="24" r="7" fill="#dba982"/>
+        <circle cx="43" cy="52" r="38" fill="url(#bear-body)"/>
+        <ellipse cx="32" cy="64" rx="19" ry="14" fill="url(#bear-snout)"/>
+        <ellipse cx="27" cy="58" rx="7" ry="5" fill="#2d1e17"/>
+        <path d="M22 68 Q28 73 34 68" fill="none" stroke="#4a2e20" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Glossy Pixar Eyes -->
+        <g class="gh-blink" style="transform-origin:34px 46px">
+          <circle cx="24" cy="46" r="5.2" fill="#1e1510"/><circle cx="25.5" cy="44.2" r="1.8" fill="#fff"/>
+          <circle cx="46" cy="46" r="5.2" fill="#1e1510"/><circle cx="47.5" cy="44.2" r="1.8" fill="#fff"/>
+        </g>
+        <ellipse cx="16" cy="56" rx="6" ry="3.5" fill="#fb7185" opacity="0.45"/>
+        <ellipse cx="52" cy="56" rx="6" ry="3.5" fill="#fb7185" opacity="0.45"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- 3 Cute 3D Pixar-Ghibli Students with Backpacks, Rosy Cheeks, Blinking Eyes & Gestures -->
+  <g transform="translate(120,174)" filter="url(#gh-soft)">
+    <ellipse cx="78" cy="112" rx="88" ry="13" fill="#14532d" opacity="0.24"/>
+
+    <!-- Student 1 (Left): Yellow Hoodie + Pink Hairband + Backpack -->
+    <g class="gh-stu-1" style="transform-origin:24px 104px" transform="translate(0,14)">
+      <rect x="-4" y="42" width="14" height="28" rx="6" fill="#d97706"/>
+      <rect x="12" y="72" width="9" height="20" rx="4" fill="#334155"/>
+      <rect x="25" y="72" width="9" height="20" rx="4" fill="#334155"/>
+      <rect x="6" y="38" width="32" height="38" rx="14" fill="#fbbf24"/>
+      <ellipse cx="22" cy="40" rx="11" ry="5" fill="#f59e0b"/>
+      <circle cx="22" cy="20" r="19" fill="url(#stu-skin)"/>
+      <path d="M2 18 Q22 -5 42 18 Q36 6 22 7 Q8 6 2 18Z" fill="#292524"/>
+      <circle cx="10" cy="8" r="5" fill="#fb7185"/>
+      <g class="gh-blink-1" style="transform-origin:27px 21px">
+        <circle cx="21" cy="21" r="3.4" fill="#1e1b18"/><circle cx="22" cy="19.8" r="1.2" fill="#fff"/>
+        <circle cx="33" cy="21" r="3.4" fill="#1e1b18"/><circle cx="34" cy="19.8" r="1.2" fill="#fff"/>
+      </g>
+      <ellipse cx="15" cy="27" rx="4.2" ry="2.4" fill="#fb7185" opacity="0.5"/>
+      <ellipse cx="36" cy="27" rx="4.2" ry="2.4" fill="#fb7185" opacity="0.5"/>
+      <path d="M24 29 Q27 32 30 29" fill="none" stroke="#9a3412" stroke-width="1.8" stroke-linecap="round"/>
+    </g>
+
+    <!-- Student 2 (Center Leader): Blue Jacket + Adventure Cap + Pointing Hand -->
+    <g class="gh-stu-2" style="transform-origin:78px 104px" transform="translate(54,0)">
+      <rect x="4" y="46" width="15" height="30" rx="6" fill="#1d4ed8"/>
+      <rect x="16" y="80" width="10" height="22" rx="5" fill="#1e293b"/>
+      <rect x="30" y="80" width="10" height="22" rx="5" fill="#1e293b"/>
+      <rect x="10" y="42" width="36" height="42" rx="16" fill="#3b82f6"/>
+      <path d="M20 44 L28 54 L36 44" fill="none" stroke="#bfdbfe" stroke-width="2.5" stroke-linecap="round"/>
+      <g class="gh-arm-wave" style="transform-origin:42px 52px">
+        <rect x="40" y="48" width="18" height="10" rx="5" fill="#3b82f6"/>
+        <circle cx="58" cy="53" r="5" fill="url(#stu-skin)"/>
+      </g>
+      <g class="gh-head-bob" style="transform-origin:28px 36px">
+        <circle cx="28" cy="22" r="20.5" fill="url(#stu-skin)"/>
+        <path d="M7 18 Q28 -6 49 18 Q38 6 28 7 Q18 6 7 18Z" fill="#0f172a"/>
+        <path d="M10 12 Q28 2 46 12 L52 15 Q28 11 10 14Z" fill="#ef4444"/>
+        <g class="gh-blink-2" style="transform-origin:33px 23px">
+          <circle cx="27" cy="23" r="3.6" fill="#1e1b18"/><circle cx="28.2" cy="21.7" r="1.3" fill="#fff"/>
+          <circle cx="39" cy="23" r="3.6" fill="#1e1b18"/><circle cx="40.2" cy="21.7" r="1.3" fill="#fff"/>
+        </g>
+        <ellipse cx="20" cy="29" rx="4.5" ry="2.5" fill="#fb7185" opacity="0.45"/>
+        <ellipse cx="42" cy="29" rx="4.5" ry="2.5" fill="#fb7185" opacity="0.45"/>
+        <path d="M30 31 Q33 34 36 31" fill="none" stroke="#9a3412" stroke-width="2" stroke-linecap="round"/>
+      </g>
+    </g>
+
+    <!-- Student 3 (Right): Mint Sweater + Cream Scarf + Cute Bob Hair -->
+    <g class="gh-stu-3" style="transform-origin:136px 104px" transform="translate(114,16)">
+      <rect x="10" y="70" width="9" height="20" rx="4" fill="#334155"/>
+      <rect x="23" y="70" width="9" height="20" rx="4" fill="#334155"/>
+      <rect x="5" y="36" width="32" height="38" rx="14" fill="#10b981"/>
+      <ellipse cx="21" cy="39" rx="13" ry="6" fill="#fef3c7"/>
+      <circle cx="21" cy="19" r="18.5" fill="url(#stu-skin)"/>
+      <path d="M2 19 Q21 -4 40 19 Q42 30 36 32 Q34 14 21 10 Q8 14 6 32 Q0 30 2 19Z" fill="#451a03"/>
+      <g class="gh-blink-3" style="transform-origin:25px 20px">
+        <circle cx="19" cy="20" r="3.3" fill="#1e1b18"/><circle cx="20" cy="18.8" r="1.2" fill="#fff"/>
+        <circle cx="31" cy="20" r="3.3" fill="#1e1b18"/><circle cx="32" cy="18.8" r="1.2" fill="#fff"/>
+      </g>
+      <ellipse cx="13" cy="26" rx="4" ry="2.3" fill="#fb7185" opacity="0.5"/>
+      <ellipse cx="34" cy="26" rx="4" ry="2.3" fill="#fb7185" opacity="0.5"/>
+      <path d="M22 28 Q25 31 28 28" fill="none" stroke="#9a3412" stroke-width="1.8" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <!-- Floating Ghibli Fireflies / Pollen Motes -->
+  <g fill="#fef08a">
+    <circle class="gh-firefly f1" cx="290" cy="140" r="3.5" opacity="0.85"/>
+    <circle class="gh-firefly f2" cx="370" cy="195" r="2.8" opacity="0.75"/>
+    <circle class="gh-firefly f3" cx="430" cy="120" r="3.2" opacity="0.8"/>
+    <circle class="gh-firefly f4" cx="590" cy="175" r="3" opacity="0.8"/>
+  </g>
+
+  <!-- Cute Pill Labels -->
+  <g font-size="13" font-weight="800" fill="#1e293b">
+    <rect x="488" y="102" width="76" height="26" rx="13" fill="#ffffff" opacity="0.9"/>
+    <text x="526" y="120" text-anchor="middle">🐻 หมีป่า</text>
+    <rect x="150" y="148" width="112" height="26" rx="13" fill="#ffffff" opacity="0.9"/>
+    <text x="206" y="166" text-anchor="middle">👥 เพื่อน 3 คน</text>
+  </g>
+</svg><div class="forest-step-label" id="forest-step-label">ขั้นที่ 1 / 4 · ประเมินสถานการณ์</div></div><div class="scenario-question" id="survival-question"></div><div class="choice-grid" id="survival-options"></div><div id="survival-feedback" class="feedback" aria-live="polite"></div></div><div class="panel"><div class="panel-top"><h3>บันทึกกระบวนการตัดสินใจ</h3><button class="btn btn-outline btn-small" id="survival-reset">↺ เริ่มสถานการณ์ใหม่</button></div><div class="timeline" id="survival-log"><div class="empty-state">เลือกการตัดสินใจด้านบน เพื่อสร้าง Algorithm Trace</div></div></div></div><aside class="lab-secondary"><div class="info-card"><span class="eyebrow">LIVE METRICS</span><h3>สถานะการทดลอง</h3><div class="big-counter"><b id="survival-progress-num">0/4</b><span>การตัดสินใจ</span></div><div class="metric-label"><span>ความรอบคอบของแผน</span><b id="survival-score">0 / 8</b></div><div class="meter light"><span id="survival-score-meter" style="width:0%"></span></div><p>คะแนนใช้เปรียบเทียบเหตุผลในแบบจำลอง ไม่ใช่การประเมินความปลอดภัยจริง</p></div><div class="note-card"><b>🎯 แนวคิดที่ฝึก</b><p>Decomposition · Conditional Logic · Sequence · การอธิบายเหตุผล</p><b>ภารกิจ</b><p>เลือกอย่างมีเหตุผลให้ครบ 4 ขั้น แล้วตรวจสอบบันทึกการตัดสินใจ</p></div></aside></div>
+        </section>
+
+        <section class="page" data-page="books">
+          <div class="page-head"><div class="eyebrow">MODULE 02 <span class="sep">/</span> PATTERN RECOGNITION</div><h1>ระบบแนะนำหนังสือจากข้อมูล 0/1</h1><p>ข้อมูลเริ่มต้นอ้างอิงตาราง 1.1 ในสไลด์ 5: เปรียบเทียบการซื้อหนังสือ A–F ของนักเรียนกับลูกค้าคนอื่น แล้วแนะนำหนังสือจากคนที่มีพฤติกรรมใกล้กัน</p></div>
+          <div class="lab-layout"><div class="lab-primary"><div class="panel"><div class="panel-top"><div><h2>📚 Book Similarity Matrix</h2><span>คลิกช่องตัวเลขเพื่อสลับค่า 0 ↔ 1 ระบบจะคำนวณใหม่ทันที</span></div><div class="btn-row"><button id="books-random" class="btn btn-primary btn-small">🎲 สุ่มข้อมูลใหม่</button><button id="books-reset" class="btn btn-outline btn-small">↺ ค่าสไลด์</button></div></div><div class="matrix-wrap"><table class="data-matrix" id="book-table"><thead><tr><th>ลูกค้า</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th title="เวทย์มนต์พ่อมดวัยรุ่น">เวทย์มนต์<br>พ่อมดวัยรุ่น</th><th>ปลูก<br>มะม่วง</th><th>กลอน<br>ภาษาไทย</th><th>ระยะห่าง</th></tr></thead><tbody id="book-tbody"></tbody></table></div><p class="tiny-help">ค่า 1 = ซื้อหนังสือเล่มนั้น, 0 = ไม่ซื้อ, ? = นักเรียนยังไม่ระบุข้อมูล หนังสือ 3 เล่มท้ายใช้เพื่อเสนอแนะ ไม่ใช้คำนวณระยะห่าง</p></div><div class="panel"><div class="panel-top"><h3>การคำนวณความแตกต่าง</h3><span class="tag">HAMMING DISTANCE</span></div><div class="formula">d(x,y) = Σ |xᵢ − yᵢ| , &nbsp;i = 1,…,6</div><div id="books-bars" class="bar-list"></div></div></div><aside class="lab-secondary"><div class="info-card"><span class="eyebrow">RECOMMENDATION</span><h3>ผลการแนะนำทันที</h3><div class="recommendation" id="book-result"></div><div class="small-divider"></div><label for="book-guess" class="field-label">ทายว่าใครมีพฤติกรรมใกล้นักเรียนที่สุด</label><select id="book-guess" class="select"><option value="">เลือกชื่อลูกค้า</option></select><button class="btn btn-primary btn-block" id="book-check">ตรวจคำตอบ</button><div class="feedback compact" id="book-feedback" aria-live="polite"></div></div><div class="note-card"><b>🎯 แนวคิดที่ฝึก</b><p>Pattern Recognition · Abstraction · Similarity Metric</p><b>เกณฑ์ในเอกสาร</b><p>หาผลรวมจำนวนช่องที่ซื้อแตกต่างกันของหนังสือ A–F แล้วเลือกลูกค้าที่มีค่าน้อยที่สุด</p></div></aside></div>
+        </section>
+
+        <section class="page" data-page="house">
+          <div class="page-head"><div class="eyebrow">MODULE 03 <span class="sep">/</span> COORDINATE ALGORITHM</div><h1>บ้านเธอ บ้านฉัน: โปรแกรมวาดบ้าน</h1><p>เขียนคำสั่งให้โปรแกรมวาดบ้านตามพิกัด x,y ในสไลด์ 7–8 หรือเปิดโหมดวาดเองแล้วคลิกบนกริดเพื่อสร้างเส้นตรง</p></div>
+          <div class="lab-layout"><div class="lab-primary"><div class="panel"><div class="panel-top"><div><h2>⌗ Coordinate Canvas</h2><span>แตะกริดเพื่อดูพิกัด (x,y) · แตะบรรทัดโค้ดเพื่อไฮไลต์เส้นบนกริด</span></div><div class="btn-row"><label class="switch-label"><input type="checkbox" id="house-reference" checked><span>แสดงเส้นต้นแบบ</span></label><label class="switch-label"><input type="checkbox" id="house-predict-mode"><span>🎯 ทายจุดก่อนวาด</span></label></div></div><div class="draw-surface"><svg id="house-svg" viewBox="0 0 700 520" role="img" aria-label="แกนพิกัดและเส้นรูปบ้านสำหรับวาดตามคำสั่ง"></svg></div><div class="house-toolbar"><span id="house-status" class="tag soft">ยังไม่เริ่ม</span><span id="house-probe" class="tag" style="display:none">พิกัด: —</span><div class="btn-row"><button class="btn btn-primary btn-small" id="house-step">▷ ทีละคำสั่ง</button><button class="btn btn-outline btn-small" id="house-run">▶ ทำทั้งหมด</button><button class="btn btn-outline btn-small" id="house-check">✓ ตรวจภาพ</button><button class="btn btn-quiet btn-small" id="house-clear">↺ ล้างภาพ</button></div></div><div class="feedback compact" id="house-feedback"></div></div></div><aside class="lab-secondary"><div class="info-card"><span class="eyebrow">PROGRAM EDITOR</span><h3>เขียนชุดคำสั่ง</h3><div class="segmented"><button class="selected" data-house-mode="code">ใช้โค้ด</button><button data-house-mode="free">วาดด้วยเมาส์</button></div><div id="house-code-box"><p class="field-hint">รองรับ <code>RECT x1 y1 x2 y2</code> และ <code>LINE x1 y1 x2 y2</code></p><textarea spellcheck="false" class="code-editor" id="house-code" aria-label="ชุดคำสั่งวาดบ้าน"></textarea><div class="btn-row" style="margin-top:8px"><button class="btn btn-outline btn-small" style="flex:1" id="house-load-buggy">🐞 โจทย์แก้บั๊ก (3 จุด)</button><button class="btn btn-outline btn-small" style="flex:1" id="house-load-blank">📐 โจทย์เติมพิกัด (?)</button></div><button class="btn btn-quiet btn-small btn-block" id="house-insert-probe" disabled>➕ แทรกพิกัดที่แตะลงโค้ด</button></div><div id="house-free-box" hidden><p>คลิกจุดบนกริดครั้งแรกเป็นต้นเส้น และคลิกจุดต่อไปเป็นปลายเส้น จากนั้นวาดต่อเนื่องได้</p><div class="hint-box">จุดปัจจุบัน: <b id="house-pointer">ยังไม่ได้เลือก</b></div><button class="btn btn-outline btn-small btn-block" id="house-clear-free">ลบเส้นที่วาดเอง</button></div><div class="small-divider"></div><h4>Algorithm Trace</h4><div class="tiny-trace" id="house-trace">รอการทำงาน...</div></div><div class="note-card"><b>🎯 แนวคิดที่ฝึก</b><p>Algorithm Design · Coordinate System · Debugging · Precision</p><p>ชุดคำสั่งเริ่มต้นถอดจากสไลด์ 7 โดยแก้คำที่พิมพ์คลาดเคลื่อนในพิกัดสุดท้ายเป็น (21,11)</p></div></aside></div>
+        </section>
+
+        <section class="page" data-page="routes">
+          <div class="page-head"><div class="eyebrow">MODULE 04 <span class="sep">/</span> ROUTE PLANNING</div><h1>ไปให้ครบทุกที่: Route Planner</h1><p>จากสถานการณ์ในสไลด์ 9–10 ทดลองจัดลำดับจุดหมาย A, B, C โดยคลิกบนแผนที่ แล้วเปรียบเทียบกับเส้นทางที่สั้นที่สุดในแบบจำลอง</p></div>
+          <div class="lab-layout"><div class="lab-primary"><div class="panel"><div class="panel-top"><div><h2>🧭 Route Planning Sandbox</h2><span>กราฟระยะทางจำลองเพื่อการศึกษา ไม่ใช่ระยะทางถนนจริงจากสไลด์</span></div><span class="tag">LIVE MAP</span></div><div class="route-surface"><svg id="route-svg" viewBox="0 0 740 450" role="img" aria-label="แผนที่จำลองที่สามารถคลิกจุดหมาย A B C เพื่อกำหนดเส้นทาง"></svg></div><div class="route-controls"><label class="switch-label"><input type="checkbox" id="route-return" checked><span>กลับจุดเริ่มต้น S</span></label><div class="btn-row"><button id="route-random" class="btn btn-outline btn-small">🎲 สุ่มแผนที่ใหม่</button><button id="route-optimize" class="btn btn-primary btn-small">✦ ค้นหาทางที่สั้นที่สุด</button><button id="route-animate" class="btn btn-outline btn-small">▶ จำลองการเดินทาง</button><button id="route-reset" class="btn btn-quiet btn-small">↺ ล้างเส้นทาง</button></div></div></div><div class="panel"><div class="panel-top"><h3>เปรียบเทียบแผนการเดินทาง</h3><span class="tag">6 POSSIBLE ORDERS</span></div><div class="route-comparison" id="route-comparison"></div></div></div><aside class="lab-secondary"><div class="info-card"><span class="eyebrow">CURRENT ROUTE</span><h3>ผลการวางแผน</h3><div class="route-sequence" id="route-order">S → …</div><div class="big-counter"><b id="route-total">—</b><span>หน่วยระยะทางจำลอง</span></div><div id="route-leg-list" class="route-leg-list"></div><div class="feedback compact" id="route-feedback"></div><p>คลิกวงกลม A, B, C ตามลำดับที่ต้องการ สามารถเลือกแต่ละจุดได้หนึ่งครั้ง</p></div><div class="note-card"><b>🎯 แนวคิดที่ฝึก</b><p>Decomposition · Enumeration · Optimization · Route Comparison</p><b>ข้อสังเกต</b><p>แผนที่และค่าน้ำหนักนี้ออกแบบขึ้นใหม่เพื่อทดลองแนวคิด ไม่ใช่ข้อมูลภูมิศาสตร์ของสถานที่จริง</p></div></aside></div>
+        </section>
+
+        <section class="page" data-page="gcd">
+          <div class="page-head"><div class="eyebrow">MODULE 05 <span class="sep">/</span> EUCLIDEAN ALGORITHM</div><h1>หา ห.ร.ม. ง่ายกว่าที่คิด</h1><p>ทดลองใช้ Euclidean Algorithm ตามตัวอย่างในสไลด์ 11–15 ตั้งแต่โจทย์ 12 กับ 20 จนถึงจำนวนหลายหลัก พร้อมแสดงรอบการหารและเงื่อนไขหยุด</p></div>
+          <div class="lab-layout"><div class="lab-primary"><div class="panel"><div class="panel-top"><div><h2>∑ Euclidean Algorithm Visualizer</h2><span>ใส่จำนวนเต็มบวกสองจำนวน แล้วกด Step หรือ Play</span></div><span class="tag">NUMBER THEORY</span></div><div class="gcd-inputs"><div class="field"><label for="gcd-a">จำนวน A</label><input id="gcd-a" type="number" min="1" max="1000000000" step="1" value="180"></div><div class="field"><label for="gcd-b">จำนวน B</label><input id="gcd-b" type="number" min="1" max="1000000000" step="1" value="126"></div><div class="field smaller"><label for="gcd-speed">ความเร็ว</label><select id="gcd-speed" class="select"><option value="1600">ช้า</option><option value="850" selected>ปกติ</option><option value="360">เร็ว</option></select></div></div><div class="preset-row"><span>โจทย์ประยุกต์ใช้จริง:</span><button data-gcd-preset="180,126" data-gcd-story="🧱 ห้องทดลองกว้าง 180 ซม. ยาว 126 ซม. ต้องการปูกระเบื้องจัตุรัสขนาดใหญ่ที่สุดโดยไม่ตัดเศษ จะใช้กระเบื้องขนาดด้านละกี่ ซม.?">🧱 ปูกระเบื้อง (180, 126)</button><button data-gcd-preset="48,36" data-gcd-story="🧪 มีบีกเกอร์ 48 ใบ และหลอดทดลอง 36 อัน ต้องการแบ่งจัดเป็นชุดให้ได้มากที่สุดโดยทุกชุดมีจำนวนเท่ากัน จะได้กี่ชุด?">🧪 จัดชุดอุปกรณ์ (48, 36)</button><button data-gcd-preset="24,18" data-gcd-story="🌱 เซนเซอร์ความชื้นทำงานทุก 24 นาที และเซนเซอร์แสงทุก 18 นาที หาช่วงเวลาพื้นฐานร่วมที่ลงตัวที่สุด">🌱 เซนเซอร์เกษตร (24, 18)</button><button data-gcd-preset="187,221" data-gcd-story="📐 ตัวอย่างจากสไลด์: หา ห.ร.ม. ของ 187 และ 221">187, 221</button><button data-gcd-preset="301981,449573" data-gcd-story="🔢 ตัวอย่างเลขขนาดใหญ่จากสไลด์: 301,981 และ 449,573">301,981 · 449,573</button></div><div id="gcd-story-box" class="gcd-story-box">🧱 ห้องทดลองกว้าง 180 ซม. ยาว 126 ซม. ต้องการปูกระเบื้องจัตุรัสขนาดใหญ่ที่สุดโดยไม่ตัดเศษ จะใช้กระเบื้องขนาดด้านละกี่ ซม.?</div><div class="gcd-current" id="gcd-current"><span>รอเริ่มต้น</span></div><div id="gcd-3d-visual" class="gcd-3d-visual"></div><div class="gcd-controls"><button id="gcd-step" class="btn btn-primary">▷ ขั้นถัดไป</button><button id="gcd-play" class="btn btn-outline">▶ เล่นอัตโนมัติ</button><button id="gcd-all" class="btn btn-outline">≡ แสดงทั้งหมด</button><button id="gcd-reset" class="btn btn-quiet">↺ เริ่มใหม่</button></div><div class="progress-strip"><div class="meter light"><span id="gcd-meter" style="width:0%"></span></div><span id="gcd-stage-label">0 / 0 ขั้น</span></div><div class="feedback compact" id="gcd-feedback"></div></div><div class="panel"><div class="panel-top"><h3>ตาราง Algorithm Trace</h3><button id="gcd-export" class="btn btn-outline btn-small">↓ บันทึกขั้นตอน (.txt)</button></div><div class="table-scroll"><table class="trace-table"><thead><tr><th>รอบ</th><th>a</th><th>b</th><th>การหาร</th><th>เศษ r</th><th>ผลลัพธ์ขั้นถัดไป</th></tr></thead><tbody id="gcd-tbody"><tr><td colspan="6" class="muted-cell">กดขั้นถัดไปเพื่อเริ่มการคำนวณ</td></tr></tbody></table></div></div></div><aside class="lab-secondary"><div class="info-card"><span class="eyebrow">ALGORITHM STATUS</span><h3>ผลการคำนวณ</h3><div class="big-counter"><b id="gcd-result">—</b><span>ห.ร.ม. (GCD)</span></div><div class="stat-pair"><span>จำนวนรอบทั้งหมด</span><b id="gcd-steps">—</b></div><div class="stat-pair"><span>สถานะ</span><b id="gcd-state">พร้อมทดลอง</b></div><div class="small-divider"></div><label class="field-label" for="gcd-guess">ลองทำนายคำตอบ</label><input type="number" min="1" step="1" id="gcd-guess" placeholder="กรอก ห.ร.ม. ที่คาดไว้"><button class="btn btn-primary btn-block" id="gcd-check">ตรวจคำตอบ</button><div id="gcd-guess-feedback" class="feedback compact"></div></div><div class="note-card"><b>🎯 แนวคิดที่ฝึก</b><p>Iteration · Modulus · Termination Condition · Algorithm Trace</p><div class="formula small">a = b × q + r</div><p>แทนค่า a ด้วย b และ b ด้วย r ทำซ้ำจน r = 0</p></div></aside></div>
+        </section>
+        <section class="page" data-page="decomposition">
+          <div class="page-head"><div class="eyebrow">MODULE 06 <span class="sep">/</span> DECOMPOSITION</div><h1>การแยกส่วนประกอบและการย่อยปัญหา</h1><p>จากเอกสาร <b>02_Decomposition.pdf</b> (10 หน้า) ทดลองแยกส่วนประกอบของวัตถุ แบ่งงานใหญ่เป็นขั้นย่อย วิเคราะห์ข้อเท็จจริง และออกแบบวิธีแก้ปัญหาในชีวิตประจำวัน</p></div>
+          <div class="decomp-tabs" role="tablist" aria-label="เลือกห้องทดลองการย่อยปัญหา">
+            <button type="button" class="decomp-tab selected" data-decomp-tab="bike" role="tab" aria-selected="true">🚲 <span>แยกชิ้นส่วนจักรยาน</span></button>
+            <button type="button" class="decomp-tab" data-decomp-tab="innovate" role="tab" aria-selected="false">💡 <span>แยกส่วนและสร้างใหม่</span></button>
+            <button type="button" class="decomp-tab" data-decomp-tab="commute" role="tab" aria-selected="false">🚌 <span>ย่อยขั้นตอนเดินทาง</span></button>
+            <button type="button" class="decomp-tab" data-decomp-tab="investigate" role="tab" aria-selected="false">🔎 <span>แยกประเด็นและหลักฐาน</span></button>
+            <button type="button" class="decomp-tab" data-decomp-tab="daily" role="tab" aria-selected="false">🗂️ <span>ภารกิจชีวิตประจำวัน</span></button>
+          </div>
+
+          <div class="decomp-content active" data-decomp-panel="bike" role="tabpanel">
+            <div class="lab-layout"><div class="lab-primary">
+              <div class="panel"><div class="panel-top"><div><h2>🚲 Bicycle Decomposition Lab</h2><span>คลิกชิ้นส่วนที่ต้องการเปิดเผยบนภาพ • 6 ส่วนหลักที่ออกแบบสำหรับแบบจำลองนี้</span></div><span class="tag">PAGE 5 / 10</span></div>
+                <div class="bike-scene" id="decomp-bike-scene"><svg id="decomp-bike-svg" viewBox="0 0 790 370" role="img" aria-label="ภาพประกอบจักรยานที่จะปรากฏตามการเลือกชิ้นส่วน"></svg></div>
+                <div class="decomp-part-grid" id="decomp-bike-buttons" aria-label="ส่วนประกอบจักรยาน"></div>
+                <div class="progress-strip"><div class="meter light"><span id="decomp-bike-meter" style="width:0%"></span></div><b id="decomp-bike-count">0 / 6 ส่วน</b></div>
+                <div id="decomp-bike-feedback" class="feedback compact" aria-live="polite"></div>
+              </div>
+            </div><aside class="lab-secondary"><div class="info-card"><span class="eyebrow">COMPONENT ANALYSIS</span><h3>แยกวัตถุ → ส่วนย่อย</h3><div class="big-counter"><b id="decomp-bike-pct">0%</b><span>ส่วนประกอบที่ระบุแล้ว</span></div><div class="decomp-insight" id="decomp-bike-insight">เลือกชิ้นส่วนเพื่อดูหน้าที่และความสัมพันธ์กับชิ้นส่วนอื่น</div><button id="decomp-bike-all" class="btn btn-primary btn-block">แสดงทุกส่วน</button><button id="decomp-bike-clear" class="btn btn-outline btn-block">↺ เริ่มใหม่</button></div><div class="note-card"><b>📖 จากเอกสาร หน้า 5</b><p>ตัวอย่างจักรยานทั้งคันที่แยกออกเป็นส่วนประกอบย่อย เป็นภาพอธิบายความหมายของการย่อยปัญหา ภาพจักรยานในเว็บนี้วาดขึ้นใหม่</p><b>ประเด็นอภิปราย</b><p>หากไม่มีล้อหรือระบบเบรก จักรยานจะยังทำงานตามเป้าหมายได้หรือไม่?</p></div></aside></div>
+          </div>
+
+          <div class="decomp-content" data-decomp-panel="innovate" role="tabpanel" hidden>
+            <div class="lab-layout"><div class="lab-primary"><div class="panel"><div class="panel-top"><div><h2>💡 Innovation Builder</h2><span>เลือกชิ้นส่วนจากสิ่งของในเอกสาร แล้วประกอบเป็นแนวคิดนวัตกรรมใหม่</span></div><span class="tag">PAGE 6 / 10</span></div>
+            <div class="inno-scene"><div class="inno-illustration" id="decomp-inno-visual" aria-label="ชิ้นส่วนที่เลือก">⚙️</div><div><div class="eyebrow">YOUR INNOVATION</div><h3 id="decomp-inno-title">เลือกชิ้นส่วนเพื่อเริ่มต้น</h3><p id="decomp-inno-subtitle">การผสมองค์ประกอบเป็นแบบจำลองแนวคิด มิใช่แบบแปลนวิศวกรรม</p><div class="inno-tags" id="decomp-inno-tags"></div></div></div>
+            <div class="section-subhead"><b>เลือกส่วนประกอบ</b><span>แตะบัตรเพื่อเพิ่ม/นำออกจากต้นแบบ</span></div>
+            <div id="decomp-inno-parts" class="decomp-part-grid inno-grid"></div>
+            <div class="field decomp-field"><label for="decomp-inno-goal">เลือกปัญหาที่นวัตกรรมควรช่วยแก้</label><select id="decomp-inno-goal" class="select"><option value="night">สำรวจพื้นที่ในที่แสงน้อย</option><option value="move">ขนส่งอุปกรณ์ขนาดเล็ก</option><option value="record">บันทึกภาพและข้อมูลระหว่างเดินทาง</option></select></div>
+            <div id="decomp-inno-feedback" class="feedback compact" aria-live="polite"></div><div class="btn-row"><button id="decomp-inno-check" class="btn btn-primary">✓ ประเมินแนวคิด</button><button id="decomp-inno-reset" class="btn btn-outline">↺ เริ่มใหม่</button></div>
+            </div></div><aside class="lab-secondary"><div class="info-card"><span class="eyebrow">DESIGN THINKING</span><h3>เปลี่ยนส่วนย่อยเป็นสิ่งใหม่</h3><div class="big-counter"><b id="decomp-inno-count">0</b><span>องค์ประกอบที่เลือก</span></div><div class="decomp-insight" id="decomp-inno-insight">เลือกอุปกรณ์จากโทรศัพท์ ไฟฉาย รถบังคับ และกล่องดินสอ แล้วกำหนดเป้าหมายใช้งาน</div><p class="field-hint">เป้าหมาย: เลือกอย่างน้อย 2 ชิ้นส่วน และมีองค์ประกอบที่ตรงกับปัญหา</p></div><div class="note-card"><b>📖 จากเอกสาร หน้า 6</b><p>ต้นฉบับแสดงโทรศัพท์ ไฟฉาย รถบังคับ และกล่องดินสอ เพื่อให้ลองนำส่วนประกอบมาสร้างนวัตกรรมใหม่</p><b>คำถามคิดต่อ</b><p>ชิ้นส่วนต่างชนิดช่วยเสริมหน้าที่กันอย่างไร และจำเป็นต้องออกแบบอะไรเพิ่มก่อนผลิตจริง?</p></div></aside></div>
+          </div>
+
+          <div class="decomp-content" data-decomp-panel="commute" role="tabpanel" hidden>
+            <div class="lab-layout"><div class="lab-primary"><div class="panel"><div class="panel-top"><div><h2>🚌 Journey Decomposition Tree</h2><span>ขยายแผนงานทีละระดับ จากเป้าหมายใหญ่สู่ขั้นตอนที่ลงมือทำได้</span></div><span class="tag">PAGES 8–9 / 10</span></div>
+            <div class="journey-route"><div class="journey-point"><span>🏡</span><b>บ้าน</b></div><div class="journey-line"><span id="decomp-bus-marker">🚌</span></div><div class="journey-point"><span>🏫</span><b>โรงเรียน</b></div></div>
+            <div class="decomp-tree" id="decomp-tree"></div>
+            <div class="progress-strip"><div class="meter light"><span id="decomp-commute-meter" style="width:0%"></span></div><b id="decomp-commute-count">0 / 0 ขั้น</b></div><div id="decomp-commute-feedback" class="feedback compact"></div>
+            <div class="btn-row"><button id="decomp-commute-expand" class="btn btn-outline">▤ ขยายทุกขั้นตอน</button><button id="decomp-commute-run" class="btn btn-primary">▶ ทำขั้นตอนถัดไป</button><button id="decomp-commute-reset" class="btn btn-quiet">↺ เริ่มใหม่</button></div>
+            </div></div><aside class="lab-secondary"><div class="info-card"><span class="eyebrow">HIERARCHICAL BREAKDOWN</span><h3>ภาพรวมขั้นตอน</h3><div class="big-counter"><b id="decomp-commute-pct">0%</b><span>กิจกรรมย่อยที่ผ่านแล้ว</span></div><div id="decomp-commute-current" class="decomp-insight">กดแต่ละกลุ่มเพื่อขยายและศึกษาขั้นตอนย่อย</div></div><div class="note-card"><b>📖 จากเอกสาร หน้า 8–9</b><p>เริ่มจาก 3 ขั้นหลัก: บ้าน → ป้ายรถประจำทาง → บริเวณโรงเรียน → โรงเรียน และแบ่งให้ละเอียดลงไป เช่น เปิดประตูบ้าน รอรถ จ่ายค่าโดยสาร และหาที่นั่ง</p><p>ลำดับที่ใช้ในเว็บเป็นตัวอย่างเพื่อฝึกย่อยงาน สามารถปรับให้เหมาะกับการเดินทางจริงได้</p></div></aside></div>
+          </div>
+
+          <div class="decomp-content" data-decomp-panel="investigate" role="tabpanel" hidden>
+            <div class="lab-layout"><div class="lab-primary"><div class="panel"><div class="panel-top"><div><h2>🔎 Evidence &amp; Hypothesis Sorting</h2><span>วิเคราะห์สถานการณ์ชวนคิดในเอกสาร แยกสิ่งที่ทราบจริงออกจากสิ่งที่ยังต้องตรวจสอบ</span></div><span class="tag">PAGES 3–4 / 10</span></div>
+            <div class="decomp-case-head"><label for="decomp-case">เลือกสถานการณ์</label><select id="decomp-case" class="select"><option value="1">สถานการณ์ 1 — เหตุที่กระท่อม</option><option value="2">สถานการณ์ 2 — เหตุทะเลาะวิวาทระหว่างกลุ่มวัยรุ่น</option></select></div>
+            <p class="decomp-case-desc" id="decomp-case-desc"></p><div class="section-subhead"><b>เลือกบัตรข้อมูล แล้วจัดเข้าหมวด</b><span>ข้อเท็จจริงที่ระบุ · ประเด็นต้องตรวจสอบ · ข้อสันนิษฐาน</span></div>
+            <div class="decomp-evidence-cards" id="decomp-evidence-cards"></div>
+            <div class="decomp-sort-actions"><button data-sort="fact" class="btn btn-outline">📄 ข้อเท็จจริงในโจทย์</button><button data-sort="verify" class="btn btn-outline">🧪 ต้องตรวจสอบเพิ่ม</button><button data-sort="hyp" class="btn btn-outline">💭 ข้อสันนิษฐาน</button></div>
+            <div id="decomp-case-feedback" class="feedback compact" aria-live="polite"></div><div class="btn-row"><button id="decomp-case-check" class="btn btn-primary">✓ ตรวจการจำแนก</button><button id="decomp-case-reset" class="btn btn-quiet">↺ ล้างคำตอบ</button></div>
+            </div></div><aside class="lab-secondary"><div class="info-card"><span class="eyebrow">STRUCTURED REASONING</span><h3>แยกปัญหาอย่างมีหลักฐาน</h3><div class="big-counter"><b id="decomp-case-count">0 / 6</b><span>บัตรที่จัดประเภทแล้ว</span></div><div id="decomp-case-breakdown" class="decomp-insight">เริ่มจากจัดหมวดข้อมูลก่อนสรุปผล การตั้งข้อกล่าวหาโดยไม่มีหลักฐานไม่ใช่คำตอบของกิจกรรม</div></div><div class="note-card"><b>📖 จากเอกสาร หน้า 3–4</b><p>สไลด์ยกตัวอย่างสถานการณ์ให้แยกเป็นข้อเท็จจริง พยาน หลักฐาน และคำถามย่อยเพื่อใช้กระบวนการคิดอย่างเป็นระบบ</p><b>จริยธรรมในการวิเคราะห์</b><p>ข้อมูลจากโจทย์ไม่เพียงพอสำหรับยืนยันความผิดของบุคคลใด ระบบจึงตรวจวิธีจำแนกข้อมูล ไม่ตัดสินว่าใครเป็นผู้กระทำผิด</p></div></aside></div>
+          </div>
+
+          <div class="decomp-content" data-decomp-panel="daily" role="tabpanel" hidden>
+            <div class="lab-layout"><div class="lab-primary"><div class="panel"><div class="panel-top"><div><h2>🗂️ Everyday Task Decomposer</h2><span>แยกภารกิจในชีวิตประจำวันเป็นขั้นตอนย่อย พร้อมจัดลำดับ เพิ่ม ลบ และทดลองทำตามแผน</span></div><span class="tag">PAGE 10 / 10</span></div>
+            <div class="field decomp-field"><label for="decomp-daily-preset">โจทย์จากเอกสาร</label><select id="decomp-daily-preset" class="select"><option value="quiz">การทำข้อสอบแบบเลือกตอบ</option><option value="lunch">การรับประทานอาหารกลางวันที่โรงเรียน</option><option value="university">การวางแผนไปทัศนศึกษา</option><option value="online">การขายสินค้าออนไลน์</option><option value="sports">การเตรียมเสื้อกีฬาสี</option><option value="custom">กำหนดภารกิจเอง</option></select></div>
+            <div class="field decomp-field"><label for="decomp-daily-title">เป้าหมายของภารกิจ</label><input type="text" id="decomp-daily-title" maxlength="100" value="ทำข้อสอบแบบเลือกตอบให้ครบและตรวจคำตอบ"/></div>
+            <div class="decomp-daily-list" id="decomp-daily-list"></div>
+            <div class="decomp-daily-add"><input type="text" id="decomp-daily-new" maxlength="140" placeholder="พิมพ์ขั้นตอนย่อยที่ต้องการเพิ่ม…" aria-label="ขั้นตอนย่อยใหม่"><button id="decomp-daily-add" class="btn btn-outline">＋ เพิ่มขั้นตอน</button></div>
+            <div class="progress-strip"><div class="meter light"><span id="decomp-daily-meter" style="width:0%"></span></div><b id="decomp-daily-count">0 / 0 ขั้น</b></div>
+            <div id="decomp-daily-feedback" class="feedback compact" aria-live="polite"></div><div class="btn-row"><button id="decomp-daily-check" class="btn btn-primary">✓ ตรวจแผนและบันทึกภารกิจ</button><button id="decomp-daily-export" class="btn btn-outline">↓ ส่งออกแผน (.json)</button><button id="decomp-daily-reset" class="btn btn-quiet">↺ โหลดโจทย์ใหม่</button></div>
+            </div></div><aside class="lab-secondary"><div class="info-card"><span class="eyebrow">LEARNING BY DESIGN</span><h3>เขียนแผนด้วยตนเอง</h3><div class="big-counter"><b id="decomp-daily-total">0</b><span>ขั้นตอนย่อยทั้งหมด</span></div><div class="decomp-insight">ตรวจเกณฑ์พื้นฐาน: มีเป้าหมายชัดเจน อย่างน้อย 3 ขั้นตอน ไม่ซ้ำกัน และเรียงลำดับจนปฏิบัติได้</div><p class="field-hint">กด ✓ ทางซ้ายเพื่อจำลองการทำเสร็จ และปุ่ม ↑ ↓ เพื่อเปลี่ยนลำดับ</p></div><div class="note-card"><b>📖 จากเอกสาร หน้า 10</b><p>ต้นฉบับเสนอโจทย์ชีวิตประจำวัน 5 หัวข้อ เพื่อฝึกย่อยภารกิจให้เป็นขั้นตอนที่จัดการได้ง่ายขึ้น</p><p>รายการขั้นตอนตัวอย่างในเว็บเป็นข้อเสนอเพื่อเริ่มทดลอง ผู้เรียนสามารถเปลี่ยนแปลงเองได้ทั้งหมด</p></div></aside></div>
+          </div>
+        </section>
+<section class="page" data-page="searching">
+ <div class="page-head"><div class="eyebrow">MODULE 07 <span class="sep">/</span> SEARCHING ALGORITHMS</div><h1>การค้นหาข้อมูล: Searching Lab</h1><p>ห้องทดลองจากเอกสาร <b>07_searching.pptx</b> (6 สไลด์) ฝึกค้นหาแบบลำดับและทวิภาค เปรียบเทียบจำนวนครั้งที่เปิดข้อมูล และวิเคราะห์ค่าเฉลี่ยของ 5 กลุ่ม</p></div>
+ <div class="search-highlight"><span class="pill">🔢 ข้อมูลเรียงลำดับ 18 ค่า จากสไลด์ 6</span><span class="pill">🎯 ค่าเป้าหมายเริ่มต้น: 62</span><span class="pill">⚡ ประมวลผลทันทีในเบราว์เซอร์</span></div>
+ <div class="search-setup"><h2>⚙️ ชุดข้อมูลทดลอง (ใช้ร่วมกันในกิจกรรมค้นหาตัวเลข)</h2>
+  <div class="search-inputgrid"><div class="search-data-field"><label for="search-data">ข้อมูลจำนวนเต็มเรียงจากน้อยไปมาก (4–36 ค่า คั่นด้วยเครื่องหมายจุลภาค)</label><textarea id="search-data" class="search-data-entry" spellcheck="false">8, 9, 13, 35, 42, 44, 50, 54, 58, 60, 61, 62, 77, 84, 86, 90, 92, 96</textarea></div><div><label for="search-target">Key ที่ต้องการค้นหา</label><input id="search-target" type="number" value="62" min="-99999999" max="99999999" step="1"></div><div><label for="search-middle-rule">เกณฑ์เลือกค่ากลาง</label><select id="search-middle-rule"><option value="slide">ตามตัวอย่างสไลด์</option><option value="lower">ค่ากลางล่างทุกครั้ง</option></select></div></div>
+  <div class="search-setup-foot"><div class="search-inline-buttons"><button class="btn btn-primary btn-small" id="search-apply">✓ ใช้ชุดข้อมูลนี้</button><button class="btn btn-outline btn-small" id="search-default">↺ ข้อมูลจากสไลด์</button><button class="btn btn-outline btn-small" id="search-random">⚄ สุ่มตัวเลขเรียงลำดับ</button></div><small id="search-setup-note">ข้อมูลเรียงลำดับจำเป็นสำหรับ Binary Search · เลือกโมดูลด้านล่างเพื่อเริ่มทดลอง</small></div>
+ </div>
+ <div class="search-tabs" role="tablist" aria-label="ห้องทดลองการค้นหา">
+  <button class="search-tab selected" role="tab" aria-selected="true" data-search-tab="bottles">🧴 เปรียบเทียบขวด</button>
+  <button class="search-tab" role="tab" aria-selected="false" data-search-tab="linear">➡️ Linear Search</button>
+  <button class="search-tab" role="tab" aria-selected="false" data-search-tab="binary">🎯 Binary Search</button>
+  <button class="search-tab" role="tab" aria-selected="false" data-search-tab="compare">📊 เปรียบเทียบ 5 กลุ่ม</button>
+  <button class="search-tab" role="tab" aria-selected="false" data-search-tab="challenge">🧠 ทายขั้นถัดไป</button>
+  <button class="search-tab" role="tab" aria-selected="false" data-search-tab="race">🏁 แข่งขัน &amp; สลับข้อมูล 3D</button>
+ </div>
+ <div class="search-panel active" data-search-panel="bottles" role="tabpanel">
+  <div class="search-lab-grid"><div class="panel"><div class="panel-top"><div><h2>🧴 สังเกตของ 2 ชุด</h2><span>สไลด์ 2 · ค้นหาขวดที่สูงที่สุด ต่ำที่สุด และสูงที่สุดหลังนำสองขวดแรกออก</span></div><span class="tag">ACTIVITY 0</span></div>
+   <div class="search-bottles-foot" style="margin:0 0 10px"><div><label for="search-bottle-set">ชุดขวด</label><select id="search-bottle-set"><option value="ordered">ชุดที่ 1 — เรียงตามความสูง</option><option value="mixed">ชุดที่ 2 — จัดวางสลับกัน</option></select></div><div><label for="search-bottle-mission">ภารกิจ</label><select id="search-bottle-mission"><option value="highest">หาขวดที่สูงมากที่สุด</option><option value="lowest">หาขวดที่สูงน้อยที่สุด</option><option value="aftertwo">นำขวดสองใบแรกออก แล้วหาขวดที่สูงที่สุด</option></select></div></div>
+   <div class="search-card-stage"><div class="search-bottle-grid" id="search-bottle-grid"></div><div class="search-inspect-note">คลิกที่ขวดเพื่อดูความสูง (ซม.) แล้วเลือกขวดที่ต้องการตอบ · ข้อมูลขวดเป็นชุดจำลองที่สร้างใหม่</div></div>
+   <div class="search-controls"><button class="btn btn-primary" id="search-bottle-check">✓ ตรวจคำตอบ</button><button class="btn btn-outline" id="search-bottle-reset">↺ เริ่มดูขวดใหม่</button></div><div class="search-feedback" id="search-bottle-feedback" aria-live="polite">เลือกขวดสักใบเพื่อเปิดเผยความสูง แล้วตรวจว่าตรงกับภารกิจหรือไม่</div>
+  </div><div class="search-aside-stack"><div class="info-card"><span class="eyebrow">OBSERVATION</span><h3>ค้นหาต้องตรวจอะไรบ้าง?</h3><div class="search-live-stats"><div class="search-stat"><strong id="search-bottle-views">0</strong><span>จำนวนขวดที่เปิดดู</span></div><div class="search-stat"><strong id="search-bottle-choice">—</strong><span>ขวดที่เลือก</span></div></div><p class="search-aside-note">ทดลองเปรียบเทียบการจัดวาง <strong>แบบเรียงลำดับ</strong> และ <strong>สลับตำแหน่ง</strong> เพื่อสังเกตว่าการจัดข้อมูลช่วยให้ค้นหาได้เร็วขึ้นหรือไม่</p></div><div class="note-card"><b>📖 จากสไลด์ 2</b><p>เอกสารใช้ภาพขวด 2 ชุดตั้งคำถามเรื่องความสูง เว็บนี้แทนภาพจริงด้วยขวดจำลองที่ตรวจวัดได้ทันที</p></div></div></div>
+ </div>
+ <div class="search-panel" data-search-panel="linear" role="tabpanel" hidden>
+  <div class="search-lab-grid"><div class="panel"><div class="panel-top"><div><h2>➡️ Linear Search — ค้นหาจากซ้ายไปขวา</h2><span>สไลด์ 3 · เปิดตัวเลขทีละใบจนกว่าจะพบ Key หรือครบทุกใบ</span></div><span class="tag">ACTIVITY 1</span></div>
+   <div class="search-card-stage"><div class="search-stage-head"><span class="search-stage-label">เปิดดูแล้ว <b id="search-linear-progress">0 / 18</b> ใบ</span><span class="search-stage-key">KEY = <span id="search-linear-key">62</span></span></div><div class="search-number-grid" id="search-linear-grid"></div></div>
+   <div class="search-controls"><button class="btn btn-primary" id="search-linear-next">▷ เปิดใบถัดไป</button><button class="btn btn-outline" id="search-linear-play">▶ เล่นอัตโนมัติ</button><button class="btn btn-outline" id="search-linear-all">≡ แสดงทั้งหมด</button><button class="btn btn-outline" id="search-linear-reset">↺ เริ่มใหม่</button></div>
+   <div class="search-feedback" id="search-linear-feedback" aria-live="polite">เริ่มต้นที่ดัชนี 1 และค้นหาจากซ้ายไปขวา</div>
+   <div class="search-trace-wrap"><table class="search-trace"><thead><tr><th>ครั้งที่</th><th>ดัชนี (เริ่มจาก 1)</th><th>ค่าที่ตรวจ</th><th>ผล</th></tr></thead><tbody id="search-linear-trace"></tbody></table></div>
+  </div><div class="search-aside-stack"><div class="info-card"><span class="eyebrow">SEARCH EXECUTION</span><h3>ข้อมูลการทำงาน</h3><div class="search-live-stats"><div class="search-stat"><strong id="search-linear-count">0</strong><span>จำนวนครั้งที่เปรียบเทียบ</span></div><div class="search-stat"><strong id="search-linear-result">—</strong><span>ตำแหน่งที่พบ</span></div></div><div class="search-expr">for i = 0 .. n−1:<br>　if data[i] == key:<br>　　return i<br>return not_found</div></div><div class="note-card"><b>💬 คำถามอภิปราย</b><p>ถ้า Key อยู่ท้ายสุดหรือไม่มีในชุดข้อมูล จะต้องตรวจทั้งหมดกี่ครั้ง? และถ้ามี 1,000 ค่า จะเป็นอย่างไร?</p></div></div></div>
+ </div>
+ <div class="search-panel" data-search-panel="binary" role="tabpanel" hidden>
+  <div class="search-lab-grid"><div class="panel"><div class="panel-top"><div><h2>🎯 Binary Search — แบ่งครึ่งช่วงการค้นหา</h2><span>สไลด์ 4 และ 6 · เปรียบเทียบค่ากลางแล้วเลือกช่วงซ้ายหรือขวา</span></div><span class="tag">ACTIVITY 2 + 3</span></div>
+   <div class="search-card-stage"><div class="search-stage-head"><span class="search-stage-label">ขอบเขตที่เหลือ <b id="search-binary-bounds">1–18</b></span><span class="search-stage-key">KEY = <span id="search-binary-key">62</span></span></div><div class="search-number-grid" id="search-binary-grid"></div></div>
+   <div class="search-controls"><button class="btn btn-primary" id="search-binary-next">▷ ตรวจค่ากลาง</button><button class="btn btn-outline" id="search-binary-play">▶ เล่นอัตโนมัติ</button><button class="btn btn-outline" id="search-binary-all">≡ แสดงทั้งหมด</button><button class="btn btn-outline" id="search-binary-reset">↺ เริ่มใหม่</button></div><div class="search-feedback" id="search-binary-feedback" aria-live="polite">ตั้ง left = 1, right = 18 แล้วเลือกค่ากลาง</div>
+   <div class="search-trace-wrap"><table class="search-trace"><thead><tr><th>รอบ</th><th>left</th><th>mid</th><th>right</th><th>ค่ากลาง</th><th>การตัดสินใจ</th></tr></thead><tbody id="search-binary-trace"></tbody></table></div>
+  </div><div class="search-aside-stack"><div class="info-card"><span class="eyebrow">DIVIDE & CONQUER</span><h3>ลดขอบเขตทีละครึ่ง</h3><div class="search-live-stats"><div class="search-stat"><strong id="search-binary-count">0</strong><span>จำนวนครั้งที่เปรียบเทียบ</span></div><div class="search-stat"><strong id="search-binary-result">—</strong><span>ตำแหน่งที่พบ</span></div></div><div class="search-expr">while left ≤ right:<br>　mid = middle(left,right)<br>　if data[mid] == key: found<br>　elif data[mid] &lt; key: left = mid+1<br>　else: right = mid−1</div><p class="search-aside-note" style="margin-top:9px" id="search-binary-mode-note">โหมดตัวอย่างสไลด์: เมื่อมี 2 ตำแหน่งกึ่งกลาง จะเลือกตำแหน่งล่างในรอบแรก และบนในรอบถัดไป</p></div><div class="note-card"><b>📖 ตัวอย่างสไลด์ 6</b><p>ในชุดข้อมูล 18 ค่า ใช้ Key = 62 โดยตัวอย่างแสดง 58 → 84 → 62 ก่อนพบตำแหน่งที่ 12</p></div></div></div>
+ </div>
+ <div class="search-panel" data-search-panel="compare" role="tabpanel" hidden>
+  <div class="panel"><div class="panel-top"><div><h2>📊 เปรียบเทียบจำนวนครั้งที่ค้นหา</h2><span>สไลด์ 3–5 · บันทึกจำนวนครั้งของแต่ละ Key และหาค่าเฉลี่ยของ 5 กลุ่ม</span></div><span class="tag">GROUP ANALYSIS</span></div>
+   <div class="search-metrics"><div class="search-metric"><strong id="search-average-linear">—</strong><span>เฉลี่ย Linear Search (ครั้ง)</span></div><div class="search-metric"><strong id="search-average-binary">—</strong><span>เฉลี่ย Binary Search (ครั้ง)</span></div><div class="search-metric"><strong id="search-average-saving">—</strong><span>ประหยัดการเปรียบเทียบโดยเฉลี่ย</span></div></div>
+   <p class="search-subtitle">ค่าเฉลี่ยคำนวณจากการค้นหาทุก Key ที่มีอยู่จริงในชุดข้อมูลเดียวกัน โดยนับการเปรียบเทียบเพียงครั้งต่อค่าที่ตรวจ</p><div class="search-legend"><span><b class="linear"></b>Linear Search</span><span><b class="binary"></b>Binary Search</span></div><div id="search-compare-chart" class="search-compare-chart"></div>
+   <div class="search-controls"><button class="btn btn-outline" id="search-compare-csv">↓ ดาวน์โหลดข้อมูลราย Key (.csv)</button></div>
+  </div>
+  <div class="panel" style="margin-top:16px"><div class="panel-top"><div><h2>👥 ค่าเฉลี่ยจาก 5 กลุ่ม</h2><span>แบ่ง Key สลับกลุ่ม 1–5 เพื่อให้เห็นขั้นตอนรวมผลตามสไลด์ 5 · ค่าที่เห็นเป็นข้อมูลจำลองจากอัลกอริทึม</span></div><span class="tag">ACTIVITY 1 VS 2</span></div><div class="search-table-box"><table class="search-group-table"><thead><tr><th>กลุ่ม</th><th>จำนวน Key</th><th>Linear เฉลี่ย</th><th>Binary เฉลี่ย</th></tr></thead><tbody id="search-groups-body"></tbody><tfoot><tr><td>เฉลี่ย 5 กลุ่ม</td><td>—</td><td id="search-group-linear">—</td><td id="search-group-binary">—</td></tr></tfoot></table></div>
+   <div class="search-group-foot"><small id="search-group-note">ถ้าจำนวน Key แต่ละกลุ่มต่างกัน ค่าเฉลี่ยทุก Key จะต่างจากการเฉลี่ยค่าเฉลี่ยกลุ่มแบบไม่ถ่วงน้ำหนักเล็กน้อย</small><button class="btn btn-outline btn-small" id="search-group-reset">↺ โหลดค่าเฉลี่ยตัวอย่างกลับ</button></div>
+  </div>
+ </div>
+ <div class="search-panel" data-search-panel="challenge" role="tabpanel" hidden>
+  <div class="search-lab-grid"><div class="panel"><div class="panel-top"><div><h2>🧠 ทำนายขั้นตอนถัดไป</h2><span>เลือกบัตรที่จะต้องตรวจเป็นลำดับถัดไปด้วยตัวเอง ระบบให้ Feedback ทันที</span></div><span class="tag">PRACTICE</span></div>
+   <div class="search-quiz-prompt"><b id="search-challenge-prompt">เริ่มเกมโดยเลือกรูปแบบค้นหา แล้วคลิกตำแหน่งที่ควรเปิดก่อน</b></div>
+   <div class="search-bottles-foot" style="margin-bottom:10px"><div><label for="search-challenge-algorithm">วิธีค้นหา</label><select id="search-challenge-algorithm"><option value="binary">Binary Search</option><option value="linear">Linear Search</option></select></div><div><label for="search-challenge-help">ระดับคำใบ้</label><select id="search-challenge-help"><option value="show">แสดงช่วงที่ต้องค้นหา</option><option value="hide">ไม่แสดงช่วง</option></select></div></div>
+   <div class="search-card-stage"><div class="search-stage-head"><span class="search-stage-label">คลิกที่บัตรที่ควรตรวจในรอบ <b id="search-challenge-round">1</b></span><span class="search-stage-key">KEY = <span id="search-challenge-key">62</span></span></div><div class="search-number-grid" id="search-challenge-grid"></div></div>
+   <div class="search-controls"><button class="btn btn-outline" id="search-challenge-reset">↺ เริ่มโจทย์ใหม่</button><button class="btn btn-outline" id="search-challenge-hint">💡 คำใบ้</button></div><div class="search-feedback" id="search-challenge-feedback" aria-live="polite">สังเกตดัชนีที่แสดงบนการ์ด แล้วเลือกตำแหน่งแรก</div>
+  </div><div class="search-aside-stack"><div class="info-card"><span class="eyebrow">PRACTICE TRACKER</span><h3>ความถูกต้องของการเลือก</h3><div class="search-live-stats"><div class="search-stat"><strong id="search-challenge-right">0</strong><span>ตอบถูก</span></div><div class="search-stat"><strong id="search-challenge-wrong">0</strong><span>ตอบผิด</span></div></div><div class="search-checkpoints" id="search-challenge-checkpoints"></div><p class="search-aside-note">ลองเปลี่ยน Key ด้านบนเป็นเลขที่ไม่มีในชุดข้อมูล แล้วสังเกตว่าอัลกอริทึมหยุดเมื่อใด</p></div><div class="note-card"><b>🎓 เกณฑ์สำเร็จโมดูล 07</b><p>ทดลอง Linear Search และ Binary Search จนค้นหาจบอย่างน้อยอย่างละ 1 ครั้ง เพื่อบันทึกความก้าวหน้า</p></div></div></div>
+ </div>
+ <div class="search-panel" data-search-panel="race" role="tabpanel" hidden>
+  <div class="panel" style="margin-bottom:16px">
+    <div class="panel-top">
+      <div>
+        <h2>🏁 ทดลองสับเปลี่ยนข้อมูล &amp; แข่งขันความเร็ว 3D (Linear vs Binary)</h2>
+        <span>แตะการ์ด 2 ใบเพื่อสลับตำแหน่ง หรือกดสุ่มสลับมั่ว แล้วดูว่า Binary Search ยังหาเจอหรือไม่!</span>
+      </div>
+      <span id="race-sort-status" class="tag">✓ ข้อมูลเรียงจากน้อยไปมากแล้ว</span>
+    </div>
+    <div class="race-deck-grid" id="race-deck-grid"></div>
+    <div class="race-toolbar">
+      <div class="btn-row">
+        <button type="button" class="btn btn-outline btn-small" id="race-shuffle-btn">🔀 สุ่มสลับมั่ว (ทดสอบ Binary พัง!)</button>
+        <button type="button" class="btn btn-outline btn-small" id="race-sort-btn">✨ เรียงข้อมูล (Sort)</button>
+      </div>
+      <div class="btn-row">
+        <select id="race-key-select" class="select" style="width:auto;min-height:36px;padding:6px 10px;font-size:12px" aria-label="เลือก Key เป้าหมาย"></select>
+        <button type="button" class="btn btn-primary btn-small" id="race-start-btn">🏁 แข่งขันความเร็วอัตโนมัติ</button>
+        <button type="button" class="btn btn-outline btn-small" id="race-step-btn">▷ ทีละก้าว</button>
+        <button type="button" class="btn btn-quiet btn-small" id="race-reset-btn">↺ รีเซ็ต</button>
+      </div>
+    </div>
+  </div>
+  <div class="race-split">
+    <div class="panel">
+      <div class="panel-top">
+        <div><h3>➡️ Linear Search</h3><span>ตรวจเรียงจากซ้ายไปขวาทีละใบ</span></div>
+        <span class="tag soft" id="race-lin-count">0 ครั้ง</span>
+      </div>
+      <div class="race-mini-grid" id="race-lin-track"></div>
+      <div class="feedback compact" id="race-lin-note" style="margin-top:10px">พร้อมเริ่มแข่งขัน Linear Search</div>
+    </div>
+    <div class="panel">
+      <div class="panel-top">
+        <div><h3>🎯 Binary Search</h3><span>ผ่าครึ่งช่วง L..R แล้วตรวจค่ากลาง</span></div>
+        <span class="tag" id="race-bin-count">0 ครั้ง</span>
+      </div>
+      <div class="race-mini-grid" id="race-bin-track"></div>
+      <div class="feedback compact" id="race-bin-note" style="margin-top:10px">พร้อมเริ่มแข่งขัน Binary Search</div>
+    </div>
+  </div>
+ </div>
+ <div class="source-note"><b>ที่มา:</b> 07_searching.pptx (6 สไลด์), สสวท. · ค่าเริ่มต้นของเลข 18 ค่าและโจทย์ Key = 62 มาจากสไลด์ 6 · ขวด ความสูง ภาพประกอบ ตัวเลขสุ่ม และเกณฑ์ฝึกทายขั้นตอนเป็นสื่อจำลองที่พัฒนาเพิ่มเติม · Binary Search ต้องใช้ข้อมูลเรียงลำดับ</div>
+</section>
+
+<!-- CT-Lab v4.0: source-grounded algorithm and flowchart modules -->
+<section class="page" data-page="algorithms">
+  <div class="page-head"><div class="eyebrow">MODULE 08 <span class="sep">/</span> ALGORITHM DESIGN</div><h1>การออกแบบขั้นตอนวิธี</h1><p>ฝึกกำหนดข้อมูลนำเข้า ตัวแปร เงื่อนไข และการวนซ้ำ โดยทดลองเปลี่ยนค่าแล้วติดตามผลตามแนวทางจากสไลด์ <b>02 ขั้นตอนวิธี.pptx</b> (14 สไลด์)</p></div>
+  <div class="v4-highlights"><span>⚙️ Input → Process → Output</span><span>🔀 Conditions & Branching</span><span>🔁 Repetition & Trace</span><span>✅ Feedback ทันที</span></div>
+  <div class="v4-tabs" role="tablist" aria-label="ห้องทดลองการออกแบบขั้นตอนวิธี">
+    <button class="v4-tab selected" data-alg-tab="water" role="tab" aria-selected="true">🌱 ระบบรดน้ำ</button>
+    <button class="v4-tab" data-alg-tab="minimum" role="tab" aria-selected="false">📉 ค่าต่ำสุด</button>
+    <button class="v4-tab" data-alg-tab="logic" role="tab" aria-selected="false">🔀 ตารางค่าความจริง</button>
+    <button class="v4-tab" data-alg-tab="budget" role="tab" aria-selected="false">🛒 การวนซ้ำและนับสินค้า</button>
+  </div>
+  <div class="v4-panel active" data-alg-panel="water" role="tabpanel">
+    <div class="lab-layout">
+      <div class="lab-primary"><div class="panel"><div class="panel-top"><div><h2>🌱 Automatic Watering Simulator</h2><span>สไลด์ 3 · ตัดสินใจจากความชื้น H &lt; 0.1 แล้ววนตรวจวัดอีกครั้ง</span></div><span class="tag">IF / ELSE / LOOP</span></div>
+        <div class="v4-water-scene"><div class="v4-water-decor"><div id="alg-water-drop" class="v4-water-drop">💧</div><div class="v4-soil-pot"><span class="v4-sprout">🌿</span><div class="v4-pot">🌱</div></div></div><div><span class="v4-eyebrow">ค่าความชื้นในดิน</span><strong id="alg-water-h" class="v4-large-number">0.08</strong><div id="alg-water-state" class="v4-state-pill">เปิดน้ำ · H &lt; 0.1</div><p id="alg-water-explain">ค่าความชื้นต่ำกว่าเกณฑ์ จึงเปิดระบบรดน้ำ</p></div></div>
+        <div class="v4-control-box"><label for="alg-water-slider">ปรับค่า H (0.00–1.00) <b id="alg-water-hint">0.08</b></label><input type="range" id="alg-water-slider" min="0" max="1" step="0.01" value="0.08"><div class="v4-range-labels"><span>แห้ง 0.00</span><span>เกณฑ์ 0.10</span><span>ชื้นมาก 1.00</span></div><div style="margin:8px 0 10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap"><label for="alg-water-thresh" style="font-size:12px;font-weight:750;color:#465d78">ปรับเกณฑ์เงื่อนไข (H &lt; เกณฑ์):</label><select id="alg-water-thresh" class="select" style="width:auto;min-height:34px;padding:4px 10px;font-size:12px"><option value="0.10" selected>0.10 (ค่าจากสไลด์)</option><option value="0.25">0.25 (พืชทั่วไป)</option><option value="0.40">0.40 (พืชต้องการน้ำมาก)</option></select></div><div class="v4-btn-row"><button class="btn btn-primary" id="alg-water-step">▷ ตรวจวัดหนึ่งรอบ</button><button class="btn btn-outline" id="alg-water-auto">▶ จำลองอัตโนมัติ</button><button class="btn btn-outline" id="alg-water-reset">↺ เริ่มใหม่</button></div></div>
+        <div id="alg-water-feedback" class="feedback compact" aria-live="polite"></div><div class="v4-trace" id="alg-water-trace"></div>
+      </div></div>
+      <aside class="lab-secondary"><div class="info-card"><div class="eyebrow">FLOW LOGIC</div><h3>ผังงานระบบรดน้ำ</h3><div class="v4-vertical-flow"><div class="v4-node v4-end">เริ่มต้น</div><div class="v4-flow-arrow">↓</div><div class="v4-node">อ่านค่า H</div><div class="v4-flow-arrow">↓</div><div class="v4-node v4-diamond"><span>H &lt; 0.1 ?</span></div><div class="v4-flow-split"><div><small>จริง</small><div class="v4-node v4-yes">เปิดน้ำ</div></div><div><small>เท็จ</small><div class="v4-node v4-no">ปิดน้ำ</div></div></div><div class="v4-flow-arrow">↓</div><div class="v4-node">รอ 1 วินาที ↻</div></div></div><div class="note-card"><b>📖 อ้างอิงสไลด์ 3</b><p>สไลด์ใช้เงื่อนไข H &lt; 0.1 โดย H เป็นค่าความชื้น จำลองการอ่านซ้ำเป็นรอบ สำหรับสื่อการเรียนรู้เท่านั้น ไม่ใช่ระบบรดน้ำอุปกรณ์จริง</p></div></aside>
+    </div>
+  </div>
+  <div class="v4-panel" data-alg-panel="minimum" role="tabpanel" hidden>
+    <div class="lab-layout"><div class="lab-primary"><div class="panel"><div class="panel-top"><div><h2>📉 Minimum Finder</h2><span>สไลด์ 5 · ทดลองติดตามตัวแปร Min และ x ทีละตำแหน่ง</span></div><span class="tag">LOOP + COMPARISON</span></div>
+      <div class="v4-input-group"><label for="alg-min-data">ข้อมูลตัวเลข คั่นด้วยจุลภาค (1–24 ค่า)</label><textarea id="alg-min-data" spellcheck="false" rows="2">8, 3, 11, 2, 7, 5</textarea></div>
+      <div class="v4-btn-row"><button class="btn btn-primary" id="alg-min-next">▷ พิจารณาค่าถัดไป</button><button class="btn btn-outline" id="alg-min-all">≡ แสดงทั้งหมด</button><button class="btn btn-outline" id="alg-min-random">🎲 สุ่มตัวเลขใหม่</button><button class="btn btn-outline" id="alg-min-reset">↺ เริ่มใหม่</button></div>
+      <div class="v4-tiles" id="alg-min-tiles"></div><div id="alg-min-feedback" class="feedback compact" aria-live="polite"></div><div class="v4-table-scroll"><table class="v4-table"><thead><tr><th>รอบ</th><th>x</th><th>Min ก่อนตรวจ</th><th>เงื่อนไข</th><th>Min หลังตรวจ</th></tr></thead><tbody id="alg-min-trace"></tbody></table></div>
+      </div></div><aside class="lab-secondary"><div class="info-card"><div class="eyebrow">VARIABLE TRACKER</div><h3>ค่าที่น้อยที่สุดขณะนี้</h3><div class="v4-counter" id="alg-min-result">—</div><p id="alg-min-progress">รอเริ่มตรวจข้อมูล</p><div class="v4-code">Min ← ตัวแรกของรายการ<br>สำหรับ x แต่ละตัวที่เหลือ:<br>　ถ้า x &lt; Min:<br>　　Min ← x<br>คืนค่า Min</div></div><div class="note-card"><b>คำถามชวนคิด</b><p>หากมีข้อมูลซ้ำ ตัวแปร Min เปลี่ยนทุกครั้งหรือไม่? ทดลองใส่ตัวเลขติดลบและเรียงลำดับกลับกัน</p></div></aside></div>
+  </div>
+  <div class="v4-panel" data-alg-panel="logic" role="tabpanel" hidden>
+    <div class="lab-layout"><div class="lab-primary"><div class="panel"><div class="panel-top"><div><h2>🔀 Boolean Logic Lab</h2><span>สไลด์ 6–8 · ฝึกตารางค่าความจริง AND, OR, NOT และนิพจน์เงื่อนไข</span></div><span class="tag">TRUTH TABLE</span></div>
+      <div class="v4-switches"><label class="v4-switch"><input id="alg-logic-a" type="checkbox" checked><span>เงื่อนไข A <b id="alg-logic-a-label">จริง</b></span></label><label class="v4-switch"><input id="alg-logic-b" type="checkbox"><span>เงื่อนไข B <b id="alg-logic-b-label">เท็จ</b></span></label></div>
+      <div class="v4-logic-output"><div><b>A AND B</b><strong id="alg-and">เท็จ</strong></div><div><b>A OR B</b><strong id="alg-or">จริง</strong></div><div><b>NOT A</b><strong id="alg-not">เท็จ</strong></div></div>
+      <div class="v4-table-scroll"><table class="v4-table" id="alg-truth-table"><thead><tr><th>A</th><th>B</th><th>A AND B</th><th>A OR B</th><th>NOT A</th></tr></thead><tbody id="alg-truth-rows"></tbody></table></div>
+      <div class="v4-logic-challenge"><b>ตรวจความเข้าใจ</b><p>ต้องการให้ระบบทำงานเมื่อ <b>A เป็นจริง หรือ B เป็นจริง</b> ควรใช้ตัวดำเนินการใด?</p><div class="v4-btn-row"><button class="btn btn-outline" data-logic-answer="AND">AND</button><button class="btn btn-outline" data-logic-answer="OR">OR</button><button class="btn btn-outline" data-logic-answer="NOT">NOT</button></div><div id="alg-logic-feedback" class="feedback compact" aria-live="polite"></div></div>
+      </div></div><aside class="lab-secondary"><div class="info-card"><div class="eyebrow">BOOLEAN VARIABLES</div><h3>ผลของเงื่อนไข</h3><p>เปิด–ปิดตัวแปร A และ B เพื่อดูการคำนวณค่าในตารางแถวที่สอดคล้องกันทันที</p><div class="v4-code">AND : จริงเมื่อทั้งคู่จริง<br>OR : จริงเมื่ออย่างน้อยหนึ่งจริง<br>NOT : กลับค่าความจริง</div></div><div class="note-card"><b>📖 จากสไลด์ 6–8</b><p>นิพจน์เชิงตรรกะใช้กำหนดกฎของการตัดสินใจ เช่น การเลือกค่าตามเงื่อนไขหลายข้อ</p></div></aside></div>
+  </div>
+  <div class="v4-panel" data-alg-panel="budget" role="tabpanel" hidden>
+    <div class="lab-layout"><div class="lab-primary"><div class="panel"><div class="panel-top"><div><h2>🛒 Count Affordable Items</h2><span>สไลด์ 9–12 · นับจำนวนสินค้าที่มีราคาไม่เกินเงิน M</span></div><span class="tag">COUNT + LOOP</span></div>
+      <div class="v4-two-fields"><div class="v4-input-group"><label for="alg-budget-money">จำนวนเงิน M (บาท)</label><input type="number" id="alg-budget-money" value="100" min="0" max="1000000" step="1"></div><div class="v4-input-group"><label for="alg-budget-data">ราคาสินค้าในรายการ A (คั่นด้วยจุลภาค)</label><input id="alg-budget-data" type="text" value="35, 120, 80, 150, 99, 45"></div></div>
+      <div class="v4-btn-row"><button class="btn btn-primary" id="alg-budget-next">▷ ตรวจราคาถัดไป</button><button class="btn btn-outline" id="alg-budget-all">≡ แสดงทั้งหมด</button><button class="btn btn-outline" id="alg-budget-reset">↺ เริ่มใหม่</button></div>
+      <div class="v4-tiles" id="alg-budget-tiles"></div><div id="alg-budget-feedback" class="feedback compact" aria-live="polite"></div><div class="v4-table-scroll"><table class="v4-table"><thead><tr><th>รอบ</th><th>ราคา x</th><th>x ≤ M</th><th>count</th></tr></thead><tbody id="alg-budget-trace"></tbody></table></div>
+      </div></div><aside class="lab-secondary"><div class="info-card"><div class="eyebrow">COUNTER VARIABLE</div><h3>สินค้าราคาไม่เกิน M</h3><div class="v4-counter" id="alg-budget-result">0</div><p id="alg-budget-progress">ยังไม่ได้เริ่มตรวจสินค้า</p><div class="v4-code">count ← 0<br>สำหรับราคา x แต่ละตัว:<br>　ถ้า x ≤ M:<br>　　count ← count + 1<br>คืนค่า count</div></div><div class="note-card"><b>📖 อ้างอิงสไลด์ 10–12</b><p>ค่าในช่องรายการราคาของเว็บเป็นตัวอย่างใหม่ ใช้ทดลองเปลี่ยนค่าด้วยตนเอง ไม่ใช่ตารางราคาสินค้าที่กำหนดในต้นฉบับ</p></div></aside></div>
+  </div>
+  <div class="source-note"><b>เอกสารต้นทาง:</b> 02 ขั้นตอนวิธี.pptx (14 สไลด์), สสวท. · ตัวอย่างค่าเริ่มต้นบางชุดในเว็บเป็นข้อมูลจำลองเพิ่มเติม · เงื่อนไขการรดน้ำ H &lt; 0.1 และขั้นตอนวิธีนับสินค้า x ≤ M อ้างอิงข้อความจากสไลด์</div>
+</section>
+
+<section class="page" data-page="flowcharts">
+  <div class="page-head"><div class="eyebrow">MODULE 09 <span class="sep">/</span> FLOWCHART PUZZLE</div><h1>เกมเรียงผังงาน: Flowchart Challenge</h1><p>นำบล็อกผังงานจากไฟล์ <b>โปรแกรมเรียงผังงาน ด่าน 2.xlsx</b> มาจัดเรียงตามกระบวนการ 5 สถานการณ์ ฝึกใช้สัญลักษณ์เริ่มต้น การประมวลผล การตัดสินใจ และการวนซ้ำ</p></div>
+  <div class="v4-highlights"><span>🖱️ คลิกเพิ่มหรือใช้ Drag & Drop</span><span>⇅ เลื่อนลำดับบนมือถือ</span><span>◇ Decision Node</span><span>✓ ตรวจโครงสร้างขั้นตอน</span></div>
+  <div class="v4-flow-select"><label for="fc-case">เลือกด่านฝึกผังงาน</label><select id="fc-case" class="select"><option value="teeth">🪥 การแปรงฟัน · 8 บล็อก</option><option value="shirt">👔 การใส่เสื้อเชิ้ต · 6 บล็อก</option><option value="commute">🚌 การเดินทางมาโรงเรียน · 9 บล็อก</option><option value="egg">🍳 การทอดไข่ · 13 บล็อก</option><option value="dishes">🍽️ การล้างจาน · 8 บล็อก</option></select><span class="v4-mini-tag" id="fc-status">ยังไม่ได้ผ่านด่าน</span></div>
+  <div class="v4-flow-layout"><div class="panel"><div class="panel-top"><div><h2 id="fc-title">🪥 การแปรงฟัน</h2><span id="fc-description">เลือกบล็อกเพื่อจัดผังงานจากเริ่มต้นจนจบ</span></div><span class="tag">BUILD WORKFLOW</span></div>
+    <div class="v4-flow-metrics"><span>วางแล้ว <b id="fc-count">0 / 8</b></span><span>คะแนนตำแหน่ง <b id="fc-score">—</b></span><span>ด่านที่ผ่าน <b id="fc-passed">0 / 5</b></span></div>
+    <div class="v4-flow-chart" id="fc-chart" aria-label="พื้นที่วางกล่องผังงาน"></div>
+    <div id="fc-feedback" class="feedback compact" aria-live="polite">เลือกบล็อกจากด้านขวาเพื่อเริ่มต้นจัดลำดับ</div>
+    <div class="v4-btn-row"><button class="btn btn-primary" id="fc-check">✓ ตรวจผังงาน</button><button class="btn btn-outline" id="fc-hint">💡 คำใบ้</button><button class="btn btn-outline" id="fc-example">▷ ดูการทำงาน</button><button class="btn btn-outline" id="fc-reset">↺ เริ่มด่านใหม่</button></div>
+    <div id="fc-simulation" class="v4-simulation" hidden><h3>Algorithm Trace: สาธิตเส้นทางการทำงาน</h3><div id="fc-sim-steps"></div><button class="btn btn-outline btn-small" id="fc-sim-next">▷ ขั้นถัดไป</button></div>
+  </div><div class="v4-flow-aside"><div class="panel"><div class="panel-top"><div><h2>🧩 คลังบล็อกผังงาน</h2><span>กดบล็อกเพื่อเพิ่มท้ายลำดับหรือลากไปตำแหน่งที่ต้องการ</span></div></div><div class="v4-flow-bank" id="fc-bank"></div></div><div class="note-card"><b>สัญลักษณ์ผังงาน</b><p>วงรี = เริ่มต้น/จบ · สี่เหลี่ยม = กระบวนการ · ข้าวหลามตัด = เงื่อนไข · ลูกศร = ทิศทางการทำงาน</p><b>กรณีพิเศษ</b><p>ด่านเสื้อเชิ้ตยอมรับการสลับสวมแขนซ้าย/ขวาได้ ส่วนโจทย์เดินทาง ทอดไข่ และล้างจานแสดงเงื่อนไขที่สามารถเกิดซ้ำหรือมีทางเลือก</p></div></div></div>
+  <div class="source-note"><b>เอกสารต้นทาง:</b> โปรแกรมเรียงผังงาน ด่าน 2.xlsx (5 แผ่นงาน) · ข้อความโจทย์และบล็อกมาจากวัตถุรูปร่างใน Excel ไม่ใช่ข้อมูลเซลล์ · กติกาการเรียงและเส้นทางการสาธิตเป็นการตีความเพื่อทำเป็นเกมออนไลน์ โดยกิจกรรมที่มีทางเลือกอาจมีผังงานที่สมเหตุสมผลได้หลายแบบ</div>
+</section>
+
+        <section class="page" data-page="challenge">
+          <div class="page-head">
+            <span class="eyebrow">MODULE 10 · ILLUSTRATED COMPUTATIONAL THINKING</span>
+            <h1>แบบฝึกหัดท้าทายพร้อมภาพประกอบ</h1>
+            <p>วิเคราะห์สถานการณ์จากภาพประกอบทั้ง 5 ข้อ แล้วเลือกคำตอบที่ถูกต้องที่สุด ระบบจะบันทึกคำตอบส่งให้อาจารย์ตรวจโดยตรง (เฉลยสงวนไว้สำหรับอาจารย์ผู้สอนเท่านั้น)</p>
+          </div>
+          <form id="ch-form">
+            <div class="panel" style="margin-bottom:18px">
+              <div class="panel-top">
+                <div>
+                  <h2>ระบุตัวตนก่อนส่งคำตอบ</h2>
+                  <span>เลือกสาขาของตนเองก่อน จากนั้นจึงเลือกรหัสและชื่อ-นามสกุล</span>
+                </div>
+                <span class="tag">5 ข้อ · ส่งเข้าฐานข้อมูล</span>
+              </div>
+              <div class="submit-grid submit-grid-2" style="margin-bottom:0">
+                <div class="submit-field">
+                  <label for="ch-section-select">1. เลือกสาขา / กลุ่มเรียน *</label>
+                  <select id="ch-section-select" required>
+                    <option value="">-- กรุณาเลือกสาขา / กลุ่มเรียน --</option>
+                  </select>
+                </div>
+                <div class="submit-field">
+                  <label for="ch-student-select">2. เลือกรหัสนักศึกษาและชื่อ-นามสกุล *</label>
+                  <select id="ch-student-select" required disabled>
+                    <option value="">-- กรุณาเลือกสาขาก่อน --</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div id="ch-questions" class="ch-questions">
+              <div class="empty-state">กำลังโหลดโจทย์และภาพประกอบ...</div>
+            </div>
+
+            <div class="panel">
+              <div class="submit-field" style="margin-bottom:12px">
+                <label for="ch-note">สรุปเหตุผล / ข้อสังเกตเพิ่มเติมถึงอาจารย์ (ถ้ามี)</label>
+                <textarea id="ch-note" rows="2" placeholder="อธิบายแนวคิดในการตอบคำถาม..."></textarea>
+              </div>
+              <div id="ch-feedback" class="feedback" aria-live="polite"></div>
+              <button type="submit" class="btn btn-primary btn-block" id="ch-submit-btn">📤 ส่งคำตอบให้อาจารย์ตรวจ</button>
+            </div>
+          </form>
+        </section>
+
+      </main>
+      <footer class="main-footer"><span>CT-Lab v4.0 · Standalone Interactive Web Simulator</span><span>Computational Thinking · Thai Edition · 2026</span></footer>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="mobile-overlay" id="mobile-overlay"></div>
+  <dialog id="teacher-dialog" class="teacher-dialog"><form method="dialog"><div class="dialog-head"><div><div class="eyebrow">TEACHER GUIDE</div><h2>แนวทางจัดกิจกรรมในชั้นเรียน</h2></div><button class="icon-btn" aria-label="ปิด">✕</button></div><p>แผนแนะนำสำหรับกิจกรรมประมาณ 8–9 ชั่วโมง หรือแบ่งหลายคาบ สามารถปรับตามจำนวนผู้เรียนและชั้นเรียนได้</p><div style="margin-bottom:14px"><a class="btn btn-primary btn-small" href="teacher.html" target="_blank" rel="noopener">🎓 เปิดระบบตรวจงานผู้สอน (Teacher Portal) ↗</a></div><div class="guide-list"><div><b>1. สถานการณ์ชวนคิด — 30 นาที</b><span>ให้นักศึกษาทดลองเลือกขั้นตอน เปรียบเทียบคะแนน และอภิปรายว่าข้อกำหนดมีผลต่ออัลกอริทึมอย่างไร</span></div><div><b>2. แนะนำหนังสือ — 40 นาที</b><span>เปลี่ยนค่าในตาราง ทดลองหา Hamming Distance และอธิบายกรณีระยะห่างเท่ากัน</span></div><div><b>3. บ้านตามพิกัด — 45 นาที</b><span>ให้จับคู่เขียนชุดคำสั่งแลกกัน ปรับพิกัด และตรวจสอบความถูกต้องของเส้น</span></div><div><b>4. ไปให้ครบทุกที่ — 45 นาที</b><span>วางแผนด้วยตนเองก่อน แล้วให้ระบบลองครบ 6 ลำดับ เปรียบเทียบต้นทุนที่ต่างกัน</span></div><div><b>5. หา ห.ร.ม. — 40 นาที</b><span>ทำนายผล แสดง Trace ทีละรอบ และอภิปรายเงื่อนไขหยุด</span></div><div><b>6. Decomposition — 50 นาที</b><span>เลือกอย่างน้อย 3 ห้องย่อยจากจักรยาน นวัตกรรม เดินทาง หลักฐาน และภารกิจประจำวัน</span></div><div><b>7. Searching Algorithms — 55 นาที</b><span>ทดลองเปิดบัตรแบบ Linear/Binary เปรียบเทียบจำนวนครั้ง และอภิปรายการเลือกค่ากลางตามตัวอย่างสไลด์</span></div><div><b>8. Algorithm Design — 50 นาที</b><span>ทดลองระบบรดน้ำ H &lt; 0.1, หาค่าต่ำสุด, ตารางค่าความจริง และนับสินค้าที่ราคาไม่เกิน M</span></div><div><b>9. Flowchart Challenge — 55 นาที</b><span>เลือก 2–3 ด่านจาก Excel แล้วจัดบล็อกผังงาน ตรวจเงื่อนไข การวนซ้ำ และอธิบายทางเลือกในกรณีที่สลับลำดับได้</span></div><div><b>สรุปและสะท้อนคิด — 40 นาที</b><span>อภิปราย Input → Process → Output และให้ผู้เรียนส่งออกผลการเรียนเป็นไฟล์ JSON</span></div></div><p class="dialog-disclaimer">หมายเหตุ: กิจกรรมป่าเป็นสถานการณ์สมมติเพื่อเรียนรู้ตรรกะ และกิจกรรมแผนที่เป็นกราฟจำลอง ไม่มีข้อมูลทางภูมิศาสตร์จริง</p><button class="btn btn-primary btn-block">ปิดคู่มือ</button></form></dialog>
+  <dialog id="submit-dialog" class="teacher-dialog submit-dialog" aria-labelledby="submit-dialog-title">
+    <div class="dialog-head">
+      <div>
+        <div class="eyebrow">STUDENT SUBMISSION</div>
+        <h2 id="submit-dialog-title">ส่งงานและติดตามผลตรวจ</h2>
+      </div>
+      <button type="button" class="icon-btn" id="sub-close-btn" aria-label="ปิด">✕</button>
+    </div>
+    <div class="submit-tabs">
+      <button type="button" class="active" data-sub-tab="form">📤 ส่งงานให้อาจารย์ตรวจ</button>
+      <button type="button" data-sub-tab="history">📋 ประวัติการส่ง &amp; ผลตรวจ</button>
+    </div>
+    <div id="sub-pane-form">
+      <form id="sub-form">
+        <div class="submit-grid submit-grid-2">
+          <div class="submit-field">
+            <label for="sub-section-select">1. เลือกสาขา / กลุ่มเรียน *</label>
+            <select id="sub-section-select" required>
+              <option value="">-- กรุณาเลือกสาขา / กลุ่มเรียน --</option>
+            </select>
+          </div>
+          <div class="submit-field">
+            <label for="sub-student-select">2. เลือกรหัสนักศึกษาและชื่อ-นามสกุล *</label>
+            <select id="sub-student-select" required disabled>
+              <option value="">-- กรุณาเลือกสาขาก่อน --</option>
+            </select>
+          </div>
+        </div>
+        <div id="sub-selected-card" class="submit-selected-card" hidden>
+          <span>ผู้ส่งงาน: <strong id="sub-selected-name"></strong></span>
+          <span class="submit-selected-meta">รหัส <b id="sub-selected-id"></b> · สาขา/กลุ่ม <b id="sub-selected-sec"></b></span>
+        </div>
+        <input type="hidden" id="sub-student-id">
+        <input type="hidden" id="sub-full-name">
+        <input type="hidden" id="sub-section">
+        <div class="submit-field" style="margin-bottom:10px">
+          <label for="sub-scope">ขอบเขตงานที่ส่ง</label>
+          <select id="sub-scope">
+            <option value="all">ภาพรวมทั้งหมด (9 กิจกรรม)</option>
+            <option value="survival">01 สถานการณ์ชวนคิด</option>
+            <option value="books">02 แนะนำหนังสือ</option>
+            <option value="house">03 บ้านตามพิกัด</option>
+            <option value="routes">04 ไปให้ครบทุกที่</option>
+            <option value="gcd">05 หา ห.ร.ม.</option>
+            <option value="decomposition">06 การย่อยปัญหา</option>
+            <option value="searching">07 การค้นหาข้อมูล</option>
+            <option value="algorithms">08 การออกแบบขั้นตอนวิธี</option>
+            <option value="flowcharts">09 เกมเรียงผังงาน</option>
+          </select>
+        </div>
+        <div class="submit-summary-box">
+          <div class="submit-summary-head">
+            <span>ความคืบหน้าปัจจุบันของคุณ</span>
+            <span id="sub-progress-count">สำเร็จ 0 / 9 กิจกรรม</span>
+          </div>
+          <div class="submit-module-pills" id="sub-module-pills"></div>
+        </div>
+        <div class="submit-field" style="margin-bottom:10px">
+          <label for="sub-note">บันทึกเพิ่มเติม / สรุปแนวคิดถึงอาจารย์ (ถ้ามี)</label>
+          <textarea id="sub-note" rows="3" placeholder="อธิบายแนวคิด หรือปัญหาที่พบระหว่างทำกิจกรรม..."></textarea>
+        </div>
+        <div id="sub-feedback" class="feedback" aria-live="polite"></div>
+        <button type="submit" class="btn btn-primary btn-block" id="sub-submit-btn">📤 ส่งงานบันทึกลงฐานข้อมูล</button>
+      </form>
+    </div>
+    <div id="sub-pane-history" hidden>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <span style="font-size:12px;color:#677b93">แสดงประวัติการส่งงานล่าสุดจากฐานข้อมูล</span>
+        <button type="button" class="btn btn-small btn-outline" id="sub-refresh-history">↻ รีเฟรช</button>
+      </div>
+      <div id="sub-history-list" class="history-list"></div>
+    </div>
+  </dialog>
+  <script src="main.js"></script>
+  <script src="decomposition.js"></script>
+<script src="searching.js"></script>
+<script src="new_modules.js"></script>
+<script src="submit.js"></script>
+<script src="challenge.js"></script>
+<script src="guide_pixar.js"></script>
+<script src="motion_3d.js"></script>
+<script src="searching_3d.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+{
+  "id": "book4",
+  "folder": "Book4_Data_Structures_Algorithms_and_Data",
+  "volume": 4,
+  "title_th": "วิทยาการคำนวณ 4 ขั้นตอนวิธี โครงสร้างข้อมูล และการจัดการข้อมูลดิจิทัล",
+  "title_en": "Computing Science 4: Data Structures, Algorithms and Digital Information Management",
+  "subtitle": "การวิเคราะห์ความซับซ้อน บิ๊กโอ ขั้นตอนวิธีการค้นหา การเรียงลำดับ ฐานข้อมูล และความปลอดภัยดิจิทัล",
+  "accent_color": "#8b5cf6",
+  "secondary_color": "#6d28d9",
+  "gradient": "linear-gradient(135deg, #4c1d95 0%, #6d28d9 50%, #8b5cf6 100%)",
+  "source_hints": [
+    "book2_chapters",
+    "book1_chapters",
+    "reference_matter"
+  ],
+  "chapters": [
+    {
+      "num": 1,
+      "title": "การวิเคราะห์ความซับซ้อนของขั้นตอนวิธีและสัญกรณ์บิ๊กโอ",
+      "en": "Algorithmic Complexity and Big-O Asymptotic Notation"
+    },
+    {
+      "num": 2,
+      "title": "ขั้นตอนวิธีการค้นหาข้อมูลเชิงเส้นและแบบทวิภาค",
+      "en": "Searching Algorithms: Linear and Binary Search"
+    },
+    {
+      "num": 3,
+      "title": "ขั้นตอนวิธีการเรียงลำดับข้อมูลพื้นฐานและขั้นสูง",
+      "en": "Sorting Algorithms: Bubble, Insertion, Merge and Quick Sort"
+    },
+    {
+      "num": 4,
+      "title": "การเรียกซ้ำและความสัมพันธ์เวียนเกิด",
+      "en": "Recursion, Call Stack and Divide-and-Conquer"
+    },
+    {
+      "num": 5,
+      "title": "โครงสร้างข้อมูลเชิงเส้น สแต็กและคิว",
+      "en": "Linear Abstract Data Types: Stacks and Queues"
+    },
+    {
+      "num": 6,
+      "title": "โครงสร้างข้อมูลต้นไม้และกราฟเบื้องต้น",
+      "en": "Hierarchical and Network Models: Trees and Graphs"
+    },
+    {
+      "num": 7,
+      "title": "ระบบฐานข้อมูลเชิงสัมพันธ์และภาษา SQL",
+      "en": "Relational Databases, Schema Normalization and SQL"
+    },
+    {
+      "num": 8,
+      "title": "การวิเคราะห์และการแสดงภาพข้อมูลสารสนเทศ",
+      "en": "Information Analysis and Data Visualization with Python"
+    },
+    {
+      "num": 9,
+      "title": "ความมั่นคงปลอดภัยไซเบอร์ วิทยาการรหัสลับ และความปลอดภัยดิจิทัล",
+      "en": "Cybersecurity, Modern Cryptography and Hash Functions"
+    },
+    {
+      "num": 10,
+      "title": "จริยธรรมสารสนเทศ กฎหมายคุ้มครองข้อมูลส่วนบุคคล และพลเมืองดิจิทัล",
+      "en": "Information Ethics, PDPA Compliance and Digital Citizenship"
+    }
+  ]
+}

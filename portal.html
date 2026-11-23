@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CS2027 PORTAL HUB — ศูนย์กลางระบบเกมจำลองและปฏิบัติการวิทยาการคำนวณ 3 มิติ (OBE × STEAM)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050918;
+      --card: rgba(15, 23, 42, 0.84);
+      --border: rgba(56, 189, 248, 0.3);
+      --emerald: #10b981;
+      --cyan: #38bdf8;
+      --pink: #ec4899;
+      --purple: #a855f7;
+      --amber: #f59e0b;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Sarabun', 'Outfit', sans-serif;
+      background: radial-gradient(circle at 20% 0%, #102a45 0%, #050918 65%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 22px 18px 60px;
+      line-height: 1.6;
+    }
+    .container { max-width: 1240px; margin: 0 auto; }
+
+    /* Top Navbar */
+    .navbar {
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px;
+      background: rgba(10, 18, 38, 0.88); border: 1px solid var(--border); border-radius: 18px;
+      padding: 14px 20px; backdrop-filter: blur(18px); margin-bottom: 24px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.45);
+    }
+    .nav-brand { display: flex; align-items: center; gap: 12px; }
+    .nav-logo {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: linear-gradient(135deg, #ec4899, #8b5cf6, #06b6d4);
+      display: grid; place-items: center; font-size: 23px;
+      box-shadow: 0 0 20px rgba(236,72,153,0.4);
+    }
+    .nav-brand h1 { font-family: 'Outfit', 'Sarabun', sans-serif; font-size: 19px; font-weight: 800; color: #fff; }
+    .nav-brand span { font-size: 12.5px; color: var(--muted); display: block; }
+    .nav-menu { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .nav-pill {
+      padding: 7px 13px; border-radius: 10px; border: 1px solid rgba(148,163,184,0.28);
+      background: rgba(15,23,42,0.75); color: #e2e8f0; text-decoration: none; font-size: 13px; font-weight: 600;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; font-family: inherit;
+    }
+    .nav-pill:hover { border-color: var(--cyan); color: #fff; transform: translateY(-1px); }
+    .nav-pill.accent { background: linear-gradient(135deg, #10b981, #0ea5e9); border: none; color: #fff; }
+    .nav-pill.add-btn { border-color: rgba(236,72,153,0.55); background: rgba(236,72,153,0.2); color: #fbcfe8; }
+
+    /* Hero Banner */
+    .hero {
+      border-radius: 22px; padding: 28px; margin-bottom: 24px;
+      background: linear-gradient(135deg, rgba(236,72,153,0.16), rgba(14,165,233,0.16), rgba(16,185,129,0.16));
+      border: 1px solid var(--border);
+      display: grid; grid-template-columns: 1.35fr 1fr; gap: 24px; align-items: center;
+    }
+    .hero-tag {
+      display: inline-block; padding: 4px 12px; border-radius: 99px;
+      background: rgba(56,189,248,0.2); border: 1px solid rgba(56,189,248,0.45);
+      color: #7dd3fc; font-size: 12px; font-weight: 700; margin-bottom: 10px;
+    }
+    .hero h2 {
+      font-family: 'Outfit', 'Sarabun', sans-serif; font-size: 29px; line-height: 1.25; margin-bottom: 10px;
+      background: linear-gradient(90deg, #fff, #7dd3fc, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero p { color: #cbd5e1; font-size: 14.5px; margin-bottom: 16px; }
+    .kpi-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .kpi-box { background: rgba(15,23,42,0.78); border: 1px solid rgba(148,163,184,0.22); border-radius: 12px; padding: 10px 12px; text-align: center; }
+    .kpi-box strong { font-family: 'Outfit', sans-serif; font-size: 21px; color: #38bdf8; display: block; }
+    .kpi-box small { font-size: 11.5px; color: var(--muted); }
+
+    .roster-summary {
+      background: rgba(15,23,42,0.82); border: 1px solid rgba(16,185,129,0.35); border-radius: 16px; padding: 16px;
+    }
+    .roster-summary h3 { font-size: 15px; color: #6ee7b7; margin-bottom: 8px; }
+    .phys-list { list-style: none; font-size: 12.5px; color: #e2e8f0; display: flex; flex-direction: column; gap: 4px; }
+    .phys-list li { background: rgba(2,6,23,0.55); padding: 4px 9px; border-radius: 7px; border-left: 3px solid #f472b6; display: flex; justify-content: space-between; }
+
+    /* Filter Tabs */
+    .filter-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; }
+    .filter-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tab-btn {
+      padding: 7px 14px; border-radius: 99px; border: 1px solid rgba(148,163,184,0.25);
+      background: rgba(15,23,42,0.65); color: var(--muted); font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+    }
+    .tab-btn.active { background: linear-gradient(135deg, #ec4899, #8b5cf6); color: #fff; border-color: transparent; }
+
+    /* Cards Grid */
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+    .portal-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+      overflow: hidden; display: flex; flex-direction: column; transition: all 0.25s ease;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.4);
+    }
+    .portal-card:hover { transform: translateY(-5px); border-color: #f472b6; box-shadow: 0 16px 40px rgba(236,72,153,0.24); }
+    .card-banner {
+      height: 125px; padding: 18px; display: flex; align-items: flex-end; justify-content: space-between;
+      position: relative; overflow: hidden; border-bottom: 1px solid rgba(148,163,184,0.2);
+    }
+    .card-icon { font-size: 46px; filter: drop-shadow(0 6px 14px rgba(0,0,0,0.45)); }
+    .card-body { padding: 18px; flex: 1; display: flex; flex-direction: column; gap: 9px; }
+    .pill-tag { padding: 3px 10px; border-radius: 99px; font-size: 11.5px; font-weight: 700; display: inline-block; }
+    .portal-card h3 { font-size: 18.5px; color: #fff; line-height: 1.3; }
+    .portal-card p { font-size: 13.5px; color: #cbd5e1; flex: 1; }
+    .feature-list { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0; }
+    .feature-list li { font-size: 11.5px; padding: 3px 8px; border-radius: 7px; background: rgba(2,6,23,0.6); color: #93c5fd; border: 1px solid rgba(56,189,248,0.22); }
+    .card-actions { display: flex; gap: 8px; margin-top: 8px; }
+    .btn-launch {
+      flex: 1; padding: 10px 14px; border-radius: 11px; border: none;
+      background: linear-gradient(135deg, #10b981, #0ea5e9); color: #fff;
+      font-family: inherit; font-size: 13.5px; font-weight: 700; text-decoration: none;
+      text-align: center; cursor: pointer;
+    }
+    .btn-sub {
+      padding: 10px 12px; border-radius: 11px; border: 1px solid var(--border);
+      background: rgba(15,23,42,0.85); color: #e2e8f0; text-decoration: none; font-size: 13px; font-weight: 600;
+    }
+
+    .add-card-tile {
+      border: 2px dashed rgba(56,189,248,0.4); background: rgba(15,23,42,0.45);
+      border-radius: 20px; min-height: 330px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px; padding: 24px;
+      text-align: center; cursor: pointer; transition: all 0.2s; color: var(--muted);
+    }
+    .add-card-tile:hover { border-color: var(--pink); color: #fff; background: rgba(236,72,153,0.1); }
+    .add-icon { width: 56px; height: 56px; border-radius: 50%; background: rgba(56,189,248,0.18); display: grid; place-items: center; font-size: 28px; color: var(--cyan); }
+
+    .modal-bg { position: fixed; inset: 0; z-index: 60; background: rgba(2,6,23,0.78); backdrop-filter: blur(6px); display: grid; place-items: center; padding: 16px; }
+    .modal-card { width: min(520px, 95vw); background: #0f172a; border: 1px solid var(--border); border-radius: 18px; padding: 22px; }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 12.5px; color: #7dd3fc; margin-bottom: 4px; font-weight: 600; }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%; padding: 9px 12px; border-radius: 9px; border: 1px solid var(--border);
+      background: #050918; color: #fff; font-family: inherit; font-size: 13.5px;
+    }
+    .hidden { display: none !important; }
+    @media (max-width: 860px) { .hero { grid-template-columns: 1fr; } .kpi-strip { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Top Navbar -->
+    <header class="navbar">
+      <div class="nav-brand">
+        <div class="nav-logo">💻</div>
+        <div>
+          <h1>CS2027 — วิทยาการคำนวณสำหรับการสอนวิทยาศาสตร์ (RBRU Portal Hub)</h1>
+          <span>ศูนย์กลางระบบเกมจำลองอัลกอริทึม · ผังงาน ISO 5807 · Blockly · 3D Realtime OBE × STEAM</span>
+        </div>
+      </div>
+      <nav class="nav-menu">
+        <a href="CT_Lab04_Algorithm_Flowchart_Web/index.html" class="nav-pill">🔀 1. CT-Lab 04 (Flowchart)</a>
+        <a href="Blockly_Algo_Game_UG/index.html" class="nav-pill">🧩 2. AlgoQuest UG (Blockly)</a>
+        <a href="Method05_3D_OBE_STEAM_Game/index.html" class="nav-pill accent">🚀 3. 3D Method Game (OBE STEAM)</a>
+        <a href="https://docs.google.com/spreadsheets/d/1qUFN1WhbXy9XzM7avE4wuEzJ_CSLnVec88zaKgahFSI/edit" target="_blank" class="nav-pill">📊 Google Sheets (25 คน)</a>
+        <button id="btn-open-add" class="nav-pill add-btn">➕ เพิ่มการ์ดเพจใหม่</button>
+      </nav>
+    </header>
+
+    <!-- Hero Section with Confirmed 5 Physics + 20 General Science Roster -->
+    <section class="hero">
+      <div>
+        <span class="hero-tag">รหัสวิชา 124941-62 · วิทยาการคำนวณสำหรับการสอนวิทยาศาสตร์ · ผศ.ดร.ชีวะ ทัศนา</span>
+        <h2>ศูนย์รวม 3 เกมปฏิบัติการขั้นตอนวิธี &amp; การประเมินผล OBE × STEAM</h2>
+        <p>เชื่อมโยงทั้ง <strong>3 เพจเกมหลักของรายวิชา CS2027</strong> เข้ากับฐานข้อมูลนักศึกษาเดียวกันรวม <strong>25 คน (สาขาวิทยาศาสตร์ทั่วไป 20 คน + สาขาฟิสิกส์ 5 คน)</strong> และออกแบบในรูปแบบ Extensible Portal ที่สามารถเพิ่มการ์ดและเมนูเชื่อมต่อเพจอื่นๆ ในอนาคตได้ทันที</p>
+        <div class="kpi-strip">
+          <div class="kpi-box"><strong>3</strong><small>เพจเกมจำลองหลัก</small></div>
+          <div class="kpi-box"><strong>20 + 5</strong><small>นักศึกษา (วิทย์ 20 / ฟิสิกส์ 5)</small></div>
+          <div class="kpi-box"><strong>OBE×STEAM</strong><small>ประเมินผลเรียลไทม์ 5 แกน</small></div>
+          <div class="kpi-box"><strong>MySQL+SQLite</strong><small>ฐานข้อมูลคู่ขนานอัตโนมัติ</small></div>
+        </div>
+      </div>
+
+      <div class="roster-summary">
+        <h3>⚛️ รายชื่อนักศึกษาสาขาฟิสิกส์ 5 คน (661/ฟิสิกส์) ที่ซิงก์ครบทั้ง 3 เกมแล้ว</h3>
+        <ul class="phys-list">
+          <li><span>1. <strong>6614901002</strong> นางสาวมุกดา หนองน้ำเย็น</span><span>661/ฟิสิกส์ ✓</span></li>
+          <li><span>2. <strong>6614901003</strong> นางสาววิดาพร ธนะปฐมชัย</span><span>661/ฟิสิกส์ ✓</span></li>
+          <li><span>3. <strong>6614901004</strong> นายวุฒิชัย เจริญวงศ์</span><span>661/ฟิสิกส์ ✓</span></li>
+          <li><span>4. <strong>6614901006</strong> นายนวพล แสงพระจันทร์</span><span>661/ฟิสิกส์ ✓</span></li>
+          <li><span>5. <strong>6614901008</strong> นางสาวอุไรพร เต็กใจตรง</span><span>661/ฟิสิกส์ ✓</span></li>
+        </ul>
+        <p style="font-size:11.5px;color:#94a3b8;margin-top:7px;">+ นักศึกษาสาขาวิทยาศาสตร์ทั่วไป (`661/วิทย์`) จำนวน 20 คน (`6614611001`–`6614611029`) รวมทั้งหมด 25 คน</p>
+      </div>
+    </section>
+
+    <!-- Category Filter Bar -->
+    <div class="filter-bar">
+      <div class="filter-tabs">
+        <button class="tab-btn active" data-cat="all">🌟 ทั้งหมด</button>
+        <button class="tab-btn" data-cat="core-games">🎮 3 เกมปฏิบัติการหลัก</button>
+        <button class="tab-btn" data-cat="textbooks">📚 ตำราและห้องปฏิบัติการ</button>
+        <button class="tab-btn" data-cat="custom">🧩 เพจเชื่อมต่อเพิ่มเติม</button>
+      </div>
+      <button id="btn-reset-cards" class="nav-pill" style="font-size:12px;">🔄 รีเซ็ตการ์ดเริ่มต้น</button>
+    </div>
+
+    <!-- Cards Grid -->
+    <main class="cards-grid" id="portal-cards-grid"></main>
+  </div>
+
+  <!-- Modal: Add Custom Card -->
+  <div id="add-modal" class="modal-bg hidden">
+    <div class="modal-card">
+      <h3 style="margin-bottom:14px;color:#7dd3fc;">➕ เพิ่มการ์ดและเมนูเชื่อมต่อเพจใหม่ในอนาคต</h3>
+      <div class="form-group">
+        <label>ชื่อเกม / เพจ / บทเรียนใหม่</label>
+        <input type="text" id="inp-title" placeholder="เช่น Chapter 06 Sorting 3D Arena หรือ Python AI Sandbox">
+      </div>
+      <div class="form-group">
+        <label>หมวดหมู่</label>
+        <select id="inp-cat">
+          <option value="core-games">🎮 เกมปฏิบัติการหลัก</option>
+          <option value="textbooks">📚 ตำราและห้องปฏิบัติการ</option>
+          <option value="custom">🧩 เพจเชื่อมต่อเพิ่มเติม</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>ลิงก์ปลายทาง (URL หรือ Path ของไฟล์)</label>
+        <input type="text" id="inp-url" placeholder="เช่น RBRU_MOOC_CS_VOL1/index.html หรือ https://...">
+      </div>
+      <div class="form-group">
+        <label>คำอธิบายย่อ</label>
+        <textarea id="inp-desc" rows="2" placeholder="ระบุรายละเอียดของเพจหรือเกมที่ต้องการเชื่อมต่อ..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>ป้ายกำกับ (คั่นด้วยจุลภาค ,)</label>
+        <input type="text" id="inp-tags" placeholder="เช่น 3D Simulator, OBE STEAM, Python">
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px;">
+        <button id="btn-cancel-add" class="nav-pill">ยกเลิก</button>
+        <button id="btn-save-card" class="nav-pill accent">💾 บันทึกการ์ดเข้าสู่ Portal</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DEFAULT_CARDS = [
+      {
+        id: 'cs_game_1',
+        cat: 'core-games',
+        icon: '🔀',
+        bannerBg: 'linear-gradient(135deg, #0284c7, #1e3a8a)',
+        badge: 'GAME 01 · ALGORITHM & FLOWCHART',
+        badgeStyle: 'background:rgba(56,189,248,0.2);color:#7dd3fc;',
+        title: 'CT-Lab 04 — การออกแบบขั้นตอนวิธี รหัสลำลอง ผังงาน ISO 5807 & Trace Table',
+        desc: 'ระบบปฏิบัติการออกแบบขั้นตอนวิธีแบบ IPO, เขียนรหัสลำลองสองภาษา, สร้างผังงานมาตรฐาน ISO 5807:1985 และฝึกไล่ค่าตัวแปรใน Trace Table สำหรับการทดลองเคมี ฟิสิกส์ ชีววิทยา',
+        url: 'CT_Lab04_Algorithm_Flowchart_Web/index.html',
+        subUrl: 'CT_Lab04_Algorithm_Flowchart_Web/teacher.html',
+        subLabel: '👨‍🏫 ตรวจงาน',
+        tags: ['ISO 5807 Flowchart', 'Trace Table Dry-Run', 'AI Auto-Grader', 'นักศึกษา 25 คน']
+      },
+      {
+        id: 'cs_game_2',
+        cat: 'core-games',
+        icon: '🧩',
+        bannerBg: 'linear-gradient(135deg, #7c3aed, #312e81)',
+        badge: 'GAME 02 · BLOCKLY ALGOQUEST UG',
+        badgeStyle: 'background:rgba(168,85,247,0.22);color:#d8b4fe;',
+        title: 'AlgoQuest UG — เกมออกแบบอัลกอริทึมด้วย Blockly & วิเคราะห์ความซับซ้อน',
+        desc: 'เกมต่อบล็อกคำสั่ง Google Blockly 10 ด่าน ฝึกโครงสร้างลำดับ เงื่อนไข การวนซ้ำ และการวิเคราะห์ความซับซ้อน Big-O พร้อมแปลงเป็นโค้ด Python/JS และจำลองฉาก 3 มิติ',
+        url: 'Blockly_Algo_Game_UG/index.html',
+        subUrl: 'Blockly_Algo_Game_UG/teacher.html',
+        subLabel: '👨‍🏫 ตรวจงาน',
+        tags: ['Google Blockly 10 ด่าน', 'Python & JS Generator', 'Big-O Judge', 'นักศึกษา 25 คน']
+      },
+      {
+        id: 'cs_game_3',
+        cat: 'core-games',
+        icon: '🚀',
+        bannerBg: 'linear-gradient(135deg, #ec4899, #059669)',
+        badge: 'GAME 03 · 05_method 3D OBE × STEAM',
+        badgeStyle: 'background:rgba(236,72,153,0.22);color:#f472b6;',
+        title: 'ALGO-QUEST 3D — เกมจำลองการออกแบบขั้นตอนวิธีเรียลไทม์ (05_method.pdf)',
+        desc: 'เกม 3D Realtime สีสันสดใสเข้าใจง่ายจากเนื้อหา 05_method.pdf (สสวท.) ครบ 6 ด่าน: IPO เลือกอาหาร, ระบบรดน้ำต้นไม้ H<40%, หาค่าต่ำสุด Min, พิกัดกากบาท (x,y), ลูปนับสินค้า X<=M และ Smax พร้อมระบบประเมินผล OBE × STEAM 5 แกน',
+        url: 'Method05_3D_OBE_STEAM_Game/index.html',
+        subUrl: '../G2_Education_Curriculum_Exam/04_Education_Exam/my_course2026/CS_Final/05_method.pdf',
+        subLabel: '📄 สไลด์ 05_method',
+        tags: ['Three.js 3D Realtime', '05_method.pdf ครบ 14 หน้า', 'OBE × STEAM 5 แกน', 'วิทย์ 20 + ฟิสิกส์ 5']
+      },
+      {
+        id: 'cs_ctlab_v4',
+        cat: 'textbooks',
+        icon: '🧠',
+        bannerBg: 'linear-gradient(135deg, #059669, #064e3b)',
+        badge: 'CT-LAB V4.0 · 9 MODULES',
+        badgeStyle: 'background:rgba(16,185,129,0.2);color:#6ee7b7;',
+        title: 'CT-Lab v4.0 — ห้องปฏิบัติการแนวคิดเชิงคำนวณ 4 เสาหลัก',
+        desc: 'ชุดปฏิบัติการแนวคิดเชิงคำนวณครบ 9 โมดูล (การแยกส่วนประกอบ การหารูปแบบ ความเป็นนามธรรม ขั้นตอนวิธี ห.ร.ม. และการค้นหา) พร้อมระบบ AI ตรวจให้คะแนน',
+        url: 'CT_Lab_v4_Web/index.html',
+        subUrl: 'CT_Lab_v4_Web/teacher.html',
+        subLabel: '👨‍🏫 ตรวจงาน',
+        tags: ['4 Pillars of CT', '9 Interactive Labs', 'AI Rubric Grader', 'นักศึกษา 25 คน']
+      },
+      {
+        id: 'cs_books_6',
+        cat: 'textbooks',
+        icon: '📚',
+        bannerBg: 'linear-gradient(135deg, #d97706, #78350f)',
+        badge: 'TEXTBOOK SERIES · 6 VOLUMES',
+        badgeStyle: 'background:rgba(245,158,11,0.2);color:#fcd34d;',
+        title: 'ชุดตำราวิทยาการคำนวณและปัญญาประดิษฐ์ 6 เล่ม & คู่มือ 180 ปฏิบัติการ',
+        desc: 'คลังตำราวิชาการและสื่อจำลองประกอบการเรียนการสอนรายวิชาวิทยาการคำนวณสำหรับการสอนวิทยาศาสตร์ มหาวิทยาลัยราชภัฏรำไพพรรณี',
+        url: 'MASTER_6_BOOKS_SERIES/index.html',
+        subUrl: 'RBRU_MOOC_CS_VOL1/index.html',
+        subLabel: '🎓 RBRU MOOC',
+        tags: ['6 Master Volumes', '180 Lab Experiments', 'WebAR & MediaPipe', 'XeLaTeX PDF']
+      }
+    ];
+
+    let activeCat = 'all';
+
+    function getCards() {
+      const custom = JSON.parse(localStorage.getItem('cs2027_portal_custom_cards') || '[]');
+      return [...DEFAULT_CARDS, ...custom];
+    }
+
+    function renderPortal() {
+      const grid = document.getElementById('portal-cards-grid');
+      const cards = getCards().filter(c => activeCat === 'all' || c.cat === activeCat);
+
+      const cardsHtml = cards.map(c => `
+        <article class="portal-card">
+          <div class="card-banner" style="background:${c.bannerBg || 'linear-gradient(135deg,#0284c7,#1e1b4b)'}">
+            <span class="pill-tag" style="${c.badgeStyle || 'background:rgba(255,255,255,0.2);color:#fff;'}">${c.badge || 'CUSTOM PAGE'}</span>
+            <span class="card-icon">${c.icon || '✨'}</span>
+          </div>
+          <div class="card-body">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+              <h3>${c.title}</h3>
+              ${c.isCustom ? `<button onclick="deleteCustomCard('${c.id}')" style="background:none;border:none;color:#f87171;cursor:pointer;font-size:12px;">🗑️ ลบ</button>` : ''}
+            </div>
+            <p>${c.desc}</p>
+            <ul class="feature-list">
+              ${(c.tags || []).map(t => `<li>${t}</li>`).join('')}
+            </ul>
+            <div class="card-actions">
+              <a href="${c.url}" class="btn-launch">🚀 เปิดเข้าใช้งาน</a>
+              ${c.subUrl ? `<a href="${c.subUrl}" target="_blank" class="btn-sub">${c.subLabel || '🔗 ลิงก์เสริม'}</a>` : ''}
+            </div>
+          </div>
+        </article>
+      `).join('');
+
+      const addTileHtml = `
+        <div class="add-card-tile" onclick="document.getElementById('add-modal').classList.remove('hidden')">
+          <div class="add-icon">➕</div>
+          <h3 style="color:#e2e8f0;font-size:17px;">เพิ่มการ์ด / เมนูเชื่อมต่อเพจใหม่</h3>
+          <p style="font-size:13px;max-width:270px;">คลิกเพื่อเพิ่มการ์ดเชื่อมต่อเกมจำลอง บทเรียน หรือเพจใหม่ๆ ในอนาคต</p>
+        </div>
+      `;
+
+      grid.innerHTML = cardsHtml + addTileHtml;
+    }
+
+    window.deleteCustomCard = (id) => {
+      const custom = JSON.parse(localStorage.getItem('cs2027_portal_custom_cards') || '[]').filter(c => c.id !== id);
+      localStorage.setItem('cs2027_portal_custom_cards', JSON.stringify(custom));
+      renderPortal();
+    };
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+        activeCat = btn.dataset.cat;
+        renderPortal();
+      };
+    });
+
+    document.getElementById('btn-open-add').onclick = () => document.getElementById('add-modal').classList.remove('hidden');
+    document.getElementById('btn-cancel-add').onclick = () => document.getElementById('add-modal').classList.add('hidden');
+    document.getElementById('btn-reset-cards').onclick = () => {
+      localStorage.removeItem('cs2027_portal_custom_cards');
+      renderPortal();
+    };
+
+    document.getElementById('btn-save-card').onclick = () => {
+      const title = document.getElementById('inp-title').value.trim();
+      const cat = document.getElementById('inp-cat').value;
+      const url = document.getElementById('inp-url').value.trim() || '#';
+      const desc = document.getElementById('inp-desc').value.trim() || 'เพจเชื่อมต่อเพิ่มเติมในระบบนิเวศ CS2027';
+      const tags = document.getElementById('inp-tags').value.split(',').map(s => s.trim()).filter(Boolean);
+      if (!title) return;
+
+      const custom = JSON.parse(localStorage.getItem('cs2027_portal_custom_cards') || '[]');
+      custom.push({
+        id: 'custom_' + Date.now(),
+        cat,
+        icon: '🧩',
+        badge: 'EXTENDED PAGE',
+        title,
+        desc,
+        url,
+        tags: tags.length ? tags : ['CS2027', 'OBE STEAM'],
+        isCustom: true
+      });
+      localStorage.setItem('cs2027_portal_custom_cards', JSON.stringify(custom));
+      document.getElementById('add-modal').classList.add('hidden');
+      renderPortal();
+    };
+
+    renderPortal();
+  </script>
+</body>
+</html>
