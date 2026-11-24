@@ -724,10 +724,34 @@
       return { ok: true };
     }
 
+    let liveSnapshotCache = {};
+
+    async function preloadLiveSnapshots() {
+      for (const act of ['list', 'roster', 'gradebook', 'ai_report']) {
+        if (!liveSnapshotCache[act]) {
+          try {
+            const r = await fetch(`data/live_${act}.json`);
+            if (r.ok) liveSnapshotCache[act] = await r.json();
+          } catch {}
+        }
+      }
+      if (liveSnapshotCache.list && Array.isArray(liveSnapshotCache.list.submissions)) {
+        const existing = getLocalSubmissions();
+        if (existing.length === 0) {
+          saveLocalSubmissions(liveSnapshotCache.list.submissions);
+        }
+      }
+    }
+
     async function apiFetch(urlStr, options = {}) {
+      const savedPin = sessionStorage.getItem('ct04_teacher_pin') || '';
+      const mergedHeaders = { ...(options.headers || {}) };
+      if (savedPin) mergedHeaders['X-Teacher-Pin'] = savedPin;
+      const reqOpts = { ...options, headers: mergedHeaders };
+
       if (!isStaticFallbackMode) {
         try {
-          const res = await fetch(urlStr, options);
+          const res = await fetch(urlStr, reqOpts);
           const text = await res.text();
           if (res.ok && text && !text.trim().startsWith('<?php')) {
             const parsed = JSON.parse(text);
@@ -741,6 +765,26 @@
         } catch {
           isStaticFallbackMode = true;
         }
+      }
+      await preloadLiveSnapshots();
+      const u = new URL(urlStr, window.location.href);
+      const act = u.searchParams.get('action') || 'list';
+      if (act === 'login') {
+        let b = {};
+        try { b = JSON.parse(options.body || '{}'); } catch {}
+        if (String(b.pin || '').trim() === 'physicss') {
+          sessionStorage.setItem('ct04_teacher_pin', 'physicss');
+          sessionStorage.setItem('ct04_teacher_auth', '1');
+        }
+      }
+      if (act === 'gradebook' && liveSnapshotCache.gradebook && !u.searchParams.get('section')) {
+        return { status: 200, ok: true, json: async () => liveSnapshotCache.gradebook };
+      }
+      if (act === 'ai_report' && liveSnapshotCache.ai_report && !u.searchParams.get('section')) {
+        return { status: 200, ok: true, json: async () => liveSnapshotCache.ai_report };
+      }
+      if (act === 'roster' && liveSnapshotCache.roster) {
+        return { status: 200, ok: true, json: async () => liveSnapshotCache.roster };
       }
       const fallbackData = handleLocalAdminApi(urlStr, options);
       return {
@@ -1116,12 +1160,20 @@
     // Event Listeners
     $id('t-login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const res = await apiFetch('api/admin.php?action=login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pin: $id('t-pin').value.trim() }) });
+      const pinVal = $id('t-pin').value.trim();
+      const res = await apiFetch('api/admin.php?action=login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pin: pinVal }) });
       const data = await res.json();
       if (!data.ok) { $id('t-login-fb').className = 'feedback bad'; $id('t-login-fb').textContent = data.error; return; }
+      sessionStorage.setItem('ct04_teacher_pin', pinVal);
+      sessionStorage.setItem('ct04_teacher_auth', '1');
       checkAuth();
     });
-    $id('t-logout-btn').addEventListener('click', async () => { await apiFetch('api/admin.php?action=logout', { method: 'POST' }); checkAuth(); });
+    $id('t-logout-btn').addEventListener('click', async () => {
+      sessionStorage.removeItem('ct04_teacher_pin');
+      sessionStorage.removeItem('ct04_teacher_auth');
+      await apiFetch('api/admin.php?action=logout', { method: 'POST' });
+      checkAuth();
+    });
     $id('f-apply').addEventListener('click', loadSubmissions);
     $id('f-refresh').addEventListener('click', loadSubmissions);
     ['f-student', 'f-module', 'f-section', 'f-status'].forEach((id) => $id(id).addEventListener('change', loadSubmissions));

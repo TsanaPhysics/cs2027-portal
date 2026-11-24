@@ -1,0 +1,290 @@
+{
+  "ok": true,
+  "db_engine": "mysql",
+  "sections": [
+    "661/ฟิสิกส์",
+    "661/วิทย์",
+    "อาจารย์/ทดสอบ"
+  ],
+  "report": {
+    "scope": "all",
+    "generated_at": "2026-11-24 10:13:54",
+    "kpi": {
+      "total_students": 25,
+      "submitted_students": 14,
+      "submission_rate": 56,
+      "total_submissions": 57,
+      "graded_count": 57,
+      "pending_count": 0,
+      "resubmit_count": 0,
+      "mean_score": 42.33,
+      "sd_score": 25.11,
+      "min_score": 0,
+      "max_score": 86.8
+    },
+    "rubric_avg": {
+      "simulation": 23.5,
+      "sequencing": 12.4,
+      "subjective": 12.2
+    },
+    "pillars": [
+      {
+        "key": "Algorithm Design",
+        "label": "การออกแบบขั้นตอนวิธี (Algorithm Design)",
+        "avg_score": 35.9,
+        "sample_count": 26
+      },
+      {
+        "key": "Pseudocode",
+        "label": "การเขียนรหัสลำลอง (Pseudocode)",
+        "avg_score": 61.4,
+        "sample_count": 10
+      },
+      {
+        "key": "Flowchart",
+        "label": "ผังงานมาตรฐาน (Standard Flowchart)",
+        "avg_score": 0,
+        "sample_count": 0
+      },
+      {
+        "key": "Trace Table",
+        "label": "การทวนสอบด้วย Trace Table (Dry Run)",
+        "avg_score": 0,
+        "sample_count": 0
+      }
+    ],
+    "modules": [
+      {
+        "module_id": "algo_design",
+        "label": "01 Algorithm Design (การลำดับขั้นตอน)",
+        "pillar": "Algorithm Design",
+        "submissions": 26,
+        "avg_score": 35.9,
+        "pass_rate": 7.7,
+        "distractor_hits": 0,
+        "missing_subj": 0
+      },
+      {
+        "module_id": "pseudocode",
+        "label": "02 รหัสลำลอง (Pseudocode)",
+        "pillar": "Pseudocode",
+        "submissions": 10,
+        "avg_score": 61.4,
+        "pass_rate": 60,
+        "distractor_hits": 3,
+        "missing_subj": 0
+      },
+      {
+        "module_id": "flowchart",
+        "label": "03 ผังงานมาตรฐาน (Flowchart)",
+        "pillar": "Flowchart",
+        "submissions": 0,
+        "avg_score": 0,
+        "pass_rate": 0,
+        "distractor_hits": 0,
+        "missing_subj": 0
+      },
+      {
+        "module_id": "lab4_tracetable",
+        "label": "04 ปฏิบัติการที่ 4: ผังงานวิทย์ & Trace Table",
+        "pillar": "Trace Table",
+        "submissions": 0,
+        "avg_score": 0,
+        "pass_rate": 0,
+        "distractor_hits": 0,
+        "missing_subj": 0
+      },
+      {
+        "module_id": "challenge10",
+        "label": "05 แบบทดสอบวัดผล (5 ข้อ)",
+        "pillar": "All 4 Pillars",
+        "submissions": 0,
+        "avg_score": 0,
+        "pass_rate": 0,
+        "distractor_hits": 0,
+        "missing_subj": 0
+      }
+    ],
+    "at_risk": [
+      {
+        "student_id": "6614611018",
+        "full_name": "นายอชิระสราภิรมย์",
+        "section": "661/วิทย์",
+        "avg_score": 0,
+        "completed_modules": 0,
+        "reason": "ยังไม่เคยส่งงานปฏิบัติการที่ 4 เข้าระบบ"
+      },
+      {
+        "student_id": "6614611014",
+        "full_name": "นางสาวภัทริดาเจ๊ะมัด",
+        "section": "661/วิทย์",
+        "avg_score": 0,
+        "completed_modules": 0,
+        "reason": "ยังไม่เคยส่งงานปฏิบัติการที่ 4 เข้าระบบ"
+      },
+      {
+        "student_id": "6614901008",
+        "full_name": "นางสาวอุไรพรเต็กใจตรง",
+        "section": "661/ฟิสิกส์",
+        "avg_score": 0,
+        "completed_modules": 0,
+        "reason": "ยังไม่เคยส่งงานปฏิบัติการที่ 4 เข้าระบบ"
+      },
+      {
+        "student_id": "6614901006",
+        "full_name": "นายนวพลแสงพระจันทร์",
+        "section": "661/ฟิสิกส์",
+        "avg_score": 0,
+        "completed_modules": 0,
+        "reason": "ยังไม่เคยส่งงานปฏิบัติการที่ 4 เข้าระบบ"
+      },
+      {
+        "student_id": "6614901003",
+        "full_name": "นางสาววิดาพรธนะปฐมชัย",
+        "section": "661/ฟิสิกส์",
+        "avg_score": 0,
+        "completed_modules": 0,
+        "reason": "ยังไม่เคยส่งงานปฏิบัติการที่ 4 เข้าระบบ"
+      },
+      {
+        "student_id": "6614901002",
+        "full_name": "นางสาวมุกดาหนองน้ำเย็น",
+        "section": "661/ฟิสิกส์",
+        "avg_score": 0,
+        "completed_modules": 0,
+        "reason": "ยังไม่เคยส่งงานปฏิบัติการที่ 4 เข้าระบบ"
+      },
+      {
+        "student_id": "6614901004",
+        "full_name": "นายวุฒิชัยเจริญวงศ์",
+        "section": "661/ฟิสิกส์",
+        "avg_score": 0,
+        "completed_modules": 0,
+        "reason": "ยังไม่เคยส่งงานปฏิบัติการที่ 4 เข้าระบบ"
+      },
+      {
+        "student_id": "6614611011",
+        "full_name": "นางสาวนภัสนาวงศ์จันทร์",
+        "section": "661/วิทย์",
+        "avg_score": 0,
+        "completed_modules": 0,
+        "reason": "ยังไม่เคยส่งงานปฏิบัติการที่ 4 เข้าระบบ"
+      },
+      {
+        "student_id": "6614611006",
+        "full_name": "นางสาวณัฐวรรณคำกอก",
+        "section": "661/วิทย์",
+        "avg_score": 0,
+        "completed_modules": 0,
+        "reason": "คะแนนเฉลี่ยต่ำกว่า 50% แนะนำให้ทวนสอบผังงานและ Trace Table เพิ่ม"
+      },
+      {
+        "student_id": "6614611005",
+        "full_name": "นางสาวณัฐณิชานาคาพยัคฆ์",
+        "section": "661/วิทย์",
+        "avg_score": 0,
+        "completed_modules": 0,
+        "reason": "ยังไม่เคยส่งงานปฏิบัติการที่ 4 เข้าระบบ"
+      },
+      {
+        "student_id": "6614611010",
+        "full_name": "นางสาวธิชานันท์นนเทศา",
+        "section": "661/วิทย์",
+        "avg_score": 0,
+        "completed_modules": 0,
+        "reason": "ยังไม่เคยส่งงานปฏิบัติการที่ 4 เข้าระบบ"
+      },
+      {
+        "student_id": "6614611007",
+        "full_name": "นางสาวเณศราโพธิ์นิล",
+        "section": "661/วิทย์",
+        "avg_score": 0,
+        "completed_modules": 0,
+        "reason": "ยังไม่เคยส่งงานปฏิบัติการที่ 4 เข้าระบบ"
+      },
+      {
+        "student_id": "6614611003",
+        "full_name": "นางสาวกิติยาแสงทอง",
+        "section": "661/วิทย์",
+        "avg_score": 7.5,
+        "completed_modules": 1,
+        "reason": "คะแนนเฉลี่ยต่ำกว่า 50% แนะนำให้ทวนสอบผังงานและ Trace Table เพิ่ม"
+      },
+      {
+        "student_id": "6614611001",
+        "full_name": "นางสาวกนกวรรณพึ่งฉ่ำ",
+        "section": "661/วิทย์",
+        "avg_score": 13,
+        "completed_modules": 1,
+        "reason": "คะแนนเฉลี่ยต่ำกว่า 50% แนะนำให้ทวนสอบผังงานและ Trace Table เพิ่ม"
+      },
+      {
+        "student_id": "6614611002",
+        "full_name": "นางสาวกาญจน์สณีทรงศรี",
+        "section": "661/วิทย์",
+        "avg_score": 30.5,
+        "completed_modules": 2,
+        "reason": "คะแนนเฉลี่ยต่ำกว่า 50% แนะนำให้ทวนสอบผังงานและ Trace Table เพิ่ม"
+      },
+      {
+        "student_id": "6614611021",
+        "full_name": "นางสาวจิฬาภรณ์อภิบาลศรี",
+        "section": "661/วิทย์",
+        "avg_score": 35,
+        "completed_modules": 1,
+        "reason": "คะแนนเฉลี่ยต่ำกว่า 50% แนะนำให้ทวนสอบผังงานและ Trace Table เพิ่ม"
+      },
+      {
+        "student_id": "6614611009",
+        "full_name": "นางสาวธันยธรณ์หมั่นกู้",
+        "section": "661/วิทย์",
+        "avg_score": 35,
+        "completed_modules": 1,
+        "reason": "คะแนนเฉลี่ยต่ำกว่า 50% แนะนำให้ทวนสอบผังงานและ Trace Table เพิ่ม"
+      },
+      {
+        "student_id": "6614611012",
+        "full_name": "นางสาวพรทิพย์บรรณสาร",
+        "section": "661/วิทย์",
+        "avg_score": 37.5,
+        "completed_modules": 1,
+        "reason": "คะแนนเฉลี่ยต่ำกว่า 50% แนะนำให้ทวนสอบผังงานและ Trace Table เพิ่ม"
+      },
+      {
+        "student_id": "6614611025",
+        "full_name": "นางสาววาสินีสุวรรณา",
+        "section": "661/วิทย์",
+        "avg_score": 39.25,
+        "completed_modules": 2,
+        "reason": "คะแนนเฉลี่ยต่ำกว่า 50% แนะนำให้ทวนสอบผังงานและ Trace Table เพิ่ม"
+      },
+      {
+        "student_id": "6614611029",
+        "full_name": "นางสาวรัตมณีเถาวัลณีย์",
+        "section": "661/วิทย์",
+        "avg_score": 45.5,
+        "completed_modules": 1,
+        "reason": "คะแนนเฉลี่ยต่ำกว่า 50% แนะนำให้ทวนสอบผังงานและ Trace Table เพิ่ม"
+      }
+    ],
+    "top_performers": [
+      {
+        "student_id": "6614611015",
+        "full_name": "นายมนตรีจันทร์เทศ",
+        "section": "661/วิทย์",
+        "avg_score": 86.8,
+        "completed_modules": 1
+      },
+      {
+        "student_id": "6614611004",
+        "full_name": "นางสาวชุลีขวัญคนขยัน",
+        "section": "661/วิทย์",
+        "avg_score": 85,
+        "completed_modules": 1
+      }
+    ],
+    "narrative": "📌 สรุปผลสัมฤทธิ์ปฏิบัติการที่ 4 (ทุกกลุ่มเรียนในระบบ): จากนักศึกษา 25 คน มีผู้ส่งงานแล้ว 14 คน (56%) รวม 57 ครั้ง (ตรวจแล้ว 57 ครั้ง, รอตรวจ 0 ครั้ง)\n\n📈 การกระจายคะแนน: ค่าเฉลี่ย Mean = 42.33% (S.D. = 25.11, ต่ำสุด 0%, สูงสุด 86.8%)\n\n🧩 โครงสร้างทักษะตาม Rubric เฉลี่ย: ห้องจำลอง/Trace Table 23.5/40, จัดลำดับรหัสลำลองและผังงาน 12.4/35, เหตุผลเชิงวิทยาศาสตร์ 12.2/25\n\n🧠 ทักษะ 4 ด้านหลัก: เด่นที่สุดคือ การเขียนรหัสลำลอง (Pseudocode) (61.4%) และทักษะที่ควรเสริมคือ การออกแบบขั้นตอนวิธี (Algorithm Design) (35.9%)\n\n⚙️ วิเคราะห์รายโมดูล: กิจกรรมที่ได้คะแนนสูงสุดคือ 02 รหัสลำลอง (Pseudocode) (61.4%) ส่วนกิจกรรมที่ควรเน้นทบทวนคือ 01 Algorithm Design (การลำดับขั้นตอน) (35.9%, ติดตัวลวง 0 ครั้ง)\n\n⚠️ ข้อเสนอแนะเชิงรุก: พบนักศึกษากลุ่มเสี่ยง/ยังไม่ส่งงาน 20 คน แนะนำให้ฝึก Dry Run ด้วย Trace Table ทีละรอบเพื่อลดข้อผิดพลาดเชิงเงื่อนไขและการวนซ้ำ",
+    "report_id": null
+  },
+  "history": []
+}

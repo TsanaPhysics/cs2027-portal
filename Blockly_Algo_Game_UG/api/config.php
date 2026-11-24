@@ -6,6 +6,14 @@
 
 define('AQ_TEACHER_PIN', 'physicss');
 
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, X-Teacher-Pin, X-Admin-Pin');
+if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
+
 function aq_is_university_server()
 {
     $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
@@ -170,22 +178,98 @@ function aq_ensure_schema($pdo)
     $checked = true;
 }
 
+function aq_default_cs2027_roster()
+{
+    return array(
+        array('student_id' => '6614611001', 'full_name' => 'นางสาวกนกวรรณพึ่งฉ่ำ', 'section' => '661/วิทย์'),
+        array('student_id' => '6614611002', 'full_name' => 'นางสาวกาญจน์สณีทรงศรี', 'section' => '661/วิทย์'),
+        array('student_id' => '6614611003', 'full_name' => 'นางสาวกิติยาแสงทอง', 'section' => '661/วิทย์'),
+        array('student_id' => '6614611004', 'full_name' => 'นางสาวชุลีขวัญคนขยัน', 'section' => '661/วิทย์'),
+        array('student_id' => '6614611005', 'full_name' => 'นางสาวณัฐณิชานาคาพยัคฆ์', 'section' => '661/วิทย์'),
+        array('student_id' => '6614611006', 'full_name' => 'นางสาวณัฐวรรณคำกอก', 'section' => '661/วิทย์'),
+        array('student_id' => '6614611007', 'full_name' => 'นางสาวเณศราโพธิ์นิล', 'section' => '661/วิทย์'),
+        array('student_id' => '6614611009', 'full_name' => 'นางสาวธันยธรณ์หมั่นกู้', 'section' => '661/วิทย์'),
+        array('student_id' => '6614611010', 'full_name' => 'นางสาวธิชานันท์นนเทศา', 'section' => '661/วิทย์'),
+        array('student_id' => '6614611011', 'full_name' => 'นางสาวนภัสนาวงศ์จันทร์', 'section' => '661/วิทย์'),
+        array('student_id' => '6614611012', 'full_name' => 'นางสาวพรทิพย์บรรณสาร', 'section' => '661/วิทย์'),
+        array('student_id' => '6614611013', 'full_name' => 'นางสาวพัชราพรมจีน', 'section' => '661/วิทย์'),
+        array('student_id' => '6614611014', 'full_name' => 'นางสาวภัทริดาเจ๊ะมัด', 'section' => '661/วิทย์'),
+        array('student_id' => '6614611015', 'full_name' => 'นายมนตรีจันทร์เทศ', 'section' => '661/วิทย์'),
+        array('student_id' => '6614611018', 'full_name' => 'นายอชิระสราภิรมย์', 'section' => '661/วิทย์'),
+        array('student_id' => '6614611019', 'full_name' => 'นายอุดมชัยบุตรอุดม', 'section' => '661/วิทย์'),
+        array('student_id' => '6614611021', 'full_name' => 'นางสาวจิฬาภรณ์อภิบาลศรี', 'section' => '661/วิทย์'),
+        array('student_id' => '6614611024', 'full_name' => 'นายมงคลศรีสมบัติ', 'section' => '661/วิทย์'),
+        array('student_id' => '6614611025', 'full_name' => 'นางสาววาสินีสุวรรณา', 'section' => '661/วิทย์'),
+        array('student_id' => '6614611029', 'full_name' => 'นางสาวรัตมณีเถาวัลณีย์', 'section' => '661/วิทย์'),
+        array('student_id' => '6614901002', 'full_name' => 'นางสาวมุกดาหนองน้ำเย็น', 'section' => '661/ฟิสิกส์'),
+        array('student_id' => '6614901003', 'full_name' => 'นางสาววิดาพรธนะปฐมชัย', 'section' => '661/ฟิสิกส์'),
+        array('student_id' => '6614901004', 'full_name' => 'นายวุฒิชัยเจริญวงศ์', 'section' => '661/ฟิสิกส์'),
+        array('student_id' => '6614901006', 'full_name' => 'นายนวพลแสงพระจันทร์', 'section' => '661/ฟิสิกส์'),
+        array('student_id' => '6614901008', 'full_name' => 'นางสาวอุไรพรเต็กใจตรง', 'section' => '661/ฟิสิกส์'),
+        array('student_id' => 'TEACHER01', 'full_name' => 'อาจารย์ชีวะ (ทดสอบระบบ)', 'section' => 'อาจารย์/ทดสอบ')
+    );
+}
+
+function aq_merge_required_roster($found)
+{
+    $map = array();
+    if (is_array($found)) {
+        foreach ($found as $r) {
+            if (!empty($r['student_id'])) {
+                $map[(string)$r['student_id']] = array(
+                    'student_id' => (string)$r['student_id'],
+                    'full_name' => isset($r['full_name']) ? (string)$r['full_name'] : '',
+                    'section' => isset($r['section']) ? (string)$r['section'] : ''
+                );
+            }
+        }
+    }
+    foreach (aq_default_cs2027_roster() as $def) {
+        $sid = $def['student_id'];
+        if (!isset($map[$sid])) {
+            $map[$sid] = $def;
+        } elseif (empty($map[$sid]['section'])) {
+            $map[$sid]['section'] = $def['section'];
+        }
+    }
+    $list = array_values($map);
+    usort($list, function ($a, $b) {
+        $c = strcmp($a['section'], $b['section']);
+        if ($c !== 0) return $c;
+        return strcmp($a['student_id'], $b['student_id']);
+    });
+    return $list;
+}
+
 /**
- * ดึงรายชื่อนักศึกษาจากฐานข้อมูลหลัก (MySQL students / ctlab04_students หรือ SQLite ของ CT_Lab)
+ * ดึงรายชื่อนักศึกษาจากฐานข้อมูลหลัก (MySQL ctlab04_students / ctlab_students / students หรือ SQLite ของ CT_Lab)
+ * พร้อมรับประกันว่ามีรายชื่อนักศึกษาสาขาฟิสิกส์ (661/ฟิสิกส์ 5 คน) และวิทยาศาสตร์ทั่วไป (661/วิทย์ 20 คน) ครบเสมอ
  */
 function aq_fetch_student_roster($pdo)
 {
     $driver = aq_db_driver($pdo);
-    $rows = array();
-    $source = $driver;
+    $defaultRoster = aq_default_cs2027_roster();
 
-    // 1. Try tables in active PDO (MySQL ct_lab_db / chewa)
-    foreach (array('students', 'ctlab04_students') as $tbl) {
+    // 1. Try tables in active PDO (MySQL ct_lab_db / chewa) - prioritize ctlab04_students & ctlab_students
+    foreach (array('ctlab04_students', 'ctlab_students', 'students') as $tbl) {
         try {
             $stmt = $pdo->query("SELECT student_id, full_name, section FROM {$tbl} ORDER BY section ASC, student_id ASC");
             $found = $stmt->fetchAll();
             if (!empty($found)) {
-                return array('source' => $driver . ':' . $tbl, 'students' => $found);
+                if (count($found) < 26) {
+                    try {
+                        $insSql = ($driver === 'sqlite')
+                            ? "INSERT OR IGNORE INTO {$tbl} (student_id, full_name, section) VALUES (?, ?, ?)"
+                            : "INSERT IGNORE INTO {$tbl} (student_id, full_name, section) VALUES (?, ?, ?)";
+                        $ins = $pdo->prepare($insSql);
+                        foreach ($defaultRoster as $r) {
+                            $ins->execute(array($r['student_id'], $r['full_name'], $r['section']));
+                        }
+                    } catch (Exception $ie) {
+                        // Ignore if table schema differs
+                    }
+                }
+                return array('source' => $driver . ':' . $tbl, 'students' => aq_merge_required_roster($found));
             }
         } catch (Exception $e) {
             // Table may not exist in this DB
@@ -195,8 +279,9 @@ function aq_fetch_student_roster($pdo)
     // 2. Fallback to existing CT_Lab SQLite databases in workspace
     $root = dirname(dirname(__DIR__));
     $sqliteCandidates = array(
-        array('path' => $root . '/CT_Lab_v4_Web/data/ctlab_local.sqlite', 'table' => 'students'),
         array('path' => $root . '/CT_Lab04_Algorithm_Flowchart_Web/data/ctlab04_local.sqlite', 'table' => 'ctlab04_students'),
+        array('path' => $root . '/CT_Lab_v4_Web/data/ctlab_local.sqlite', 'table' => 'ctlab_students'),
+        array('path' => $root . '/CT_Lab_v4_Web/data/ctlab_local.sqlite', 'table' => 'students'),
     );
 
     foreach ($sqliteCandidates as $cand) {
@@ -209,7 +294,7 @@ function aq_fetch_student_roster($pdo)
                 $stmt = $sPdo->query("SELECT student_id, full_name, section FROM {$cand['table']} ORDER BY section ASC, student_id ASC");
                 $found = $stmt->fetchAll();
                 if (!empty($found)) {
-                    return array('source' => 'sqlite:' . basename($cand['path']), 'students' => $found);
+                    return array('source' => 'sqlite:' . basename($cand['path']), 'students' => aq_merge_required_roster($found));
                 }
             } catch (Exception $e) {
                 // Continue
@@ -238,42 +323,14 @@ function aq_fetch_student_roster($pdo)
             ");
             $ins = $pdo->prepare("INSERT IGNORE INTO ctlab04_students (student_id, full_name, section) VALUES (?, ?, ?)");
         }
-        $defaultRoster = array(
-            array('6614611001', 'นางสาวกนกวรรณพึ่งฉ่ำ', '661/วิทย์'),
-            array('6614611002', 'นางสาวกาญจน์สณีทรงศรี', '661/วิทย์'),
-            array('6614611003', 'นางสาวกิติยาแสงทอง', '661/วิทย์'),
-            array('6614611004', 'นางสาวชุลีขวัญคนขยัน', '661/วิทย์'),
-            array('6614611005', 'นางสาวณัฐณิชานาคาพยัคฆ์', '661/วิทย์'),
-            array('6614611006', 'นางสาวณัฐวรรณคำกอก', '661/วิทย์'),
-            array('6614611007', 'นางสาวเณศราโพธิ์นิล', '661/วิทย์'),
-            array('6614611009', 'นางสาวธันยธรณ์หมั่นกู้', '661/วิทย์'),
-            array('6614611010', 'นางสาวธิชานันท์นนเทศา', '661/วิทย์'),
-            array('6614611011', 'นางสาวนภัสนาวงศ์จันทร์', '661/วิทย์'),
-            array('6614611012', 'นางสาวพรทิพย์บรรณสาร', '661/วิทย์'),
-            array('6614611013', 'นางสาวพัชราพรมจีน', '661/วิทย์'),
-            array('6614611014', 'นางสาวภัทริดาเจ๊ะมัด', '661/วิทย์'),
-            array('6614611015', 'นายมนตรีจันทร์เทศ', '661/วิทย์'),
-            array('6614611018', 'นายอชิระสราภิรมย์', '661/วิทย์'),
-            array('6614611019', 'นายอุดมชัยบุตรอุดม', '661/วิทย์'),
-            array('6614611021', 'นางสาวจิฬาภรณ์อภิบาลศรี', '661/วิทย์'),
-            array('6614611024', 'นายมงคลศรีสมบัติ', '661/วิทย์'),
-            array('6614611025', 'นางสาววาสินีสุวรรณา', '661/วิทย์'),
-            array('6614611029', 'นางสาวรัตมณีเถาวัลณีย์', '661/วิทย์'),
-            array('6614901002', 'นางสาวมุกดาหนองน้ำเย็น', '661/ฟิสิกส์'),
-            array('6614901003', 'นางสาววิดาพรธนะปฐมชัย', '661/ฟิสิกส์'),
-            array('6614901004', 'นายวุฒิชัยเจริญวงศ์', '661/ฟิสิกส์'),
-            array('6614901006', 'นายนวพลแสงพระจันทร์', '661/ฟิสิกส์'),
-            array('6614901008', 'นางสาวอุไรพรเต็กใจตรง', '661/ฟิสิกส์'),
-            array('TEACHER01', 'อาจารย์ชีวะ (ทดสอบระบบ)', 'อาจารย์/ทดสอบ')
-        );
         foreach ($defaultRoster as $r) {
-            $ins->execute($r);
+            $ins->execute(array($r['student_id'], $r['full_name'], $r['section']));
         }
         $stmt = $pdo->query("SELECT student_id, full_name, section FROM ctlab04_students ORDER BY section ASC, student_id ASC");
-        return array('source' => $driver . ':ctlab04_students', 'students' => $stmt->fetchAll());
+        return array('source' => $driver . ':ctlab04_students', 'students' => aq_merge_required_roster($stmt->fetchAll()));
     } catch (Exception $e) {
         // Ignore
     }
 
-    return array('source' => $source, 'students' => $rows);
+    return array('source' => $driver . ':fallback', 'students' => $defaultRoster);
 }

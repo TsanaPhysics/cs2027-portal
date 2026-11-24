@@ -1,0 +1,542 @@
+{
+  "ok": true,
+  "modules": [
+    "survival",
+    "books",
+    "house",
+    "routes",
+    "gcd",
+    "decomposition",
+    "searching",
+    "algorithms",
+    "flowcharts",
+    "challenge10"
+  ],
+  "sections": [
+    "661/ฟิสิกส์",
+    "661/วิทย์",
+    "อาจารย์/ทดสอบ"
+  ],
+  "rows": [
+    {
+      "student_id": "6614611001",
+      "full_name": "นางสาวกนกวรรณพึ่งฉ่ำ",
+      "section": "661/วิทย์",
+      "scores": {
+        "survival": 35,
+        "books": 60,
+        "house": 63,
+        "routes": 81.2,
+        "gcd": 35,
+        "decomposition": 0,
+        "searching": null,
+        "algorithms": null,
+        "flowcharts": 100,
+        "challenge10": null
+      },
+      "completed_modules": 7,
+      "total_score": 374.2,
+      "avg_score": 53.5
+    },
+    {
+      "student_id": "6614611002",
+      "full_name": "นางสาวกาญจน์สณีทรงศรี",
+      "section": "661/วิทย์",
+      "scores": {
+        "survival": 35,
+        "books": 75,
+        "house": 75,
+        "routes": 75,
+        "gcd": 87.5,
+        "decomposition": 53.8,
+        "searching": null,
+        "algorithms": null,
+        "flowcharts": 100,
+        "challenge10": null
+      },
+      "completed_modules": 7,
+      "total_score": 501.3,
+      "avg_score": 71.6
+    },
+    {
+      "student_id": "6614611003",
+      "full_name": "นางสาวกิติยาแสงทอง",
+      "section": "661/วิทย์",
+      "scores": {
+        "survival": 35,
+        "books": 42.5,
+        "house": 43,
+        "routes": 76.2,
+        "gcd": 76.2,
+        "decomposition": null,
+        "searching": null,
+        "algorithms": null,
+        "flowcharts": 93,
+        "challenge10": null
+      },
+      "completed_modules": 6,
+      "total_score": 365.9,
+      "avg_score": 61
+    },
+    {
+      "student_id": "6614611004",
+      "full_name": "นางสาวชุลีขวัญคนขยัน",
+      "section": "661/วิทย์",
+      "scores": {
+        "survival": 81.2,
+        "books": 100,
+        "house": 75,
+        "routes": 82.5,
+        "gcd": 82.5,
+        "decomposition": null,
+        "searching": 75,
+        "algorithms": 69.2,
+        "flowcharts": 68,
+        "challenge10": null
+      },
+      "completed_modules": 8,
+      "total_score": 633.4,
+      "avg_score": 79.2
+    },
+    {
+      "student_id": "6614611005",
+      "full_name": "นางสาวณัฐณิชานาคาพยัคฆ์",
+      "section": "661/วิทย์",
+      "scores": {
+        "survival": 35,
+        "books": 68,
+        "house": 60,
+        "routes": 75,
+        "gcd": 100,
+        "decomposition": null,
+        "searching": null,
+        "algorithms": null,
+        "flowcharts": 93,
+        "challenge10": null
+      },
+      "completed_modules": 6,
+      "total_score": 431,
+      "avg_score": 71.8
+    },
+    {
+      "student_id": "6614611006",
+      "full_name": "นางสาวณัฐวรรณคำกอก",
+      "section": "661/วิทย์",
+      "scores": {
+        "survival": 35,
+        "books": 75,
+        "house": 75,
+        "routes": 75,
+        "gcd": 76.2,
+        "decomposition": 60,
+        "searching": 100,
+        "algorithms": 0,
+        "flowcharts": 93,
+        "challenge10": 100
+      },
+      "completed_modules": 10,
+      "total_score": 689.2,
+      "avg_score": 68.9
+    },
+    {
+      "student_id": "6614611007",
+      "full_name": "นางสาวเณศราโพธิ์นิล",
+      "section": "661/วิทย์",
+      "scores": {
+        "survival": 0,
+        "books": 0,
+        "house": 0,
+        "routes": 100,
+        "gcd": 100,
+        "decomposition": 100,
+        "searching": 0,
+        "algorithms": 100,
+        "flowcharts": null,
+        "challenge10": null
+      },
+      "completed_modules": 8,
+      "total_score": 400,
+      "avg_score": 50
+    },
+    {
+      "student_id": "6614611009",
+      "full_name": "นางสาวธันยธรณ์หมั่นกู้",
+      "section": "661/วิทย์",
+      "scores": {
+        "survival": 35,
+        "books": 100,
+        "house": 80,
+        "routes": 100,
+        "gcd": 87.5,
+        "decomposition": 100,
+        "searching": null,
+        "algorithms": null,
+        "flowcharts": 35,
+        "challenge10": null
+      },
+      "completed_modules": 7,
+      "total_score": 537.5,
+      "avg_score": 76.8
+    },
+    {
+      "student_id": "6614611010",
+      "full_name": "นางสาวธิชานันท์นนเทศา",
+      "section": "661/วิทย์",
+      "scores": {
+        "survival": 41.2,
+        "books": 100,
+        "house": 50,
+        "routes": 100,
+        "gcd": 100,
+        "decomposition": null,
+        "searching": 100,
+        "algorithms": 100,
+        "flowcharts": 100,
+        "challenge10": 100
+      },
+      "completed_modules": 9,
+      "total_score": 791.2,
+      "avg_score": 87.9
+    },
+    {
+      "student_id": "6614611011",
+      "full_name": "นางสาวนภัสนาวงศ์จันทร์",
+      "section": "661/วิทย์",
+      "scores": {
+        "survival": 28,
+        "books": 35,
+        "house": 22,
+        "routes": null,
+        "gcd": 75.5,
+        "decomposition": 35,
+        "searching": 48.8,
+        "algorithms": 47.5,
+        "flowcharts": 45,
+        "challenge10": 60
+      },
+      "completed_modules": 9,
+      "total_score": 396.8,
+      "avg_score": 44.1
+    },
+    {
+      "student_id": "6614611012",
+      "full_name": "นางสาวพรทิพย์บรรณสาร",
+      "section": "661/วิทย์",
+      "scores": {
+        "survival": 35,
+        "books": 100,
+        "house": 95,
+        "routes": 100,
+        "gcd": 100,
+        "decomposition": 100,
+        "searching": 100,
+        "algorithms": 100,
+        "flowcharts": 100,
+        "challenge10": 100
+      },
+      "completed_modules": 10,
+      "total_score": 930,
+      "avg_score": 93
+    },
+    {
+      "student_id": "6614611013",
+      "full_name": "นางสาวพัชราพรมจีน",
+      "section": "661/วิทย์",
+      "scores": {
+        "survival": 35,
+        "books": 93.8,
+        "house": 95,
+        "routes": 75,
+        "gcd": 100,
+        "decomposition": 100,
+        "searching": 100,
+        "algorithms": 100,
+        "flowcharts": 100,
+        "challenge10": 100
+      },
+      "completed_modules": 10,
+      "total_score": 898.8,
+      "avg_score": 89.9
+    },
+    {
+      "student_id": "6614611014",
+      "full_name": "นางสาวภัทริดาเจ๊ะมัด",
+      "section": "661/วิทย์",
+      "scores": {
+        "survival": 47.5,
+        "books": 47.5,
+        "house": 28,
+        "routes": 41.2,
+        "gcd": 48,
+        "decomposition": 60,
+        "searching": 60,
+        "algorithms": 60,
+        "flowcharts": 60,
+        "challenge10": 100
+      },
+      "completed_modules": 10,
+      "total_score": 552.2,
+      "avg_score": 55.2
+    },
+    {
+      "student_id": "6614611015",
+      "full_name": "นายมนตรีจันทร์เทศ",
+      "section": "661/วิทย์",
+      "scores": {
+        "survival": 100,
+        "books": 100,
+        "house": 100,
+        "routes": 100,
+        "gcd": 100,
+        "decomposition": 100,
+        "searching": 100,
+        "algorithms": 100,
+        "flowcharts": 100,
+        "challenge10": 100
+      },
+      "completed_modules": 10,
+      "total_score": 1000,
+      "avg_score": 100
+    },
+    {
+      "student_id": "6614611018",
+      "full_name": "นายอชิระสราภิรมย์",
+      "section": "661/วิทย์",
+      "scores": {
+        "survival": 35,
+        "books": 76.2,
+        "house": 35,
+        "routes": 75,
+        "gcd": 87.5,
+        "decomposition": 100,
+        "searching": null,
+        "algorithms": null,
+        "flowcharts": 87,
+        "challenge10": null
+      },
+      "completed_modules": 7,
+      "total_score": 495.7,
+      "avg_score": 70.8
+    },
+    {
+      "student_id": "6614611019",
+      "full_name": "นายอุดมชัยบุตรอุดม",
+      "section": "661/วิทย์",
+      "scores": {
+        "survival": 35,
+        "books": 100,
+        "house": 75,
+        "routes": 75,
+        "gcd": 100,
+        "decomposition": 100,
+        "searching": null,
+        "algorithms": null,
+        "flowcharts": 100,
+        "challenge10": null
+      },
+      "completed_modules": 7,
+      "total_score": 585,
+      "avg_score": 83.6
+    },
+    {
+      "student_id": "6614611021",
+      "full_name": "นางสาวจิฬาภรณ์อภิบาลศรี",
+      "section": "661/วิทย์",
+      "scores": {
+        "survival": 35,
+        "books": 76.2,
+        "house": 100,
+        "routes": 81.2,
+        "gcd": 87.5,
+        "decomposition": 100,
+        "searching": null,
+        "algorithms": null,
+        "flowcharts": 100,
+        "challenge10": null
+      },
+      "completed_modules": 7,
+      "total_score": 579.9,
+      "avg_score": 82.8
+    },
+    {
+      "student_id": "6614611024",
+      "full_name": "นายมงคลศรีสมบัติ",
+      "section": "661/วิทย์",
+      "scores": {
+        "survival": 35,
+        "books": 75,
+        "house": 73,
+        "routes": 87.5,
+        "gcd": 100,
+        "decomposition": null,
+        "searching": null,
+        "algorithms": null,
+        "flowcharts": 100,
+        "challenge10": null
+      },
+      "completed_modules": 6,
+      "total_score": 470.5,
+      "avg_score": 78.4
+    },
+    {
+      "student_id": "6614611025",
+      "full_name": "นางสาววาสินีสุวรรณา",
+      "section": "661/วิทย์",
+      "scores": {
+        "survival": 35,
+        "books": 87.5,
+        "house": 50,
+        "routes": 81.2,
+        "gcd": 100,
+        "decomposition": 53.8,
+        "searching": null,
+        "algorithms": null,
+        "flowcharts": 93,
+        "challenge10": null
+      },
+      "completed_modules": 7,
+      "total_score": 500.5,
+      "avg_score": 71.5
+    },
+    {
+      "student_id": "6614611029",
+      "full_name": "นางสาวรัตมณีเถาวัลณีย์",
+      "section": "661/วิทย์",
+      "scores": {
+        "survival": 35,
+        "books": 100,
+        "house": 95,
+        "routes": 100,
+        "gcd": 100,
+        "decomposition": 100,
+        "searching": 100,
+        "algorithms": 100,
+        "flowcharts": 100,
+        "challenge10": 100
+      },
+      "completed_modules": 10,
+      "total_score": 930,
+      "avg_score": 93
+    },
+    {
+      "student_id": "6614901002",
+      "full_name": "นางสาวมุกดาหนองน้ำเย็น",
+      "section": "661/ฟิสิกส์",
+      "scores": {
+        "survival": null,
+        "books": null,
+        "house": null,
+        "routes": null,
+        "gcd": null,
+        "decomposition": null,
+        "searching": null,
+        "algorithms": null,
+        "flowcharts": null,
+        "challenge10": null
+      },
+      "completed_modules": 0,
+      "total_score": 0,
+      "avg_score": 0
+    },
+    {
+      "student_id": "6614901003",
+      "full_name": "นางสาววิดาพรธนะปฐมชัย",
+      "section": "661/ฟิสิกส์",
+      "scores": {
+        "survival": 35,
+        "books": 0,
+        "house": 75,
+        "routes": 81.2,
+        "gcd": 100,
+        "decomposition": null,
+        "searching": null,
+        "algorithms": null,
+        "flowcharts": null,
+        "challenge10": null
+      },
+      "completed_modules": 5,
+      "total_score": 291.2,
+      "avg_score": 58.2
+    },
+    {
+      "student_id": "6614901004",
+      "full_name": "นายวุฒิชัยเจริญวงศ์",
+      "section": "661/ฟิสิกส์",
+      "scores": {
+        "survival": 35,
+        "books": 75,
+        "house": 85,
+        "routes": 81.2,
+        "gcd": 95,
+        "decomposition": null,
+        "searching": null,
+        "algorithms": null,
+        "flowcharts": null,
+        "challenge10": null
+      },
+      "completed_modules": 5,
+      "total_score": 371.2,
+      "avg_score": 74.2
+    },
+    {
+      "student_id": "6614901006",
+      "full_name": "นายนวพลแสงพระจันทร์",
+      "section": "661/ฟิสิกส์",
+      "scores": {
+        "survival": 35,
+        "books": 76.2,
+        "house": 100,
+        "routes": 80.5,
+        "gcd": 87.5,
+        "decomposition": null,
+        "searching": null,
+        "algorithms": null,
+        "flowcharts": 100,
+        "challenge10": null
+      },
+      "completed_modules": 6,
+      "total_score": 479.2,
+      "avg_score": 79.9
+    },
+    {
+      "student_id": "6614901008",
+      "full_name": "นางสาวอุไรพรเต็กใจตรง",
+      "section": "661/ฟิสิกส์",
+      "scores": {
+        "survival": null,
+        "books": null,
+        "house": null,
+        "routes": null,
+        "gcd": null,
+        "decomposition": null,
+        "searching": null,
+        "algorithms": null,
+        "flowcharts": null,
+        "challenge10": null
+      },
+      "completed_modules": 0,
+      "total_score": 0,
+      "avg_score": 0
+    },
+    {
+      "student_id": "TEACHER01",
+      "full_name": "อาจารย์ชีวะ (ทดสอบระบบ)",
+      "section": "อาจารย์/ทดสอบ",
+      "scores": {
+        "survival": null,
+        "books": null,
+        "house": null,
+        "routes": null,
+        "gcd": null,
+        "decomposition": null,
+        "searching": null,
+        "algorithms": null,
+        "flowcharts": null,
+        "challenge10": 100
+      },
+      "completed_modules": 1,
+      "total_score": 100,
+      "avg_score": 100
+    }
+  ]
+}

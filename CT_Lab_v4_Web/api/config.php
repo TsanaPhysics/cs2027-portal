@@ -7,6 +7,14 @@
 // รหัสผ่านสำหรับเข้าหน้าตรวจงานของอาจารย์ (teacher.html)
 define('CT_LAB_TEACHER_PIN', 'physicss');
 
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, X-Teacher-Pin, X-Admin-Pin');
+if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
+
 function is_university_server()
 {
     $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
@@ -321,7 +329,7 @@ function seed_default_students($pdo)
     ");
 
     $count = (int)$pdo->query('SELECT COUNT(*) FROM ctlab_students')->fetchColumn();
-    if ($count > 1) {
+    if ($count >= 26) {
         return;
     }
 

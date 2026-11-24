@@ -929,19 +929,28 @@ const CS2027_FALLBACK_ROSTER = [
 ];
 
 async function loadRoster() {
+  let apiStudents = [];
   try {
     const res = await fetch('api.php');
     if (res.ok) {
       const d = await res.json();
       if (d.ok && Array.isArray(d.students) && d.students.length > 0) {
-        state.students = d.students;
+        apiStudents = d.students;
       }
     }
   } catch (_) {}
 
-  if (state.students.length === 0) {
-    state.students = CS2027_FALLBACK_ROSTER;
-  }
+  // Always merge CS2027_FALLBACK_ROSTER so the 5 Physics students (661/ฟิสิกส์) and 20 Science students are NEVER missing
+  const byId = new Map();
+  apiStudents.forEach((s) => {
+    if (s && s.student_id) byId.set(String(s.student_id), s);
+  });
+  CS2027_FALLBACK_ROSTER.forEach((def) => {
+    if (!byId.has(def.student_id)) {
+      byId.set(def.student_id, def);
+    }
+  });
+  state.students = Array.from(byId.values());
 
   const saved = localStorage.getItem('cs2027_student_id');
   if (saved) {
@@ -969,18 +978,34 @@ document.getElementById('modal-close').onclick = closeModal;
 
 document.getElementById('btn-pick-student').onclick = () => {
   sfx.tone(600);
+  const physCount = state.students.filter((s) => (s.section || '').includes('ฟิสิกส์')).length;
+  const sciCount = state.students.filter((s) => (s.section || '').includes('วิทย์')).length;
   const html = `
-    <p style="margin-bottom:10px;color:#cbd5e1;">เลือกรายชื่อนักศึกษาวิชา CS2027 (สาขาวิทยาศาสตร์ทั่วไป 20 คน + สาขาฟิสิกส์ 5 คน = 25 คน)</p>
-    <div style="display:flex;flex-direction:column;gap:6px;max-height:340px;overflow-y:auto;">
+    <p style="margin-bottom:8px;color:#cbd5e1;">เลือกรายชื่อนักศึกษาวิชา CS2027 (สาขาวิทยาศาสตร์ทั่วไป ${sciCount} คน + สาขาฟิสิกส์ ${physCount} คน)</p>
+    <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;">
+      <button class="hud-btn primary" data-sec-filter="ALL">ทั้งหมด (${state.students.length})</button>
+      <button class="hud-btn" data-sec-filter="661/ฟิสิกส์" style="border-color:#38bdf8;color:#7dd3fc;">⚛️ 661/ฟิสิกส์ (${physCount} คน)</button>
+      <button class="hud-btn" data-sec-filter="661/วิทย์">🧪 661/วิทย์ (${sciCount} คน)</button>
+    </div>
+    <div id="stu-picker-list" style="display:flex;flex-direction:column;gap:6px;max-height:340px;overflow-y:auto;">
       ${state.students.map((s) => `
-        <button class="btn-action" data-stu="${s.student_id}">
+        <button class="btn-action" data-stu="${s.student_id}" data-stu-sec="${s.section || ''}">
           <span><strong>${s.student_id}</strong> — ${s.full_name}</span>
-          <small style="color:#7dd3fc;">${s.section || ''}</small>
+          <small style="color:${(s.section || '').includes('ฟิสิกส์') ? '#38bdf8' : '#a7f3d0'};font-weight:700;">${s.section || ''}</small>
         </button>
       `).join('')}
     </div>
   `;
-  openModal('🎓 เลือกนักศึกษาผู้ปฏิบัติการ (25 คน)', html);
+  openModal('🎓 เลือกนักศึกษาผู้ปฏิบัติการ (วิทย์ 20 + ฟิสิกส์ 5 = 25 คน)', html);
+  document.querySelectorAll('[data-sec-filter]').forEach((fb) => {
+    fb.onclick = () => {
+      const f = fb.dataset.secFilter;
+      document.querySelectorAll('[data-sec-filter]').forEach((b) => b.classList.toggle('primary', b === fb));
+      document.querySelectorAll('[data-stu]').forEach((row) => {
+        row.style.display = (f === 'ALL' || row.dataset.stuSec === f) ? 'flex' : 'none';
+      });
+    };
+  });
   document.querySelectorAll('[data-stu]').forEach((b) => {
     b.onclick = () => {
       const stu = state.students.find((s) => s.student_id === b.dataset.stu);

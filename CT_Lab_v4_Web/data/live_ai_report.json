@@ -1,0 +1,239 @@
+{
+  "ok": true,
+  "db_engine": "mysql",
+  "sections": [
+    "661/ฟิสิกส์",
+    "661/วิทย์",
+    "อาจารย์/ทดสอบ"
+  ],
+  "report": {
+    "scope": "all",
+    "generated_at": "2026-11-24 10:13:54",
+    "kpi": {
+      "total_students": 25,
+      "submitted_students": 23,
+      "submission_rate": 92,
+      "total_submissions": 297,
+      "graded_count": 180,
+      "pending_count": 58,
+      "resubmit_count": 59,
+      "mean_score": 73.71,
+      "sd_score": 14.47,
+      "min_score": 44.09,
+      "max_score": 100
+    },
+    "rubric_avg": {
+      "simulation": 0,
+      "sequencing": 0,
+      "subjective": 0
+    },
+    "pillars": [
+      {
+        "key": "Decomposition",
+        "label": "การย่อยปัญหา (Decomposition)",
+        "avg_score": 77.2,
+        "sample_count": 18
+      },
+      {
+        "key": "Pattern Recognition",
+        "label": "การหารูปแบบ (Pattern Recognition)",
+        "avg_score": 69.6,
+        "sample_count": 49
+      },
+      {
+        "key": "Abstraction",
+        "label": "การคิดเชิงนามธรรม (Abstraction)",
+        "avg_score": 72.5,
+        "sample_count": 72
+      },
+      {
+        "key": "Algorithm Design",
+        "label": "การออกแบบขั้นตอนวิธี (Algorithm Design)",
+        "avg_score": 67.8,
+        "sample_count": 143
+      }
+    ],
+    "modules": [
+      {
+        "module_id": "survival",
+        "label": "01 สถานการณ์ชวนคิด",
+        "pillar": "Algorithm Design",
+        "submissions": 54,
+        "avg_score": 34.6,
+        "pass_rate": 9.3,
+        "distractor_hits": 0,
+        "missing_subj": 0
+      },
+      {
+        "module_id": "books",
+        "label": "02 แนะนำหนังสือ",
+        "pillar": "Pattern Recognition",
+        "submissions": 33,
+        "avg_score": 71.1,
+        "pass_rate": 78.8,
+        "distractor_hits": 0,
+        "missing_subj": 0
+      },
+      {
+        "module_id": "house",
+        "label": "03 บ้านตามพิกัด",
+        "pillar": "Abstraction",
+        "submissions": 44,
+        "avg_score": 66.6,
+        "pass_rate": 86.4,
+        "distractor_hits": 0,
+        "missing_subj": 0
+      },
+      {
+        "module_id": "routes",
+        "label": "04 ไปให้ครบทุกที่",
+        "pillar": "Abstraction",
+        "submissions": 28,
+        "avg_score": 81.8,
+        "pass_rate": 96.4,
+        "distractor_hits": 0,
+        "missing_subj": 0
+      },
+      {
+        "module_id": "gcd",
+        "label": "05 หา ห.ร.ม.",
+        "pillar": "Algorithm Design",
+        "submissions": 27,
+        "avg_score": 89.4,
+        "pass_rate": 92.6,
+        "distractor_hits": 0,
+        "missing_subj": 0
+      },
+      {
+        "module_id": "decomposition",
+        "label": "06 การย่อยปัญหา",
+        "pillar": "Decomposition",
+        "submissions": 18,
+        "avg_score": 77.2,
+        "pass_rate": 88.9,
+        "distractor_hits": 0,
+        "missing_subj": 0
+      },
+      {
+        "module_id": "searching",
+        "label": "07 การค้นหาข้อมูล",
+        "pillar": "Pattern Recognition",
+        "submissions": 16,
+        "avg_score": 66.5,
+        "pass_rate": 75,
+        "distractor_hits": 0,
+        "missing_subj": 0
+      },
+      {
+        "module_id": "algorithms",
+        "label": "08 ออกแบบขั้นตอนวิธี",
+        "pillar": "Algorithm Design",
+        "submissions": 20,
+        "avg_score": 82.8,
+        "pass_rate": 90,
+        "distractor_hits": 0,
+        "missing_subj": 0
+      },
+      {
+        "module_id": "flowcharts",
+        "label": "09 เกมเรียงผังงาน",
+        "pillar": "Algorithm Design",
+        "submissions": 42,
+        "avg_score": 89.5,
+        "pass_rate": 95.2,
+        "distractor_hits": 0,
+        "missing_subj": 0
+      },
+      {
+        "module_id": "challenge10",
+        "label": "10 แบบฝึกหัดภาพประกอบ",
+        "pillar": "All 4 Pillars",
+        "submissions": 15,
+        "avg_score": 93.3,
+        "pass_rate": 100,
+        "distractor_hits": 0,
+        "missing_subj": 0
+      }
+    ],
+    "at_risk": [
+      {
+        "student_id": "6614901008",
+        "full_name": "นางสาวอุไรพรเต็กใจตรง",
+        "section": "661/ฟิสิกส์",
+        "avg_score": 0,
+        "completed_modules": 0,
+        "reason": "ยังไม่เคยส่งงานเข้าระบบ"
+      },
+      {
+        "student_id": "6614901002",
+        "full_name": "นางสาวมุกดาหนองน้ำเย็น",
+        "section": "661/ฟิสิกส์",
+        "avg_score": 0,
+        "completed_modules": 0,
+        "reason": "ยังไม่เคยส่งงานเข้าระบบ"
+      },
+      {
+        "student_id": "6614611011",
+        "full_name": "นางสาวนภัสนาวงศ์จันทร์",
+        "section": "661/วิทย์",
+        "avg_score": 44.09,
+        "completed_modules": 9,
+        "reason": "คะแนนเฉลี่ยต่ำกว่าเกณฑ์ 50% ควรทบทวนและส่งแก้ไข"
+      }
+    ],
+    "top_performers": [
+      {
+        "student_id": "6614611015",
+        "full_name": "นายมนตรีจันทร์เทศ",
+        "section": "661/วิทย์",
+        "avg_score": 100,
+        "completed_modules": 10
+      },
+      {
+        "student_id": "6614611029",
+        "full_name": "นางสาวรัตมณีเถาวัลณีย์",
+        "section": "661/วิทย์",
+        "avg_score": 93,
+        "completed_modules": 10
+      },
+      {
+        "student_id": "6614611012",
+        "full_name": "นางสาวพรทิพย์บรรณสาร",
+        "section": "661/วิทย์",
+        "avg_score": 93,
+        "completed_modules": 10
+      },
+      {
+        "student_id": "6614611013",
+        "full_name": "นางสาวพัชราพรมจีน",
+        "section": "661/วิทย์",
+        "avg_score": 89.88,
+        "completed_modules": 10
+      },
+      {
+        "student_id": "6614611010",
+        "full_name": "นางสาวธิชานันท์นนเทศา",
+        "section": "661/วิทย์",
+        "avg_score": 87.91,
+        "completed_modules": 9
+      },
+      {
+        "student_id": "6614611019",
+        "full_name": "นายอุดมชัยบุตรอุดม",
+        "section": "661/วิทย์",
+        "avg_score": 83.57,
+        "completed_modules": 7
+      },
+      {
+        "student_id": "6614611021",
+        "full_name": "นางสาวจิฬาภรณ์อภิบาลศรี",
+        "section": "661/วิทย์",
+        "avg_score": 82.84,
+        "completed_modules": 7
+      }
+    ],
+    "narrative": "📌 สรุปผลสัมฤทธิ์ทางการเรียน (ทุกกลุ่มเรียนในระบบ): จากนักศึกษาทั้งหมด 25 คน มีผู้ส่งงานเข้าสู่ฐานข้อมูลแล้ว 23 คน (คิดเป็น 92%) รวมการส่งงานทั้งหมด 297 ครั้ง (ตรวจแล้ว 180 ครั้ง, รอตรวจ 58 ครั้ง, ส่งแก้ไข 59 ครั้ง)\n\n📈 การกระจายคะแนน: คะแนนเฉลี่ยรวม (Mean) อยู่ที่ 73.71% (S.D. = 14.47, ต่ำสุด 44.09%, สูงสุด 100%)\n\n🧩 โครงสร้างทักษะตาม Rubric เฉลี่ย: ห้องจำลองเสมือน 0/40, การจัดลำดับบล็อก 0/35, การให้เหตุผลเชิงอัตนัย 0/25\n\n🧠 ทักษะ 4 เสาหลัก CT: จุดแข็งที่สุดคือ การย่อยปัญหา (Decomposition) (เฉลี่ย 77.2%) ขณะที่เสาหลักที่ควรเสริมเพิ่มเติมคือ การออกแบบขั้นตอนวิธี (Algorithm Design) (เฉลี่ย 67.8%)\n\n⚙️ วิเคราะห์รายกิจกรรม: กิจกรรมที่ทำได้โดดเด่นที่สุดคือ 10 แบบฝึกหัดภาพประกอบ (เฉลี่ย 93.3%) ส่วนกิจกรรมที่พบจุดติดขัดมากที่สุดคือ 01 สถานการณ์ชวนคิด (เฉลี่ย 34.6%, พบการติดบล็อกตัวลวง 0 ครั้ง)\n\n⚠️ ข้อเสนอแนะเชิงรุกสำหรับผู้สอน: พบนักศึกษากลุ่มเสี่ยง/ยังไม่ส่งงานจำนวน 3 คน แนะนำให้ติดตามการส่งงานในโมดูลที่ค้าง และจัดการทบทวนเรื่องการคัดกรองเงื่อนไข/บล็อกตัวลวงและการเขียนเหตุผลเชิงเหตุ-ผล (IPO & Edge Cases)",
+    "report_id": null
+  },
+  "history": []
+}

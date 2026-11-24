@@ -160,6 +160,48 @@ function computeSummaryStats() {
 
 let cachedRoster = [];
 
+const CS2027_REQUIRED_ROSTER = [
+  { student_id: '6614611001', full_name: 'นางสาวกนกวรรณ พึ่งฉ่ำ', section: '661/วิทย์' },
+  { student_id: '6614611002', full_name: 'นางสาวกาญจน์สณี ทรงศรี', section: '661/วิทย์' },
+  { student_id: '6614611003', full_name: 'นางสาวกิติยา แสงทอง', section: '661/วิทย์' },
+  { student_id: '6614611004', full_name: 'นางสาวชุลีขวัญ คนขยัน', section: '661/วิทย์' },
+  { student_id: '6614611005', full_name: 'นางสาวณัฐณิชา นาคาพยัคฆ์', section: '661/วิทย์' },
+  { student_id: '6614611006', full_name: 'นางสาวณัฐวรรณ คำกอก', section: '661/วิทย์' },
+  { student_id: '6614611007', full_name: 'นางสาวเณศรา โพธิ์นิล', section: '661/วิทย์' },
+  { student_id: '6614611009', full_name: 'นางสาวธันยธรณ์ หมั่นกู้', section: '661/วิทย์' },
+  { student_id: '6614611010', full_name: 'นางสาวธิชานันท์ นนเทศา', section: '661/วิทย์' },
+  { student_id: '6614611011', full_name: 'นางสาวนภัสนา วงศ์จันทร์', section: '661/วิทย์' },
+  { student_id: '6614611012', full_name: 'นางสาวพรทิพย์ บรรณสาร', section: '661/วิทย์' },
+  { student_id: '6614611013', full_name: 'นางสาวพัชรา พรมจีน', section: '661/วิทย์' },
+  { student_id: '6614611014', full_name: 'นางสาวภัทริดา เจ๊ะมัด', section: '661/วิทย์' },
+  { student_id: '6614611015', full_name: 'นายมนตรี จันทร์เทศ', section: '661/วิทย์' },
+  { student_id: '6614611018', full_name: 'นายอชิระ สราภิรมย์', section: '661/วิทย์' },
+  { student_id: '6614611019', full_name: 'นายอุดมชัย บุตรอุดม', section: '661/วิทย์' },
+  { student_id: '6614611021', full_name: 'นางสาวจิฬาภรณ์ อภิบาลศรี', section: '661/วิทย์' },
+  { student_id: '6614611024', full_name: 'นายมงคล ศรีสมบัติ', section: '661/วิทย์' },
+  { student_id: '6614611025', full_name: 'นางสาววาสินี สุวรรณา', section: '661/วิทย์' },
+  { student_id: '6614611029', full_name: 'นางสาวรัตมณี เถาวัลณีย์', section: '661/วิทย์' },
+  { student_id: '6614901002', full_name: 'นางสาวมุกดา หนองน้ำเย็น', section: '661/ฟิสิกส์' },
+  { student_id: '6614901003', full_name: 'นางสาววิดาพร ธนะปฐมชัย', section: '661/ฟิสิกส์' },
+  { student_id: '6614901004', full_name: 'นายวุฒิชัย เจริญวงศ์', section: '661/ฟิสิกส์' },
+  { student_id: '6614901006', full_name: 'นายนวพล แสงพระจันทร์', section: '661/ฟิสิกส์' },
+  { student_id: '6614901008', full_name: 'นางสาวอุไรพร เต็กใจตรง', section: '661/ฟิสิกส์' },
+  { student_id: 'TEACHER01', full_name: 'อาจารย์ชีวะ (ทดสอบระบบ)', section: 'อาจารย์/ทดสอบ' }
+];
+
+function mergeRequiredRoster(list) {
+  const byId = new Map();
+  (Array.isArray(list) ? list : []).forEach((s) => {
+    if (s && s.student_id) byId.set(String(s.student_id), s);
+  });
+  CS2027_REQUIRED_ROSTER.forEach((req) => {
+    if (!byId.has(req.student_id)) {
+      byId.set(req.student_id, req);
+    }
+  });
+  return Array.from(byId.values());
+}
+
 function populateStudentsBySection(section) {
   const select = document.getElementById('select-student-db');
   if (!select) return;
@@ -195,30 +237,32 @@ async function fetchStudentRoster() {
       const res = await fetch('api/students.php');
       data = await res.json();
     } catch (_) {
-      const resFallback = await fetch('../data/cs2027_students.json');
-      data = await resFallback.json();
+      try {
+        const resFallback = await fetch('../data/cs2027_students.json');
+        data = await resFallback.json();
+      } catch (_2) {
+        data = { ok: true, source: 'cs2027-builtin', students: CS2027_REQUIRED_ROSTER };
+      }
     }
-    if (!data || !data.ok || !Array.isArray(data.students)) throw new Error('Cannot load roster');
-
-    cachedRoster = data.students;
-    if (badge) badge.textContent = `${data.count} คน (${data.source})`;
+    const rawList = (data && Array.isArray(data.students)) ? data.students : CS2027_REQUIRED_ROSTER;
+    cachedRoster = mergeRequiredRoster(rawList);
+    if (badge) badge.textContent = `${cachedRoster.length} คน (${(data && data.source) || 'CS2027'})`;
 
     const sections = Array.from(new Set(cachedRoster.map((s) => s.section).filter(Boolean)));
     secSelect.innerHTML = '<option value="">-- เลือกสาขา / หมู่เรียน --</option>';
     sections.forEach((sec) => {
+      const cnt = cachedRoster.filter((s) => s.section === sec).length;
       const opt = document.createElement('option');
       opt.value = sec;
-      opt.textContent = sec;
+      opt.textContent = `${sec} (${cnt} คน)`;
       if (state.profile.section === sec) opt.selected = true;
       secSelect.appendChild(opt);
     });
 
     populateStudentsBySection(secSelect.value);
   } catch (err) {
-    if (badge) badge.textContent = 'ออฟไลน์';
-    secSelect.innerHTML = '<option value="">-- ไม่สามารถเชื่อมต่อฐานข้อมูล --</option>';
-    stuSelect.disabled = false;
-    stuSelect.innerHTML = '<option value="">-- กรอกข้อมูลด้านล่างด้วยตนเอง --</option>';
+    cachedRoster = mergeRequiredRoster(CS2027_REQUIRED_ROSTER);
+    if (badge) badge.textContent = `${cachedRoster.length} คน (CS2027)`;
   }
 }
 

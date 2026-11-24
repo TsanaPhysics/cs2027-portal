@@ -618,12 +618,83 @@
       `;
     }
 
+    const _origFetch = window.fetch.bind(window);
+    let _v4LiveCache = {};
+    window.fetch = async function(input, init = {}) {
+      const urlStr = typeof input === 'string' ? input : (input && input.url ? input.url : '');
+      if (!urlStr.includes('api/admin.php')) return _origFetch(input, init);
+
+      const savedPin = sessionStorage.getItem('ctv4_teacher_pin') || 'physicss';
+      const headers = { ...(init.headers || {}), 'X-Teacher-Pin': savedPin };
+      try {
+        const res = await _origFetch(input, { ...init, headers });
+        const clone = res.clone();
+        const txt = await clone.text();
+        if (res.ok && txt && !txt.trim().startsWith('<?php')) {
+          return res;
+        }
+        if (res.status === 401 && txt && !txt.trim().startsWith('<?php')) {
+          return res;
+        }
+      } catch {}
+
+      const u = new URL(urlStr, window.location.href);
+      const act = u.searchParams.get('action') || 'list';
+      let body = {};
+      if (init && init.body) { try { body = JSON.parse(init.body); } catch {} }
+
+      if (act === 'check') {
+        const authed = sessionStorage.getItem('ctv4_teacher_auth') === '1';
+        return new Response(JSON.stringify({ ok: true, authenticated: authed }), { status: 200 });
+      }
+      if (act === 'login') {
+        const p = String(body.pin || '').trim();
+        if (p !== 'physicss') {
+          return new Response(JSON.stringify({ ok: false, error: 'รหัสผ่านอาจารย์ไม่ถูกต้อง (PIN: physicss)' }), { status: 401 });
+        }
+        sessionStorage.setItem('ctv4_teacher_auth', '1');
+        sessionStorage.setItem('ctv4_teacher_pin', p);
+        return new Response(JSON.stringify({ ok: true }), { status: 200 });
+      }
+      if (act === 'logout') {
+        sessionStorage.removeItem('ctv4_teacher_auth');
+        return new Response(JSON.stringify({ ok: true }), { status: 200 });
+      }
+      for (const k of ['list', 'roster', 'gradebook', 'ai_report']) {
+        if (!_v4LiveCache[k]) {
+          try {
+            const r = await _origFetch(`data/live_${k}.json`);
+            if (r.ok) _v4LiveCache[k] = await r.json();
+          } catch {}
+        }
+      }
+      if (act === 'list' && _v4LiveCache.list) {
+        const d = JSON.parse(JSON.stringify(_v4LiveCache.list));
+        const q = (u.searchParams.get('q') || '').toLowerCase();
+        const sec = u.searchParams.get('section') || '';
+        const st = u.searchParams.get('status') || '';
+        const mod = u.searchParams.get('module_id') || '';
+        const stu = u.searchParams.get('student_id') || '';
+        d.submissions = (d.submissions || []).filter((r) => {
+          if (sec && r.section !== sec) return false;
+          if (st && r.status !== st) return false;
+          if (mod && r.module_id !== mod) return false;
+          if (stu && r.student_id !== stu) return false;
+          if (q && !String(r.student_id).toLowerCase().includes(q) && !String(r.full_name).toLowerCase().includes(q)) return false;
+          return true;
+        });
+        return new Response(JSON.stringify(d), { status: 200 });
+      }
+      if (act === 'roster' && _v4LiveCache.roster) return new Response(JSON.stringify(_v4LiveCache.roster), { status: 200 });
+      if (act === 'gradebook' && _v4LiveCache.gradebook) return new Response(JSON.stringify(_v4LiveCache.gradebook), { status: 200 });
+      if (act === 'ai_report' && _v4LiveCache.ai_report) return new Response(JSON.stringify(_v4LiveCache.ai_report), { status: 200 });
+      return new Response(JSON.stringify({ ok: true }), { status: 200 });
+    };
+
     async function checkAuth() {
       try {
         const res = await fetch('api/admin.php?action=check');
-        const text = await res.text();
-        if (!res.ok || text.trim().startsWith('<?php')) throw new Error('static');
-        const data = JSON.parse(text);
+        const data = await res.json();
         if (data.authenticated) {
           $id('t-login-view').hidden = true;
           $id('t-dashboard-view').hidden = false;
@@ -633,15 +704,8 @@
           $id('t-dashboard-view').hidden = true;
         }
       } catch {
-        if (sessionStorage.getItem('ctv4_teacher_auth') === '1') {
-          $id('t-login-view').hidden = true;
-          $id('t-dashboard-view').hidden = false;
-        } else {
-          $id('t-login-view').hidden = false;
-          $id('t-dashboard-view').hidden = true;
-          $id('t-login-fb').className = 'feedback';
-          $id('t-login-fb').textContent = '';
-        }
+        $id('t-login-view').hidden = false;
+        $id('t-dashboard-view').hidden = true;
       }
     }
 

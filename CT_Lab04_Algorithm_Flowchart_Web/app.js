@@ -2103,6 +2103,46 @@
   let rosterList = [];
   let rosterMap = new Map();
 
+  const CS2027_DEFAULT_ROSTER = [
+    { student_id: '6614611001', full_name: 'นางสาวกนกวรรณพึ่งฉ่ำ', section: '661/วิทย์' },
+    { student_id: '6614611002', full_name: 'นางสาวกาญจน์สณีทรงศรี', section: '661/วิทย์' },
+    { student_id: '6614611003', full_name: 'นางสาวกิติยาแสงทอง', section: '661/วิทย์' },
+    { student_id: '6614611004', full_name: 'นางสาวชุลีขวัญคนขยัน', section: '661/วิทย์' },
+    { student_id: '6614611005', full_name: 'นางสาวณัฐณิชานาคาพยัคฆ์', section: '661/วิทย์' },
+    { student_id: '6614611006', full_name: 'นางสาวณัฐวรรณคำกอก', section: '661/วิทย์' },
+    { student_id: '6614611007', full_name: 'นางสาวเณศราโพธิ์นิล', section: '661/วิทย์' },
+    { student_id: '6614611009', full_name: 'นางสาวธันยธรณ์หมั่นกู้', section: '661/วิทย์' },
+    { student_id: '6614611010', full_name: 'นางสาวธิชานันท์นนเทศา', section: '661/วิทย์' },
+    { student_id: '6614611011', full_name: 'นางสาวนภัสนาวงศ์จันทร์', section: '661/วิทย์' },
+    { student_id: '6614611012', full_name: 'นางสาวพรทิพย์บรรณสาร', section: '661/วิทย์' },
+    { student_id: '6614611013', full_name: 'นางสาวพัชราพรมจีน', section: '661/วิทย์' },
+    { student_id: '6614611014', full_name: 'นางสาวภัทริดาเจ๊ะมัด', section: '661/วิทย์' },
+    { student_id: '6614611015', full_name: 'นายมนตรีจันทร์เทศ', section: '661/วิทย์' },
+    { student_id: '6614611018', full_name: 'นายอชิระสราภิรมย์', section: '661/วิทย์' },
+    { student_id: '6614611019', full_name: 'นายอุดมชัยบุตรอุดม', section: '661/วิทย์' },
+    { student_id: '6614611021', full_name: 'นางสาวจิฬาภรณ์อภิบาลศรี', section: '661/วิทย์' },
+    { student_id: '6614611024', full_name: 'นายมงคลศรีสมบัติ', section: '661/วิทย์' },
+    { student_id: '6614611025', full_name: 'นางสาววาสินีสุวรรณา', section: '661/วิทย์' },
+    { student_id: '6614611029', full_name: 'นางสาวรัตมณีเถาวัลณีย์', section: '661/วิทย์' },
+    { student_id: '6614901002', full_name: 'นางสาวมุกดาหนองน้ำเย็น', section: '661/ฟิสิกส์' },
+    { student_id: '6614901003', full_name: 'นางสาววิดาพรธนะปฐมชัย', section: '661/ฟิสิกส์' },
+    { student_id: '6614901004', full_name: 'นายวุฒิชัยเจริญวงศ์', section: '661/ฟิสิกส์' },
+    { student_id: '6614901006', full_name: 'นายนวพลแสงพระจันทร์', section: '661/ฟิสิกส์' },
+    { student_id: '6614901008', full_name: 'นางสาวอุไรพรเต็กใจตรง', section: '661/ฟิสิกส์' },
+    { student_id: 'TEACHER01', full_name: 'อาจารย์ชีวะ (ทดสอบระบบ)', section: 'อาจารย์/ทดสอบ' }
+  ];
+
+  function mergeWithDefaultRoster(students) {
+    const map = new Map();
+    (Array.isArray(students) ? students : []).forEach((s) => {
+      if (s && s.student_id) map.set(String(s.student_id), s);
+    });
+    CS2027_DEFAULT_ROSTER.forEach((def) => {
+      if (!map.has(def.student_id)) map.set(def.student_id, def);
+    });
+    return Array.from(map.values());
+  }
+
   function populateStudentSelect(secSelId, stuSelId, sectionVal, preId) {
     const stuSel = $(stuSelId);
     if (!stuSel) return;
@@ -2130,18 +2170,22 @@
   }
 
   async function loadRosterOnce() {
-    if (rosterList.length > 0 || location.protocol === 'file:') return;
+    if (rosterList.length > 0) return;
     try {
       let data = null;
       try {
         const res = await fetch('api/submit.php?action=roster');
         data = await res.json();
       } catch (_) {
-        const resFb = await fetch('../data/cs2027_students.json');
-        data = await resFb.json();
+        try {
+          const resFb = await fetch('../data/cs2027_students.json');
+          data = await resFb.json();
+        } catch (_2) {
+          data = { ok: true, students: CS2027_DEFAULT_ROSTER };
+        }
       }
-      if (!data || !data.ok || !Array.isArray(data.students)) return;
-      rosterList = data.students;
+      const rawStudents = (data && Array.isArray(data.students)) ? data.students : CS2027_DEFAULT_ROSTER;
+      rosterList = mergeWithDefaultRoster(rawStudents);
       rosterMap = new Map();
       const secCounts = new Map();
       rosterList.forEach((s) => {

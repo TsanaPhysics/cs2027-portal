@@ -69,7 +69,7 @@ try {
 
     if ($action === 'verify_pin' && $method === 'POST') {
         $body = aq_get_json_body();
-        $pin = trim((string)($body['pin'] ?? ''));
+        $pin = isset($body['pin']) ? trim((string)$body['pin']) : '';
         if ($pin !== AQ_TEACHER_PIN) {
             aq_json_response(array('ok' => false, 'error' => 'รหัสผ่านอาจารย์ไม่ถูกต้อง'), 401);
         }
@@ -100,14 +100,14 @@ try {
 
     if ($action === 'seed_solutions' && $method === 'POST') {
         $body = aq_get_json_body();
-        $items = $body['solutions'] ?? array();
+        $items = isset($body['solutions']) ? $body['solutions'] : array();
         if (!is_array($items)) {
             aq_json_response(array('ok' => false, 'error' => 'Invalid solutions payload'), 400);
         }
         $count = 0;
         foreach ($items as $levelId => $item) {
-            $note = trim((string)($item['note'] ?? ''));
-            $xml = trim((string)($item['xml'] ?? ''));
+            $note = isset($item['note']) ? trim((string)$item['note']) : '';
+            $xml = isset($item['xml']) ? trim((string)$item['xml']) : '';
             if ($levelId !== '' && $xml !== '') {
                 aq_upsert_solution($pdo, (string)$levelId, $note, $xml, 'system_seed');
                 $count++;
@@ -118,9 +118,9 @@ try {
 
     if ($action === 'save_solution' && $method === 'POST') {
         $body = aq_get_json_body();
-        $levelId = trim((string)($body['level_id'] ?? ''));
-        $note = trim((string)($body['note'] ?? ''));
-        $xml = trim((string)($body['xml'] ?? ''));
+        $levelId = isset($body['level_id']) ? trim((string)$body['level_id']) : '';
+        $note = isset($body['note']) ? trim((string)$body['note']) : '';
+        $xml = isset($body['xml']) ? trim((string)$body['xml']) : '';
         if ($levelId === '' || $xml === '') {
             aq_json_response(array('ok' => false, 'error' => 'level_id and xml are required'), 400);
         }
@@ -175,7 +175,7 @@ try {
 
     if ($action === 'reset_student' && $method === 'POST') {
         $body = aq_get_json_body();
-        $studentId = trim((string)($body['student_id'] ?? ''));
+        $studentId = isset($body['student_id']) ? trim((string)$body['student_id']) : '';
         if ($studentId === '') {
             aq_json_response(array('ok' => false, 'error' => 'student_id is required'), 400);
         }

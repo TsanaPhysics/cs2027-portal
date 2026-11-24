@@ -69,20 +69,21 @@ try {
 
     if ($method === 'POST') {
         $body = aq_get_json_body();
-        $studentId = trim((string)($body['student_id'] ?? ''));
+        $studentId = isset($body['student_id']) ? trim((string)$body['student_id']) : '';
         if ($studentId === '') {
             aq_json_response(array('ok' => false, 'error' => 'student_id is required'), 400);
         }
 
-        $fullName = trim((string)($body['full_name'] ?? ''));
-        $section = trim((string)($body['section'] ?? ''));
-        $rankTitle = trim((string)($body['rank_title'] ?? 'Novice Coder'));
-        $totalXp = (int)($body['total_xp'] ?? 0);
-        $totalStars = (int)($body['total_stars'] ?? 0);
-        $passedCount = (int)($body['passed_count'] ?? 0);
-        $progressJson = is_string($body['progress_json'] ?? null)
-            ? $body['progress_json']
-            : json_encode($body['progress_json'] ?? array(), JSON_UNESCAPED_UNICODE);
+        $fullName = isset($body['full_name']) ? trim((string)$body['full_name']) : '';
+        $section = isset($body['section']) ? trim((string)$body['section']) : '';
+        $rankTitle = isset($body['rank_title']) ? trim((string)$body['rank_title']) : 'Novice Coder';
+        $totalXp = isset($body['total_xp']) ? (int)$body['total_xp'] : 0;
+        $totalStars = isset($body['total_stars']) ? (int)$body['total_stars'] : 0;
+        $passedCount = isset($body['passed_count']) ? (int)$body['passed_count'] : 0;
+        $rawProg = isset($body['progress_json']) ? $body['progress_json'] : array();
+        $progressJson = is_string($rawProg)
+            ? $rawProg
+            : json_encode($rawProg, JSON_UNESCAPED_UNICODE);
 
         if (aq_db_driver($pdo) === 'sqlite') {
             $chk = $pdo->prepare('SELECT 1 FROM blockly_ug_progress WHERE student_id = ?');
