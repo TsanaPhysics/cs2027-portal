@@ -17,9 +17,9 @@
   </script>
   <style>
     :root {
-      --bg-dark: #070b1e;
-      --glass: rgba(12, 20, 46, 0.68);
-      --glass-strong: rgba(10, 16, 38, 0.9);
+      --bg-dark: #060a18;
+      --glass: rgba(10, 17, 40, 0.72);
+      --glass-strong: rgba(8, 14, 34, 0.92);
       --border: rgba(56, 189, 248, 0.32);
       --cyan: #38bdf8;
       --emerald: #10b981;
@@ -29,104 +29,216 @@
       --danger: #ef4444;
       --text: #f8fafc;
       --muted: #94a3b8;
+      --left-w: 340px;
+      --right-w: 335px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg-dark); color: var(--text); font-family: 'Sarabun', 'Outfit', sans-serif; user-select: none; }
+    html, body {
+      width: 100%; height: 100%; overflow: hidden;
+      background: var(--bg-dark); color: var(--text);
+      font-family: 'Sarabun', 'Outfit', sans-serif; user-select: none;
+    }
     #canvas-3d { position: fixed; inset: 0; z-index: 1; }
-    .glass { background: var(--glass); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border: 1px solid var(--border); box-shadow: 0 12px 34px rgba(0,0,0,0.45); }
+    .glass {
+      background: var(--glass);
+      backdrop-filter: blur(22px) saturate(190%);
+      -webkit-backdrop-filter: blur(22px) saturate(190%);
+      border: 1px solid var(--border);
+      box-shadow: 0 14px 38px rgba(0, 0, 0, 0.52);
+    }
     .hidden { display: none !important; }
 
     /* Top Header */
     .topbar {
       position: fixed; top: 12px; left: 14px; right: 14px; height: 58px;
-      border-radius: 15px; padding: 0 16px; z-index: 20;
-      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      border-radius: 15px; padding: 0 16px; z-index: 25;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      transition: transform 0.32s ease, opacity 0.32s ease;
     }
-    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
     .brand-badge {
-      width: 40px; height: 40px; border-radius: 11px;
+      width: 40px; height: 40px; border-radius: 11px; flex-shrink: 0;
       background: linear-gradient(135deg, #ec4899, #8b5cf6, #06b6d4);
       display: grid; place-items: center; font-size: 21px;
       box-shadow: 0 0 18px rgba(236, 72, 153, 0.45);
     }
-    .brand h1 { font-family: 'Outfit', 'Sarabun', sans-serif; font-size: 16.5px; font-weight: 800; background: linear-gradient(90deg, #fff, #7dd3fc, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .brand span { font-size: 11.5px; color: var(--muted); display: block; }
-    .top-actions { display: flex; align-items: center; gap: 7px; flex-wrap: nowrap; }
+    .brand-text { min-width: 0; }
+    .brand h1 {
+      font-family: 'Outfit', 'Sarabun', sans-serif; font-size: 16px; font-weight: 800;
+      background: linear-gradient(90deg, #fff, #7dd3fc, #f472b6);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .brand span {
+      font-size: 11.5px; color: var(--muted); display: block;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .top-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
     .hud-btn {
-      border: 1px solid rgba(148,163,184,0.3); background: rgba(15,23,42,0.75); color: #fff;
-      padding: 6px 12px; border-radius: 10px; font-family: inherit; font-size: 12.5px; font-weight: 600;
-      cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; transition: all 0.2s;
+      border: 1px solid rgba(148,163,184,0.3); background: rgba(15,23,42,0.78); color: #fff;
+      padding: 6px 11px; border-radius: 10px; font-family: inherit; font-size: 12px; font-weight: 600;
+      cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;
+      white-space: nowrap; transition: all 0.2s;
     }
     .hud-btn:hover { border-color: var(--cyan); background: rgba(56,189,248,0.2); }
     .hud-btn.primary { background: linear-gradient(135deg, #10b981, #0ea5e9); border-color: #34d399; }
     .hud-btn.pink { background: linear-gradient(135deg, #ec4899, #8b5cf6); border-color: #f472b6; }
 
-    /* Left Panel: 6 Algorithm Stages + Interactive Controls */
+    /* Collapsible & Expandable Side Panels */
     .side-panel {
-      position: fixed; top: 80px; bottom: 16px; width: clamp(290px, 24vw, 345px);
-      border-radius: 16px; padding: 13px; z-index: 15;
-      display: flex; flex-direction: column; gap: 10px; overflow-y: auto;
+      position: fixed; top: 80px; bottom: 16px;
+      border-radius: 16px; padding: 12px 13px; z-index: 20;
+      display: flex; flex-direction: column; gap: 10px;
+      overflow-y: auto; overflow-x: hidden;
+      transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1), width 0.28s ease, opacity 0.28s ease;
     }
-    .left-panel { left: 14px; }
-    .right-panel { right: 14px; }
-    .panel-title { font-size: 14px; font-weight: 700; color: #7dd3fc; display: flex; align-items: center; justify-content: space-between; }
+    .side-panel::-webkit-scrollbar { width: 5px; }
+    .side-panel::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.3); border-radius: 99px; }
 
-    .stage-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .left-panel { left: 14px; width: var(--left-w); }
+    .left-panel.expanded { width: min(440px, 42vw); }
+    .left-panel.collapsed { transform: translateX(calc(-100% - 28px)); opacity: 0; pointer-events: none; }
+
+    .right-panel { right: 14px; width: var(--right-w); }
+    .right-panel.expanded { width: min(430px, 42vw); }
+    .right-panel.collapsed { transform: translateX(calc(100% + 28px)); opacity: 0; pointer-events: none; }
+
+    body.zen-mode .left-panel { transform: translateX(calc(-100% - 28px)); opacity: 0; pointer-events: none; }
+    body.zen-mode .right-panel { transform: translateX(calc(100% + 28px)); opacity: 0; pointer-events: none; }
+    body.zen-mode .cam-dock { transform: translate(-50%, 90px); opacity: 0; pointer-events: none; }
+
+    /* Floating Re-open Edge Pills when sidebars are collapsed */
+    .edge-pill {
+      position: fixed; top: 88px; z-index: 22;
+      padding: 8px 14px; border-radius: 999px;
+      border: 1px solid var(--border); background: var(--glass-strong);
+      color: #fff; font-family: inherit; font-size: 12.5px; font-weight: 700;
+      cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: all 0.2s;
+    }
+    .edge-pill:hover { border-color: var(--pink); transform: scale(1.03); }
+    .edge-pill.left { left: 14px; }
+    .edge-pill.right { right: 14px; }
+
+    .panel-header {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding-bottom: 6px; border-bottom: 1px solid rgba(148,163,184,0.18); flex-shrink: 0;
+    }
+    .panel-title-grp { display: flex; align-items: center; gap: 7px; min-width: 0; }
+    .panel-title-grp h2 {
+      font-size: 13.5px; font-weight: 700; color: #7dd3fc;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .prog-badge {
+      padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 700;
+      background: rgba(16,185,129,0.2); color: #6ee7b7; white-space: nowrap; flex-shrink: 0;
+    }
+    .panel-ctrl-btns { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+    .ctrl-icon-btn {
+      width: 26px; height: 26px; border-radius: 7px;
+      border: 1px solid rgba(148,163,184,0.28); background: rgba(15,23,42,0.8);
+      color: #e2e8f0; font-size: 12px; cursor: pointer; display: grid; place-items: center;
+      transition: all 0.15s;
+    }
+    .ctrl-icon-btn:hover { border-color: var(--cyan); color: var(--cyan); background: rgba(56,189,248,0.15); }
+
+    /* 6 Stage Cards Grid — Zero Truncation, Clean Wrapping */
+    .stage-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; flex-shrink: 0; }
     .stage-btn {
       text-align: left; padding: 7px 9px; border-radius: 10px;
-      border: 1px solid rgba(148,163,184,0.22); background: rgba(15,23,42,0.6);
+      border: 1px solid rgba(148,163,184,0.22); background: rgba(15,23,42,0.62);
       color: var(--text); font-family: inherit; cursor: pointer; transition: all 0.18s;
-      display: flex; flex-direction: column; gap: 2px;
+      display: flex; flex-direction: column; gap: 3px; min-width: 0;
     }
-    .stage-btn:hover { border-color: var(--cyan); }
+    .stage-btn:hover { border-color: var(--cyan); background: rgba(30,41,59,0.75); }
     .stage-btn.active {
-      background: linear-gradient(135deg, rgba(236,72,153,0.28), rgba(14,165,233,0.25));
+      background: linear-gradient(135deg, rgba(236,72,153,0.3), rgba(14,165,233,0.25));
       border-color: #f472b6; box-shadow: 0 0 14px rgba(236,72,153,0.25);
     }
-    .stage-top { display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 700; color: #f472b6; }
-    .stage-btn strong { font-size: 12.5px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .stage-top {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 10.5px; font-weight: 700; color: #f472b6; white-space: nowrap;
+    }
+    .stage-btn strong {
+      font-size: 12px; color: #fff; line-height: 1.3;
+      white-space: normal; word-break: break-word;
+    }
 
     .control-card {
-      background: rgba(15,23,42,0.7); border: 1px solid rgba(56,189,248,0.22);
+      background: rgba(15,23,42,0.72); border: 1px solid rgba(56,189,248,0.22);
       border-radius: 12px; padding: 11px; display: flex; flex-direction: column; gap: 8px; font-size: 12.5px;
     }
-    .control-card h3 { font-size: 13.5px; color: #fcd34d; }
+    .control-card h3 { font-size: 13.5px; color: #fcd34d; line-height: 1.35; }
     .control-card p { color: #cbd5e1; line-height: 1.45; }
     .flow-box {
       background: #050816; border: 1px solid rgba(168,85,247,0.4); border-radius: 9px;
-      padding: 8px 10px; font-family: 'Outfit', 'Sarabun', monospace; font-size: 12px; color: #e9d5ff;
-      line-height: 1.5;
+      padding: 8px 10px; font-family: 'Sarabun', 'Outfit', sans-serif; font-size: 12px; color: #e9d5ff;
+      line-height: 1.5; display: flex; flex-direction: column; gap: 3px;
     }
-    .flow-step { padding: 3px 6px; border-radius: 5px; transition: all 0.2s; }
-    .flow-step.active { background: rgba(16,185,129,0.28); color: #6ee7b7; font-weight: 700; border-left: 3px solid #10b981; }
+    .flow-step { padding: 4px 7px; border-radius: 6px; transition: all 0.2s; }
+    .flow-step.active {
+      background: rgba(16,185,129,0.25); color: #6ee7b7;
+      font-weight: 700; border-left: 3px solid #10b981;
+    }
 
     .btn-action {
       width: 100%; padding: 8px 11px; border-radius: 9px; border: 1px solid rgba(56,189,248,0.4);
       background: rgba(14,165,233,0.2); color: #fff; font-family: inherit; font-size: 12.5px; font-weight: 600;
-      cursor: pointer; transition: all 0.18s; text-align: left; display: flex; justify-content: space-between; align-items: center;
+      cursor: pointer; transition: all 0.18s; text-align: left;
+      display: flex; justify-content: space-between; align-items: center; gap: 6px;
     }
     .btn-action:hover { background: rgba(14,165,233,0.35); border-color: var(--cyan); }
-    .btn-action.run { background: linear-gradient(135deg, #10b981, #059669); border-color: #34d399; justify-content: center; font-size: 13px; }
-    .btn-action.done { background: rgba(16,185,129,0.22); border-color: #10b981; color: #a7f3d0; }
+    .btn-action.run {
+      background: linear-gradient(135deg, #10b981, #059669); border-color: #34d399;
+      justify-content: center; text-align: center; font-size: 12.5px;
+    }
 
     .slider-row { display: flex; flex-direction: column; gap: 4px; }
     .slider-row label { display: flex; justify-content: space-between; font-size: 12px; color: #7dd3fc; font-weight: 600; }
     input[type="range"] { width: 100%; accent-color: #ec4899; cursor: pointer; }
 
-    /* Right Panel: OBE & STEAM Assessment */
+    /* Right Panel: OBE & STEAM Assessment — Zero Awkward Wrapping */
     .score-banner {
       background: linear-gradient(135deg, rgba(16,185,129,0.22), rgba(139,92,246,0.22));
-      border: 1px solid rgba(52,211,153,0.4); border-radius: 12px; padding: 11px;
-      display: flex; flex-direction: column; gap: 6px;
+      border: 1px solid rgba(52,211,153,0.4); border-radius: 12px; padding: 11px 12px;
+      display: flex; flex-direction: column; gap: 7px; flex-shrink: 0;
     }
-    .metric-line { display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; }
-    .big-score { font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 800; color: #34d399; }
+    .metric-line {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 8px; font-size: 12.5px; white-space: nowrap;
+    }
+    .big-score { font-family: 'Outfit', sans-serif; font-size: 19px; font-weight: 800; color: #34d399; }
     .bar-track { height: 7px; border-radius: 99px; background: rgba(148,163,184,0.2); overflow: hidden; }
     .bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #ec4899, #8b5cf6, #10b981); transition: width 0.35s ease; }
 
-    .steam-grid { display: flex; flex-direction: column; gap: 6px; }
-    .steam-item { background: rgba(15,23,42,0.65); border-radius: 9px; padding: 7px 9px; border-left: 3px solid var(--cyan); }
-    .steam-head { display: flex; justify-content: space-between; font-size: 11.5px; font-weight: 700; margin-bottom: 3px; }
+    .steam-grid { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
+    .steam-item {
+      background: rgba(15,23,42,0.68); border-radius: 9px; padding: 7px 10px;
+      border-left: 3px solid var(--cyan);
+    }
+    .steam-head {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 8px; font-size: 11.5px; font-weight: 700; margin-bottom: 4px;
+    }
+    .steam-head span:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .steam-head span:last-child { font-family: 'Outfit', sans-serif; color: #7dd3fc; flex-shrink: 0; }
+
+    /* Bottom Camera & Stage Quick Bar */
+    .cam-dock {
+      position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%);
+      z-index: 20; border-radius: 999px; padding: 5px 10px;
+      display: flex; align-items: center; gap: 6px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .dock-pill {
+      border: 1px solid transparent; background: rgba(15,23,42,0.65); color: #cbd5e1;
+      padding: 5px 11px; border-radius: 999px; font-family: inherit; font-size: 12px; font-weight: 600;
+      cursor: pointer; white-space: nowrap; transition: all 0.2s;
+    }
+    .dock-pill:hover, .dock-pill.active {
+      background: linear-gradient(135deg, #ec4899, #8b5cf6); color: #fff;
+    }
 
     .toast {
       position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 40;
@@ -151,10 +263,14 @@
     .modal-body { padding: 16px 18px; overflow-y: auto; font-size: 13.5px; line-height: 1.55; }
     .modal-foot { padding: 12px 18px; border-top: 1px solid rgba(148,163,184,0.2); display: flex; justify-content: flex-end; gap: 8px; }
 
-    @media (max-width: 900px) {
-      .side-panel { width: calc(100vw - 28px); height: 42vh; }
-      .left-panel { top: 74px; bottom: auto; }
-      .right-panel { top: auto; bottom: 12px; height: 34vh; }
+    @media (max-width: 1024px) {
+      :root { --left-w: 295px; --right-w: 290px; }
+      .brand span { display: none; }
+    }
+    @media (max-width: 760px) {
+      .side-panel { width: calc(100vw - 28px) !important; max-height: 46vh; }
+      .left-panel { top: 76px; bottom: auto; }
+      .right-panel { top: auto; bottom: 58px; }
     }
   </style>
 </head>
@@ -166,9 +282,9 @@
   <header class="topbar glass">
     <div class="brand">
       <div class="brand-badge">🚀</div>
-      <div>
+      <div class="brand-text">
         <h1>ALGO-QUEST 3D · การออกแบบขั้นตอนวิธี (05_method)</h1>
-        <span>3D Realtime Interactive Simulator · ระบบประเมินผล OBE × STEAM · มรภ.รำไพพรรณี</span>
+        <span>3D Realtime PBR Simulator · ระบบประเมินผล OBE × STEAM · มรภ.รำไพพรรณี</span>
       </div>
     </div>
     <div class="top-actions">
@@ -176,15 +292,26 @@
       <button id="btn-submit-obe" class="hud-btn primary" title="ส่งผลคะแนน OBE STEAM เข้าฐานข้อมูลและ Google Sheets">📤 ส่งผล OBE</button>
       <button id="btn-obe-report" class="hud-btn pink" title="ดูรายงานผลลัพธ์การเรียนรู้ OBE & STEAM">📊 รายงาน STEAM</button>
       <a href="https://docs.google.com/spreadsheets/d/1qUFN1WhbXy9XzM7avE4wuEzJ_CSLnVec88zaKgahFSI/edit" target="_blank" class="hud-btn" title="เปิดตารางคะแนน Google Sheets 25 คน">📗 Google Sheets</a>
-      <a href="../portal.html" class="hud-btn" title="กลับหน้าหลัก Portal Hub">🏛️ หน้าหลัก Portal</a>
+      <button id="btn-zen-mode" class="hud-btn" title="ซ่อน/แสดงแถบเมนูทั้งหมด (ปุ่ม H)">👁️ Zen</button>
+      <a href="../portal.html" class="hud-btn" title="กลับหน้าหลัก Portal Hub">🏛️ Portal</a>
     </div>
   </header>
 
+  <!-- Floating Re-open Pills when sidebars are closed/collapsed -->
+  <button id="pill-open-left" class="edge-pill left hidden" title="เปิดแถบเมนู 6 ด่าน">🎮 เปิดเมนู 6 ด่าน ▶</button>
+  <button id="pill-open-right" class="edge-pill right hidden" title="เปิดแถบประเมินผล OBE STEAM">◀ 🎯 ผลประเมิน STEAM</button>
+
   <!-- Left Panel: 6 Interactive 3D Stages from 05_method.pdf -->
-  <aside class="side-panel left-panel glass">
-    <div class="panel-title">
-      <span>🎮 6 ด่านจำลอง 3 มิติ (จาก 05_method.pdf)</span>
-      <small id="stage-progress-txt">0 / 6 ด่าน</small>
+  <aside id="left-panel" class="side-panel left-panel glass">
+    <div class="panel-header">
+      <div class="panel-title-grp">
+        <h2>🎮 6 ด่านจำลอง 3 มิติ (05_method)</h2>
+        <span id="stage-progress-txt" class="prog-badge">0 / 6 ด่าน</span>
+      </div>
+      <div class="panel-ctrl-btns">
+        <button id="btn-expand-left" class="ctrl-icon-btn" title="ขยาย/ย่อความกว้างแถบซ้าย">⤢</button>
+        <button id="btn-close-left" class="ctrl-icon-btn" title="พับเก็บแถบซ้าย">◀</button>
+      </div>
     </div>
 
     <div class="stage-nav">
@@ -210,7 +337,7 @@
       </button>
       <button class="stage-btn" data-st="s6">
         <div class="stage-top"><span>ด่าน 6 (หน้า 13-14)</span><span id="st-ok-s6">⚪</span></div>
-        <strong>🏆 หาค่าสูงสุด Smax &amp; ค้นหาอันดับ</strong>
+        <strong>🏆 หาค่าสูงสุด Smax &amp; ค้นหา</strong>
       </button>
     </div>
 
@@ -218,9 +345,15 @@
   </aside>
 
   <!-- Right Panel: OBE & STEAM Realtime Assessment -->
-  <aside class="side-panel right-panel glass">
-    <div class="panel-title">
-      <span>🎯 การประเมินผล OBE × STEAM แบบเรียลไทม์</span>
+  <aside id="right-panel" class="side-panel right-panel glass">
+    <div class="panel-header">
+      <div class="panel-ctrl-btns">
+        <button id="btn-close-right" class="ctrl-icon-btn" title="พับเก็บแถบขวา">▶</button>
+        <button id="btn-expand-right" class="ctrl-icon-btn" title="ขยาย/ย่อความกว้างแถบขวา">⤢</button>
+      </div>
+      <div class="panel-title-grp">
+        <h2>🎯 ประเมินผล OBE × STEAM เรียลไทม์</h2>
+      </div>
     </div>
 
     <div class="score-banner">
@@ -229,41 +362,49 @@
         <span id="obe-total-score" class="big-score">0 / 100</span>
       </div>
       <div class="bar-track"><div id="obe-total-bar" class="bar-fill" style="width:0%"></div></div>
-      <div class="metric-line" style="font-size:11.5px;color:#cbd5e1;">
-        <span>ระดับสมรรถนะขั้นตอนวิธี</span>
+      <div class="metric-line" style="font-size:12px;color:#cbd5e1;">
+        <span>ระดับสมรรถนะ</span>
         <strong id="obe-rank" style="color:#fcd34d;">เริ่มต้นฝึกปฏิบัติ</strong>
       </div>
     </div>
 
-    <div class="panel-title" style="margin-top:4px;"><span>🌈 มิติบูรณาการ 5 แกน (STEAM Education)</span></div>
+    <div class="panel-title-grp" style="margin-top:2px;"><h2>🌈 มิติบูรณาการ 5 แกน (STEAM)</h2></div>
     <div class="steam-grid">
       <div class="steam-item" style="border-left-color:#10b981;">
-        <div class="steam-head"><span>🔬 S — Science (วิทยาศาสตร์และระบบเซนเซอร์ความชื้น)</span><span id="steam-s-val">0%</span></div>
+        <div class="steam-head"><span>🔬 S — Science (เซนเซอร์ &amp; สมดุลความชื้น)</span><span id="steam-s-val">0%</span></div>
         <div class="bar-track"><div id="steam-s-bar" class="bar-fill" style="width:0%"></div></div>
       </div>
       <div class="steam-item" style="border-left-color:#38bdf8;">
-        <div class="steam-head"><span>💻 T — Technology (การจำลองขั้นตอนวิธีและตัวแปร)</span><span id="steam-t-val">0%</span></div>
+        <div class="steam-head"><span>💻 T — Technology (ตัวแปร &amp; จำลองขั้นตอนวิธี)</span><span id="steam-t-val">0%</span></div>
         <div class="bar-track"><div id="steam-t-bar" class="bar-fill" style="width:0%"></div></div>
       </div>
       <div class="steam-item" style="border-left-color:#f59e0b;">
-        <div class="steam-head"><span>⚙️ E — Engineering (การออกแบบระบบควบคุมอัตโนมัติ)</span><span id="steam-e-val">0%</span></div>
+        <div class="steam-head"><span>⚙️ E — Engineering (ระบบควบคุมอัตโนมัติ)</span><span id="steam-e-val">0%</span></div>
         <div class="bar-track"><div id="steam-e-bar" class="bar-fill" style="width:0%"></div></div>
       </div>
       <div class="steam-item" style="border-left-color:#ec4899;">
-        <div class="steam-head"><span>🎨 A — Arts (การสื่อสารด้วยผังงานและมิติพิกัด 3D)</span><span id="steam-a-val">0%</span></div>
+        <div class="steam-head"><span>🎨 A — Arts (ผังงาน &amp; เรขาคณิตพิกัด 3 มิติ)</span><span id="steam-a-val">0%</span></div>
         <div class="bar-track"><div id="steam-a-bar" class="bar-fill" style="width:0%"></div></div>
       </div>
       <div class="steam-item" style="border-left-color:#a855f7;">
-        <div class="steam-head"><span>📐 M — Mathematics (ตรรกศาสตร์ อสมการ และการวนซ้ำ)</span><span id="steam-m-val">0%</span></div>
+        <div class="steam-head"><span>📐 M — Mathematics (ตรรกศาสตร์ &amp; อสมการ)</span><span id="steam-m-val">0%</span></div>
         <div class="bar-track"><div id="steam-m-bar" class="bar-fill" style="width:0%"></div></div>
       </div>
     </div>
 
     <div class="control-card" style="margin-top:auto;">
       <h3>💡 คำอธิบายฉาก 3 มิติปัจจุบัน</h3>
-      <p id="scene-explain-txt">คลิกปุ่มรันจำลองในแผงด้านซ้าย หรือหมุนดูโมเดล 3 มิติตรงกลางจอเพื่อสังเกตการทำงานของตัวแปรและเงื่อนไขแบบเรียลไทม์</p>
+      <p id="scene-explain-txt">คลิกปุ่มรันจำลองในแผงด้านซ้าย หรือลากเมาส์หมุนดูโมเดล 3 มิติตรงกลางจอเพื่อสังเกตการทำงานของตัวแปรและเงื่อนไขแบบเรียลไทม์</p>
     </div>
   </aside>
+
+  <!-- Bottom Camera & Panel Quick Controls -->
+  <footer class="cam-dock glass">
+    <button class="dock-pill" id="btn-cam-front">🎥 มุมมองด้านหน้า</button>
+    <button class="dock-pill" id="btn-cam-top">📐 มุมมองด้านบน</button>
+    <button class="dock-pill" id="btn-cam-iso">🧊 มุมมอง Isometric</button>
+    <button class="dock-pill" id="btn-toggle-both">↔️ พับ/กางเมนูสองฝั่ง</button>
+  </footer>
 
   <!-- Modal -->
   <div id="modal-bg" class="modal-bg hidden">
