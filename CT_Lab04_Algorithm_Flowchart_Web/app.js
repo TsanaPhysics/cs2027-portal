@@ -2337,8 +2337,38 @@
   }
 
   // ==========================================================
-  // SUBMISSION MODAL & AI RUBRIC VIEWER
+  // SUBMISSION MODAL & AI RUBRIC + ERROR/REMEDIATION VIEWER
   // ==========================================================
+  function buildDiagnosticFromRubric(numScore, aiRubric) {
+    const errors = [];
+    const rems = [];
+    const sim = aiRubric && typeof aiRubric.simulation === 'number' ? aiRubric.simulation : null;
+    const seq = aiRubric && typeof aiRubric.sequencing === 'number' ? aiRubric.sequencing : null;
+    const subj = aiRubric && typeof aiRubric.subjective === 'number' ? aiRubric.subjective : null;
+
+    if (sim !== null && sim < 35) {
+      errors.push(`การจำลอง & Trace Table (${sim}/40): ยังทำกิจกรรมจำลองหรือตารางไล่ค่าตัวแปรไม่ครบทุกกรณีทดสอบ`);
+      rems.push('ทบทวนและรันการจำลองให้ครบทุกกรณี (Normal, Boundary, Abnormal Data) และกดตรวจคำตอบในตาราง Trace Table ให้ครบก่อนส่งงานใหม่');
+    }
+    if (seq !== null && seq < 30) {
+      errors.push(`การจัดลำดับรหัส/ผังงาน (${seq}/35): มีการสลับลำดับขั้นตอน หรือเลือกบล็อกตัวลวง (Distractor) เข้ามาในลำดับการทำงาน`);
+      rems.push('จัดเรียงขั้นตอนตามโครงสร้าง Input → ตรวจเงื่อนไขขอบเขต → Process → Fail-Safe Reset → Output และตัดบล็อกตัวลวงออก');
+    }
+    if (subj !== null && subj < 20) {
+      errors.push(`เหตุผลวิทยาศาสตร์ (${subj}/25): คำตอบอัตนัยยังขาดการอธิบายสาเหตุของข้อผิดพลาดหรือผลกระทบของตัวแปร`);
+      rems.push('อธิบายเหตุผลในช่องคำถามอัตนัยให้ชัดเจน (ระบุสาเหตุ เช่น Division by Zero, Infinite Loop, Off-by-One Error หรือระบบ Fail-Safe)');
+    }
+    if (errors.length === 0 && numScore < 80) {
+      errors.push(`ความครบถ้วนของโมดูล (${numScore.toFixed(1)}%): ยังทำกิจกรรมย่อยไม่ครบทั้ง 4 โมดูล`);
+      rems.push('เข้าทำกิจกรรมย่อยให้ครบทุกโมดูลและกดส่งงานอีกครั้งเพื่ออัปเดตคะแนนในฐานข้อมูล');
+    }
+    if (errors.length === 0) {
+      errors.push('ไม่พบข้อผิดพลาดหลัก: ผ่านเกณฑ์มาตรฐานทั้งด้านการจำลอง การจัดลำดับขั้นตอนวิธี และการให้เหตุผล');
+      rems.push('รักษามาตรฐานการทำงาน และสามารถเปิดดูประวัติผลตรวจย้อนหลังได้ในฐานข้อมูลผู้เรียน');
+    }
+    return { errors, rems };
+  }
+
   function renderAiEvalHtml(aiScore, aiRubric, aiFeedback, aiModel) {
     if (aiScore === null || aiScore === undefined) return '';
     const num = Number(aiScore);
@@ -2362,14 +2392,35 @@
         </div>
       `;
     }
+    const diag = buildDiagnosticFromRubric(num, aiRubric);
+    const prof = loadProfile();
+    const reportUrl = `../student_report.html${prof.student_id ? `?student_id=${encodeURIComponent(prof.student_id)}` : ''}`;
+    const diagHtml = `
+      <div style="margin-top:10px;display:grid;gap:8px;font-size:12.5px;">
+        <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:10px;color:#991b1b;">
+          <strong>⚠️ การแจ้งเตือนข้อผิดพลาดที่ตรวจพบ (Detected Errors):</strong>
+          <ul style="margin:5px 0 0 18px;">${diag.errors.map((e) => `<li>${esc(e)}</li>`).join('')}</ul>
+        </div>
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:10px;color:#1e3a8a;">
+          <strong>🛠️ แนวทางการแก้ไขรายบุคคล (Remediation Steps):</strong>
+          <ul style="margin:5px 0 0 18px;">${diag.rems.map((r) => `<li>${esc(r)}</li>`).join('')}</ul>
+        </div>
+        <div style="text-align:right;">
+          <a href="${reportUrl}" target="_blank" class="btn btn-small btn-primary" style="text-decoration:none;display:inline-block;">
+            🔔 เปิดฐานข้อมูลผลตรวจ ข้อผิดพลาด &amp; แนวทางแก้ไขย้อนหลังด้วยตนเอง ↗
+          </a>
+        </div>
+      </div>
+    `;
     return `
       <div class="ai-eval-card">
         <div class="ai-eval-head">
-          <div class="ai-eval-title">🤖 ผลประเมินด้วย AI ${aiModel ? `<span class="ai-pill-badge">${esc(aiModel)}</span>` : ''}</div>
+          <div class="ai-eval-title">🤖 ผลประเมินด้วย AI &amp; แจ้งเตือนแนวทางแก้ไข ${aiModel ? `<span class="ai-pill-badge">${esc(aiModel)}</span>` : ''}</div>
           <span class="ai-pill-badge ${tierCls}">คะแนน AI: ${num.toFixed(1)}%</span>
         </div>
         ${barsHtml}
-        ${aiFeedback ? `<pre class="ai-feedback-pre">${esc(aiFeedback)}</pre>` : ''}
+        ${diagHtml}
+        ${aiFeedback ? `<pre class="ai-feedback-pre" style="margin-top:8px;">${esc(aiFeedback)}</pre>` : ''}
       </div>
     `;
   }

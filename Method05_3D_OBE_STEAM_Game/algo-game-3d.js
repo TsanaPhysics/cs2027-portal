@@ -1061,21 +1061,92 @@ document.getElementById('btn-submit-obe').onclick = async () => {
     student_note: 'ALGO-QUEST 3D (05_method OBE STEAM)'
   };
 
+  const stageNames = {
+    s1: 'ด่าน 1 (หน้า 1-2): IPO & เงื่อนไขเลือกอาหารที่ชัดเจน',
+    s2: 'ด่าน 2 (หน้า 3-4): ระบบรดน้ำต้นไม้อัตโนมัติ (ความชื้น 40-60%)',
+    s3: 'ด่าน 3 (หน้า 5): ขั้นตอนวิธีหาค่าต่ำสุด (Min)',
+    s4: 'ด่าน 4 (หน้า 6-8): ตรรกศาสตร์ AND/OR พิกัดกากบาท (x,y)',
+    s5: 'ด่าน 5 (หน้า 9-12): การวนซ้ำนับจำนวนสินค้าที่ราคา <= M บาท',
+    s6: 'ด่าน 6 (หน้า 13-14): การหาค่าสูงสุด Smax & ตัวแปรสถานะ found'
+  };
+  const missingStages = Object.keys(state.passed).filter((k) => !state.passed[k]);
+  const errItems = missingStages.length > 0
+    ? missingStages.map((k) => ({
+        code: `ERR_STAGE_${k.toUpperCase()}`,
+        category: 'ด่านจำลองขั้นตอนวิธี 3 มิติที่ยังไม่ได้ทำหรือยังไม่ผ่านเกณฑ์',
+        severity: 'medium',
+        detail: `ยังไม่ได้ทำหรือยังไม่ผ่าน ${stageNames[k]}`
+      }))
+    : [{
+        code: 'NONE_EXCELLENT',
+        category: 'ผ่านครบทั้ง 6 ด่านจำลอง 3 มิติสมบูรณ์',
+        severity: 'low',
+        detail: `ผลงานยอดเยี่ยม! ผ่านครบทั้ง 6 ด่าน ได้คะแนน OBE × STEAM ${score}/100`
+      }];
+  const remItems = missingStages.length > 0
+    ? missingStages.map((k) => ({
+        step: `เข้าฝึกปฏิบัติและกดยืนยันคำตอบใน ${stageNames[k]} ให้ครบถ้วนแล้วกดส่งผล OBE อีกครั้ง`
+      }))
+    : [{
+        step: 'สามารถเปิดดูรายงานผลตรวจย้อนหลังและพิมพ์รายงาน PDF ได้ในหน้าฐานข้อมูลผลตรวจผู้เรียน'
+      }];
+
   try {
-    const res = await fetch('api.php', {
+    const customList = JSON.parse(localStorage.getItem('cs2027_custom_notifications_v1') || '[]');
+    customList.unshift({
+      id: Date.now(),
+      student_id: state.currentStudent.student_id,
+      full_name: state.currentStudent.full_name,
+      section: state.currentStudent.section || '',
+      game_id: 'method05_3d',
+      module_id: '05_method_obe_steam',
+      module_title: 'ALGO-QUEST 3D (05_method OBE × STEAM)',
+      submission_ref_id: 999,
+      score,
+      max_score: 100,
+      status: score >= 80 ? 'graded' : 'needs_improvement',
+      notify_source: 'ALGO-QUEST 3D Auto-Diagnostic Engine',
+      summary_title: `🔔 ผลตรวจ ALGO-QUEST 3D (05_method): คะแนน ${score}/100 (ผ่าน ${passedCount}/6 ด่าน)`,
+      errors: errItems,
+      remediations: remItems,
+      rubric: {},
+      teacher_comment: `ผลประเมิน 5 แกน STEAM: S=${state.steam.S}%, T=${state.steam.T}%, E=${state.steam.E}%, A=${state.steam.A}%, M=${state.steam.M}%`,
+      is_read: 0,
+      created_at: new Date().toISOString().replace('T', ' ').slice(0, 19)
+    });
+    localStorage.setItem('cs2027_custom_notifications_v1', JSON.stringify(customList));
+  } catch (_) {}
+
+  try {
+    await fetch('api.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
-    }).then((r) => r.json());
-    if (res.ok) {
-      sfx.win();
-      showToast(`ส่งผลคะแนน OBE STEAM (${score}/100) เข้าฐานข้อมูล CS2027 สำเร็จ!`, 'ok');
-      return;
-    }
+    });
   } catch (_) {}
 
   sfx.win();
-  showToast(`บันทึกผลคะแนน OBE STEAM (${score}/100) ของ ${state.currentStudent.full_name} สำเร็จ!`, 'ok');
+  showToast(`ส่งผลคะแนน OBE STEAM (${score}/100) และบันทึกผลวิเคราะห์ลงฐานข้อมูลสำเร็จ!`, 'ok');
+
+  openModal(
+    '🔔 แจ้งเตือนผลตรวจ ข้อผิดพลาด & แนวทางแก้ไขรายบุคคล (บันทึกลงฐานข้อมูลแล้ว)',
+    `<p style="margin-bottom:10px;"><strong>ผู้เรียน:</strong> ${state.currentStudent.student_id} ${state.currentStudent.full_name} (${state.currentStudent.section || ''})<br>
+     <strong>คะแนนผลสัมฤทธิ์ OBE × STEAM:</strong> <span style="color:#34d399;font-size:18px;font-weight:800;">${score} / 100</span> (ผ่าน ${passedCount}/6 ด่าน)</p>
+     <div style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.4);border-radius:11px;padding:11px;margin-bottom:10px;">
+       <strong style="color:#fca5a5;">⚠️ ข้อผิดพลาด / ด่านที่ต้องปรับปรุง:</strong>
+       <ul style="margin:6px 0 0 18px;color:#fecaca;">
+         ${errItems.map((e) => `<li>${e.detail}</li>`).join('')}
+       </ul>
+     </div>
+     <div style="background:rgba(56,189,248,0.12);border:1px solid rgba(56,189,248,0.4);border-radius:11px;padding:11px;">
+       <strong style="color:#7dd3fc;">🛠️ แนวทางการแก้ไขรายบุคคล:</strong>
+       <ul style="margin:6px 0 0 18px;color:#bae6fd;">
+         ${remItems.map((r) => `<li>${r.step}</li>`).join('')}
+       </ul>
+     </div>`,
+    `<button class="hud-btn" id="m-ok">ปิด</button>
+     <a class="hud-btn primary" href="../student_report.html?student_id=${encodeURIComponent(state.currentStudent.student_id)}">🔔 เปิดฐานข้อมูลผลตรวจย้อนหลังด้วยตนเอง ↗</a>`
+  );
 };
 
 // 60 FPS Animation Loop

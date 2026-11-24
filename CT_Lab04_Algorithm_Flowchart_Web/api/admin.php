@@ -220,7 +220,40 @@ try {
             ':status' => $status,
             ':id' => $id,
         ));
-        json_response(array('ok' => true, 'message' => 'บันทึกผลการตรวจเรียบร้อยแล้ว'));
+
+        // ส่งการแจ้งเตือนกลับให้นักศึกษาพร้อมบันทึกลงฐานข้อมูลวิเคราะห์ข้อผิดพลาด
+        $fbFile = dirname(dirname(__DIR__)) . '/api_student_feedback.php';
+        if (file_exists($fbFile)) {
+            require_once $fbFile;
+            try {
+                $sStmt = $pdo->prepare("
+                    SELECT sub.*, st.full_name, st.section
+                    FROM ctlab04_submissions sub
+                    LEFT JOIN ctlab04_students st ON st.student_id = sub.student_id
+                    WHERE sub.id = ?
+                ");
+                $sStmt->execute(array($id));
+                $sRow = $sStmt->fetch();
+                if ($sRow) {
+                    $rub = !empty($sRow['ai_rubric_json']) ? @json_decode((string)$sRow['ai_rubric_json'], true) : array();
+                    fb_record_notification($pdo, array(
+                        'student_id' => $sRow['student_id'],
+                        'full_name' => !empty($sRow['full_name']) ? $sRow['full_name'] : $sRow['student_id'],
+                        'section' => !empty($sRow['section']) ? $sRow['section'] : '',
+                        'game_id' => 'ctlab04',
+                        'module_id' => $sRow['module_id'],
+                        'submission_id' => (int)$id,
+                        'score' => $score !== null ? $score : (float)($sRow['ai_score'] !== null ? $sRow['ai_score'] : $sRow['auto_score']),
+                        'rubric' => is_array($rub) ? $rub : array(),
+                        'teacher_comment' => $feedback !== '' ? $feedback : $sRow['ai_feedback'],
+                        'notify_source' => 'อาจารย์ผู้สอนตรวจและแจ้งเตือนกลับ',
+                        'status' => $status,
+                    ));
+                }
+            } catch (Exception $fe) {}
+        }
+
+        json_response(array('ok' => true, 'message' => 'บันทึกผลการตรวจและส่งแจ้งเตือนคะแนน/ข้อผิดพลาด/แนวทางแก้ไขกลับให้นักศึกษาเรียบร้อยแล้ว'));
     }
 
     if ($action === 'submission_delete' && $reqMethod === 'POST') {

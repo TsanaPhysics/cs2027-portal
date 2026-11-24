@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CS2027 — ระบบแจ้งเตือนผลตรวจ วิเคราะห์ข้อผิดพลาด & แนวทางแก้ไขรายบุคคล (Student Diagnostic & Feedback Database)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050918;
+      --card: rgba(15, 23, 42, 0.88);
+      --border: rgba(56, 189, 248, 0.3);
+      --emerald: #10b981;
+      --cyan: #38bdf8;
+      --pink: #ec4899;
+      --purple: #a855f7;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Sarabun', 'Outfit', sans-serif;
+      background: radial-gradient(circle at 18% 0%, #102a45 0%, #050918 70%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px 16px 64px;
+      line-height: 1.6;
+    }
+    .container { max-width: 1260px; margin: 0 auto; }
+
+    .navbar {
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px;
+      background: rgba(10, 18, 38, 0.9); border: 1px solid var(--border); border-radius: 18px;
+      padding: 14px 20px; backdrop-filter: blur(18px); margin-bottom: 20px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.45);
+    }
+    .nav-brand { display: flex; align-items: center; gap: 12px; }
+    .nav-logo {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: linear-gradient(135deg, #f59e0b, #ec4899, #06b6d4);
+      display: grid; place-items: center; font-size: 22px;
+      box-shadow: 0 0 18px rgba(245,158,11,0.4);
+    }
+    .nav-brand h1 { font-family: 'Outfit', 'Sarabun', sans-serif; font-size: 18.5px; font-weight: 800; color: #fff; }
+    .nav-brand span { font-size: 12.5px; color: var(--muted); display: block; }
+    .nav-menu { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .nav-pill {
+      padding: 7px 13px; border-radius: 10px; border: 1px solid rgba(148,163,184,0.28);
+      background: rgba(15,23,42,0.8); color: #e2e8f0; text-decoration: none; font-size: 13px; font-weight: 600;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; font-family: inherit;
+    }
+    .nav-pill:hover { border-color: var(--cyan); color: #fff; }
+    .nav-pill.active { background: linear-gradient(135deg, #0ea5e9, #8b5cf6); border-color: transparent; color: #fff; }
+    .nav-pill.emerald { background: linear-gradient(135deg, #10b981, #059669); border-color: transparent; color: #fff; }
+
+    /* Mode Switch Tabs */
+    .mode-bar {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px;
+      background: rgba(15,23,42,0.75); padding: 8px; border-radius: 14px; border: 1px solid rgba(148,163,184,0.2);
+    }
+    .mode-tab {
+      flex: 1; min-width: 240px; padding: 11px 16px; border-radius: 10px; border: none;
+      background: transparent; color: var(--muted); font-family: inherit; font-size: 14px; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;
+    }
+    .mode-tab.active {
+      background: linear-gradient(135deg, #ec4899, #8b5cf6, #0ea5e9); color: #fff;
+      box-shadow: 0 6px 20px rgba(236,72,153,0.3);
+    }
+
+    /* Student Selector Card */
+    .selector-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 18px;
+      padding: 18px 20px; margin-bottom: 18px; box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+    }
+    .sec-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .sec-btn {
+      padding: 6px 14px; border-radius: 99px; border: 1px solid rgba(148,163,184,0.3);
+      background: rgba(2,6,23,0.65); color: #cbd5e1; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+    }
+    .sec-btn.active { background: linear-gradient(135deg, #0ea5e9, #10b981); color: #fff; border-color: transparent; }
+    .selector-grid { display: grid; grid-template-columns: 1.5fr auto auto; gap: 10px; align-items: center; }
+    select, input, textarea {
+      width: 100%; padding: 10px 13px; border-radius: 11px; border: 1px solid var(--border);
+      background: #050918; color: #fff; font-family: inherit; font-size: 14px;
+    }
+
+    /* Alert Notification Banner */
+    .notify-alert {
+      border-radius: 16px; padding: 16px 20px; margin-bottom: 18px;
+      background: linear-gradient(135deg, rgba(245,158,11,0.18), rgba(236,72,153,0.18));
+      border: 1px solid rgba(245,158,11,0.55);
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px;
+      animation: pulseBorder 2.4s infinite;
+    }
+    @keyframes pulseBorder {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0.35); }
+      50% { box-shadow: 0 0 0 6px rgba(245,158,11,0); }
+    }
+    .notify-badge {
+      display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 99px;
+      background: #ef4444; color: #fff; font-size: 12px; font-weight: 800;
+    }
+
+    /* KPI Row */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+    .kpi-card {
+      background: var(--card); border: 1px solid rgba(148,163,184,0.22); border-radius: 15px;
+      padding: 14px 16px;
+    }
+    .kpi-card small { color: var(--muted); font-size: 12px; display: block; }
+    .kpi-card strong { font-family: 'Outfit', sans-serif; font-size: 26px; display: block; margin-top: 2px; }
+
+    /* Diagnostic Feed Cards */
+    .feed-list { display: flex; flex-direction: column; gap: 16px; }
+    .diag-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 18px;
+      padding: 20px; position: relative; overflow: hidden;
+      box-shadow: 0 8px 26px rgba(0,0,0,0.35);
+    }
+    .diag-card.unread { border-left: 5px solid var(--amber); }
+    .diag-card.status-graded { border-left: 5px solid var(--emerald); }
+    .diag-card.status-needs_improvement { border-left: 5px solid var(--amber); }
+    .diag-card.status-resubmit { border-left: 5px solid var(--red); }
+
+    .diag-head {
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 10px;
+      margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(148,163,184,0.16);
+    }
+    .diag-title { font-size: 16.5px; font-weight: 700; color: #fff; }
+    .diag-meta { font-size: 12.5px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
+    .score-pill {
+      padding: 6px 14px; border-radius: 12px; font-family: 'Outfit', sans-serif; font-size: 17px; font-weight: 800;
+    }
+    .score-pill.high { background: rgba(16,185,129,0.2); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.45); }
+    .score-pill.mid { background: rgba(245,158,11,0.2); color: #fcd34d; border: 1px solid rgba(245,158,11,0.45); }
+    .score-pill.low { background: rgba(239,68,68,0.2); color: #fca5a5; border: 1px solid rgba(239,68,68,0.45); }
+
+    /* Rubric Bars */
+    .rubric-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+    .rubric-box { background: rgba(2,6,23,0.6); border: 1px solid rgba(148,163,184,0.18); border-radius: 10px; padding: 9px 12px; }
+    .rubric-lbl { display: flex; justify-content: space-between; font-size: 12px; color: #cbd5e1; margin-bottom: 5px; }
+    .rubric-track { height: 7px; background: rgba(148,163,184,0.18); border-radius: 99px; overflow: hidden; }
+    .rubric-fill { height: 100%; background: linear-gradient(90deg, #38bdf8, #10b981); border-radius: 99px; }
+
+    /* Error & Remediation Grid */
+    .er-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 10px; }
+    .err-panel {
+      background: rgba(239,68,68,0.09); border: 1px solid rgba(239,68,68,0.35); border-radius: 13px; padding: 13px 15px;
+    }
+    .err-panel.ok {
+      background: rgba(16,185,129,0.09); border-color: rgba(16,185,129,0.35);
+    }
+    .rem-panel {
+      background: rgba(56,189,248,0.09); border: 1px solid rgba(56,189,248,0.35); border-radius: 13px; padding: 13px 15px;
+    }
+    .panel-h { font-size: 13.5px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .err-panel .panel-h { color: #fca5a5; }
+    .err-panel.ok .panel-h { color: #6ee7b7; }
+    .rem-panel .panel-h { color: #7dd3fc; }
+    .er-list { list-style: none; display: flex; flex-direction: column; gap: 7px; font-size: 13px; }
+    .er-list li {
+      background: rgba(2,6,23,0.55); padding: 8px 10px; border-radius: 9px;
+      border-left: 3px solid currentColor;
+    }
+
+    .teacher-note-box {
+      margin-top: 12px; padding: 11px 14px; border-radius: 11px;
+      background: rgba(168,85,247,0.11); border: 1px solid rgba(168,85,247,0.35);
+      font-size: 13px; color: #e9d5ff; white-space: pre-wrap;
+    }
+
+    /* Table for Teacher Analytics */
+    .table-wrap { overflow-x: auto; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 14px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid rgba(148,163,184,0.16); }
+    th { color: #7dd3fc; font-weight: 700; background: rgba(2,6,23,0.5); }
+    tr:hover td { background: rgba(56,189,248,0.06); }
+
+    .hidden { display: none !important; }
+    @media (max-width: 860px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .er-grid, .rubric-row, .selector-grid { grid-template-columns: 1fr; }
+    }
+    @media print {
+      .navbar, .mode-bar, .sec-pills, .no-print { display: none !important; }
+      body { background: #fff; color: #000; padding: 0; }
+      .diag-card, .kpi-card, .selector-card { background: #fff; color: #000; border: 1px solid #cbd5e1; box-shadow: none; }
+      .diag-title { color: #0f172a; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Top Navbar -->
+    <header class="navbar">
+      <div class="nav-brand">
+        <div class="nav-logo">🔔</div>
+        <div>
+          <h1>CS2027 — ระบบแจ้งเตือนผลตรวจ ข้อผิดพลาด &amp; แนวทางแก้ไขรายบุคคล</h1>
+          <span>ฐานข้อมูลวิเคราะห์ข้อผิดพลาดเชิงลึก (MySQL + SQLite + Cloud Sync) สำหรับผู้เรียนเปิดดูด้วยตนเองและผู้สอนส่งแจ้งเตือนกลับ</span>
+        </div>
+      </div>
+      <nav class="nav-menu">
+        <a href="portal.html" class="nav-pill">🏛️ หน้าหลัก Portal</a>
+        <a href="CT_Lab04_Algorithm_Flowchart_Web/index.html" class="nav-pill">🔀 1. CT-Lab 04</a>
+        <a href="Blockly_Algo_Game_UG/index.html" class="nav-pill">🧩 2. AlgoQuest UG</a>
+        <a href="Method05_3D_OBE_STEAM_Game/index.html" class="nav-pill">🚀 3. 3D Method Game</a>
+        <button onclick="window.print()" class="nav-pill emerald">🖨️ พิมพ์รายงาน PDF</button>
+      </nav>
+    </header>
+
+    <!-- Mode Switcher -->
+    <div class="mode-bar">
+      <button class="mode-tab active" id="tab-student-mode">
+        🎓 สำหรับนักศึกษา: เปิดดูผลตรวจ ข้อผิดพลาด &amp; แนวทางแก้ไขด้วยตนเอง
+      </button>
+      <button class="mode-tab" id="tab-teacher-mode">
+        👨‍🏫 สำหรับอาจารย์: ฐานข้อมูลวิเคราะห์ข้อผิดพลาดทั้งชั้นเรียน &amp; ส่งแจ้งเตือนกลับ
+      </button>
+    </div>
+
+    <!-- =================================================================
+         VIEW 1: STUDENT SELF-SERVICE DIAGNOSTIC & NOTIFICATION VIEWER
+         ================================================================= -->
+    <section id="view-student">
+      <div class="selector-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+          <h3 style="color:#7dd3fc;font-size:16px;">👤 เลือกกลุ่มเรียนและชื่อนักศึกษาเพื่อดูรายงานผลตรวจ ข้อผิดพลาด และแนวทางแก้ไข</h3>
+          <span id="db-source-tag" style="font-size:12px;color:#6ee7b7;background:rgba(16,185,129,0.15);padding:3px 10px;border-radius:99px;">พร้อมใช้งาน (25 คน: วิทย์ 20 + ฟิสิกส์ 5)</span>
+        </div>
+        <div class="sec-pills">
+          <button class="sec-btn active" data-sec="ALL">🌟 ทั้งหมด (25 คน)</button>
+          <button class="sec-btn" data-sec="661/ฟิสิกส์">⚛️ สาขาฟิสิกส์ 661/ฟิสิกส์ (5 คน)</button>
+          <button class="sec-btn" data-sec="661/วิทย์">🧪 สาขาวิทยาศาสตร์ทั่วไป 661/วิทย์ (20 คน)</button>
+        </div>
+        <div class="selector-grid">
+          <select id="stu-select"></select>
+          <select id="game-filter">
+            <option value="ALL">🎮 ทุกเกมและห้องปฏิบัติการ</option>
+            <option value="ctlab04">🔀 1. CT-Lab 04 (Algorithm &amp; Flowchart ISO 5807)</option>
+            <option value="blockly_ug">🧩 2. AlgoQuest UG (Blockly 10 ด่าน)</option>
+            <option value="method05_3d">🚀 3. ALGO-QUEST 3D (05_method OBE × STEAM)</option>
+            <option value="ctlab_v4">🧪 4. CT-Lab v4.0 (ปฏิบัติการคิดเชิงคำนวณ 10 โมดูล)</option>
+          </select>
+          <button class="nav-pill emerald no-print" id="btn-mark-all-read">✓ รับทราบแนวทางแก้ไขทั้งหมด</button>
+        </div>
+      </div>
+
+      <!-- Unread Notification Banner -->
+      <div id="unread-banner" class="notify-alert hidden">
+        <div>
+          <span class="notify-badge" id="unread-badge-txt">🔔 แจ้งเตือนใหม่ 0 รายการ</span>
+          <strong style="margin-left:8px;font-size:15px;" id="unread-student-name">มีรายงานผลตรวจ ข้อผิดพลาด และแนวทางแก้ไขส่งกลับมาถึงคุณ</strong>
+          <p style="font-size:13px;color:#fde68a;margin-top:4px;">ศึกษาข้อผิดพลาดที่ระบบ/อาจารย์ตรวจพบในแต่ละหัวข้อด้านล่าง แล้วกดปุ่ม "เปิดหน้าปฏิบัติการเพื่อแก้ไขและส่งงานใหม่" เพื่อปรับปรุงคะแนนได้ทันที</p>
+        </div>
+        <button class="nav-pill active no-print" id="btn-ack-banner">✓ รับทราบผลตรวจแล้ว</button>
+      </div>
+
+      <!-- Student KPI Summary -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <small>จำนวนรายงานผลตรวจทั้งหมด</small>
+          <strong id="st-kpi-total" style="color:#38bdf8;">0</strong>
+        </div>
+        <div class="kpi-card">
+          <small>คะแนนเฉลี่ยสะสม (%)</small>
+          <strong id="st-kpi-avg" style="color:#10b981;">0%</strong>
+        </div>
+        <div class="kpi-card">
+          <small>ประเด็นข้อผิดพลาดที่พบ</small>
+          <strong id="st-kpi-errors" style="color:#f59e0b;">0</strong>
+        </div>
+        <div class="kpi-card">
+          <small>แจ้งเตือนใหม่ที่ยังไม่อ่าน</small>
+          <strong id="st-kpi-unread" style="color:#ec4899;">0</strong>
+        </div>
+      </div>
+
+      <!-- Diagnostic Cards Feed -->
+      <div class="feed-list" id="student-feed-list"></div>
+    </section>
+
+    <!-- =================================================================
+         VIEW 2: TEACHER RETURN-NOTIFICATION & CLASS ERROR ANALYTICS
+         ================================================================= -->
+    <section id="view-teacher" class="hidden">
+      <!-- Send Return Notification Form -->
+      <div class="selector-card" style="border-color:rgba(236,72,153,0.45);">
+        <h3 style="color:#f472b6;font-size:16.5px;margin-bottom:6px;">📨 ส่งการแจ้งเตือนรายงานคะแนน ข้อผิดพลาด &amp; แนวทางแก้ไข กลับให้นักศึกษารายบุคคล</h3>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">ข้อมูลที่ส่งจะถูกบันทึกลงในฐานข้อมูล `cs2027_feedback_notifications` ทันที และขึ้นแถบแจ้งเตือนสีแดงให้นักศึกษาท่านนั้นเมื่อเปิดหน้าเว็บ</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:10px;">
+          <div>
+            <label style="font-size:12px;color:#7dd3fc;">เลือกนักศึกษา (25 คน)</label>
+            <select id="t-notify-student"></select>
+          </div>
+          <div>
+            <label style="font-size:12px;color:#7dd3fc;">เกม / ห้องปฏิบัติการ</label>
+            <select id="t-notify-game">
+              <option value="ctlab04">🔀 CT-Lab 04 (Algorithm &amp; Flowchart)</option>
+              <option value="blockly_ug">🧩 AlgoQuest UG (Blockly 10 ด่าน)</option>
+              <option value="method05_3d">🚀 ALGO-QUEST 3D (05_method OBE)</option>
+              <option value="ctlab_v4">🧪 CT-Lab v4.0 (10 กิจกรรม)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px;color:#7dd3fc;">คะแนนที่ประเมิน (0–100)</label>
+            <input type="number" id="t-notify-score" min="0" max="100" value="85">
+          </div>
+          <div>
+            <label style="font-size:12px;color:#7dd3fc;">สถานะการแจ้งเตือนกลับ</label>
+            <select id="t-notify-status">
+              <option value="graded">✅ ตรวจแล้ว (ผ่านเกณฑ์)</option>
+              <option value="needs_improvement">⚠️ ผ่านเบื้องต้น (แนะนำแก้ไขเพิ่มเติม)</option>
+              <option value="resubmit">🔴 แจ้งเตือนให้แก้ไขและส่งงานใหม่</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+          <div>
+            <label style="font-size:12px;color:#fca5a5;">⚠️ ข้อผิดพลาดที่ตรวจพบ (ระบุแยกบรรทัด หรือปล่อยว่างให้ AI วิเคราะห์อัตโนมัติ)</label>
+            <textarea id="t-notify-errors" rows="3" placeholder="เช่น 1. ลืมตรวจสอบเงื่อนไขขอบเขต V <= 0 ก่อนคำนวณความเข้มข้น&#10;2. ไม่ได้ใส่ขั้นตอน Fail-Safe ปิดอุปกรณ์ก่อนจบผังงาน"></textarea>
+          </div>
+          <div>
+            <label style="font-size:12px;color:#7dd3fc;">🛠️ แนวทางการแก้ไขรายบุคคล (ระบุแยกบรรทัด)</label>
+            <textarea id="t-notify-rems" rows="3" placeholder="เช่น 1. เพิ่มบล็อก Decision ตรวจสอบ V <= 0 ก่อนเข้าสมการ C = n/V&#10;2. ตรวจสอบตาราง Trace Table รอบที่ 3 แล้วกดส่งงานใหม่อีกครั้ง"></textarea>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <input type="text" id="t-notify-comment" placeholder="💬 ข้อความเพิ่มเติมจากอาจารย์ผู้สอนถึงนักศึกษา..." style="flex:1;">
+          <button class="nav-pill active" id="btn-send-notification" style="padding:11px 18px;font-size:14px;">
+            🔔 ส่งแจ้งเตือนกลับให้นักศึกษา &amp; บันทึกลงฐานข้อมูล
+          </button>
+        </div>
+        <div id="t-notify-msg" style="margin-top:8px;font-size:13px;color:#6ee7b7;"></div>
+      </div>
+
+      <!-- Class Error Breakdown -->
+      <div class="selector-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+          <h3 style="color:#7dd3fc;font-size:16px;">📊 สถิติข้อผิดพลาดที่ตรวจพบในชั้นเรียน (จำแนกตามหมวดหมู่เพื่อใช้วิเคราะห์วิจัย)</h3>
+          <button class="nav-pill" id="btn-export-analytics-csv">📥 ส่งออกฐานข้อมูลวิเคราะห์ข้อผิดพลาด (CSV)</button>
+        </div>
+        <div id="error-breakdown-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;"></div>
+      </div>
+
+      <!-- 25-Student Diagnostic Summary Table -->
+      <div class="table-wrap">
+        <h3 style="color:#fff;font-size:16px;margin-bottom:10px;">📋 ตารางฐานข้อมูลติดตามผลตรวจ ข้อผิดพลาด และการแจ้งเตือนรายบุคคล (วิทย์ 20 + ฟิสิกส์ 5 = 25 คน)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>รหัสนักศึกษา</th>
+              <th>ชื่อ-นามสกุล</th>
+              <th>สาขา/กลุ่ม</th>
+              <th>จำนวนรายงานผลตรวจ</th>
+              <th>คะแนนเฉลี่ย</th>
+              <th>จุดผิดพลาดที่พบ</th>
+              <th>สถานะล่าสุด</th>
+              <th>การจัดการ</th>
+            </tr>
+          </thead>
+          <tbody id="teacher-stu-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const LOCAL_NOTIF_KEY = 'cs2027_custom_notifications_v1';
+    const LOCAL_READ_KEY = 'cs2027_read_notification_ids_v1';
+
+    let dbState = {
+      students: [],
+      error_breakdown: [],
+      notifications: []
+    };
+    let activeSection = 'ALL';
+    let activeStudentId = '';
+
+    function esc(s) {
+      return String(s ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function getReadSet() {
+      try {
+        return new Set(JSON.parse(localStorage.getItem(LOCAL_READ_KEY) || '[]'));
+      } catch {
+        return new Set();
+      }
+    }
+
+    function saveReadSet(setObj) {
+      try {
+        localStorage.setItem(LOCAL_READ_KEY, JSON.stringify(Array.from(setObj)));
+      } catch {}
+    }
+
+    function getCustomLocalNotifications() {
+      try {
+        return JSON.parse(localStorage.getItem(LOCAL_NOTIF_KEY) || '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    function saveCustomLocalNotification(item) {
+      const list = getCustomLocalNotifications();
+      list.unshift(item);
+      localStorage.setItem(LOCAL_NOTIF_KEY, JSON.stringify(list));
+    }
+
+    function gameLinkFor(gameId) {
+      if (gameId === 'blockly_ug') return 'Blockly_Algo_Game_UG/index.html';
+      if (gameId === 'method05_3d') return 'Method05_3D_OBE_STEAM_Game/index.html';
+      if (gameId === 'ctlab_v4') return 'CT_Lab_v4_Web/index.html';
+      return 'CT_Lab04_Algorithm_Flowchart_Web/index.html';
+    }
+
+    function gameLabelFor(gameId) {
+      if (gameId === 'blockly_ug') return '🧩 AlgoQuest UG (Blockly)';
+      if (gameId === 'method05_3d') return '🚀 ALGO-QUEST 3D (05_method)';
+      if (gameId === 'ctlab_v4') return '🧪 CT-Lab v4.0';
+      return '🔀 CT-Lab 04 (Flowchart & Trace Table)';
+    }
+
+    async function loadDatabase() {
+      let data = null;
+      try {
+        const res = await fetch('api_student_feedback.php?action=class_analytics');
+        const txt = await res.text();
+        if (res.ok && txt && !txt.trim().startsWith('<?php')) {
+          data = JSON.parse(txt);
+          document.getElementById('db-source-tag').textContent = `🟢 เชื่อมต่อฐานข้อมูลเซิร์ฟเวอร์ (${data.driver || 'MySQL/SQLite'})`;
+        }
+      } catch (_) {}
+
+      if (!data || !data.ok) {
+        const resFb = await fetch('data/student_feedback_db.json');
+        data = await resFb.json();
+        document.getElementById('db-source-tag').textContent = `☁️ ฐานข้อมูล Cloud Sync (${data.total_notifications || data.notifications.length} รายการตรวจจริง)`;
+      }
+
+      const customList = getCustomLocalNotifications();
+      const readSet = getReadSet();
+      const mergedNotifs = [...customList, ...(data.notifications || [])].map((n) => ({
+        ...n,
+        is_read: readSet.has(Number(n.id)) ? 1 : Number(n.is_read || 0)
+      }));
+
+      dbState.notifications = mergedNotifs;
+      dbState.students = data.students || [];
+      dbState.error_breakdown = data.error_breakdown || [];
+
+      populateStudentSelectors();
+      renderStudentView();
+      renderTeacherView();
+    }
+
+    function detectInitialStudentId() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('student_id')) return params.get('student_id');
+      if (localStorage.getItem('cs2027_student_id')) return localStorage.getItem('cs2027_student_id');
+      try {
+        const p04 = JSON.parse(localStorage.getItem('ctlab04-student-profile-v1') || '{}');
+        if (p04.student_id) return p04.student_id;
+      } catch {}
+      try {
+        const aq = JSON.parse(localStorage.getItem('algoquest_ug_v1') || '{}');
+        if (aq.profile && aq.profile.studentId) return aq.profile.studentId;
+      } catch {}
+      return dbState.students[0] ? dbState.students[0].student_id : '6614901002';
+    }
+
+    function populateStudentSelectors() {
+      const sel = document.getElementById('stu-select');
+      const tSel = document.getElementById('t-notify-student');
+      const filtered = dbState.students.filter((s) =>
+        activeSection === 'ALL' ? true : s.section === activeSection
+      );
+
+      if (!activeStudentId || !filtered.some((s) => s.student_id === activeStudentId)) {
+        const det = detectInitialStudentId();
+        activeStudentId = filtered.some((s) => s.student_id === det)
+          ? det
+          : (filtered[0] ? filtered[0].student_id : '');
+      }
+
+      sel.innerHTML = filtered.map((s) => `
+        <option value="${esc(s.student_id)}" ${s.student_id === activeStudentId ? 'selected' : ''}>
+          ${esc(s.student_id)} — ${esc(s.full_name)} (${esc(s.section)}) · รายงานผลตรวจ ${s.total_reports} รายการ
+        </option>
+      `).join('');
+
+      tSel.innerHTML = dbState.students.map((s) => `
+        <option value="${esc(s.student_id)}">
+          ${esc(s.student_id)} — ${esc(s.full_name)} (${esc(s.section)})
+        </option>
+      `).join('');
+    }
+
+    function renderStudentView() {
+      const sid = activeStudentId;
+      const gFilter = document.getElementById('game-filter').value;
+      const stuObj = dbState.students.find((s) => s.student_id === sid);
+      const list = dbState.notifications.filter((n) =>
+        n.student_id === sid && (gFilter === 'ALL' || n.game_id === gFilter)
+      );
+
+      const gradedItems = list.filter((n) => Number(n.submission_ref_id) > 0 || Number(n.score) > 0);
+      const avgScore = gradedItems.length
+        ? (gradedItems.reduce((a, b) => a + Number(b.score || 0), 0) / gradedItems.length).toFixed(1)
+        : '0.0';
+      let errCount = 0;
+      let unreadCount = 0;
+      list.forEach((n) => {
+        if (!n.is_read) unreadCount++;
+        (n.errors || []).forEach((e) => {
+          if (e.code !== 'NONE_EXCELLENT') errCount++;
+        });
+      });
+
+      document.getElementById('st-kpi-total').textContent = list.length;
+      document.getElementById('st-kpi-avg').textContent = `${avgScore}%`;
+      document.getElementById('st-kpi-errors').textContent = errCount;
+      document.getElementById('st-kpi-unread').textContent = unreadCount;
+
+      const banner = document.getElementById('unread-banner');
+      if (unreadCount > 0) {
+        banner.classList.remove('hidden');
+        document.getElementById('unread-badge-txt').textContent = `🔔 แจ้งเตือนผลตรวจใหม่ ${unreadCount} รายการ`;
+        document.getElementById('unread-student-name').textContent =
+          `${stuObj ? `${stuObj.student_id} ${stuObj.full_name} (${stuObj.section})` : sid} — มีรายงานคะแนน ข้อผิดพลาด และแนวทางแก้ไขส่งถึงคุณ`;
+      } else {
+        banner.classList.add('hidden');
+      }
+
+      const container = document.getElementById('student-feed-list');
+      if (list.length === 0) {
+        container.innerHTML = `<div class="selector-card" style="text-align:center;color:var(--muted);">ไม่พบรายการในหมวดหมู่นี้</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map((n) => {
+        const sc = Number(n.score || 0);
+        const scClass = sc >= 80 ? 'high' : (sc >= 55 ? 'mid' : 'low');
+        const rub = n.rubric || {};
+        const hasRubric = rub.simulation !== undefined && rub.simulation !== null && rub.sequencing !== undefined && rub.sequencing !== null;
+        const rubHtml = hasRubric ? `
+          <div class="rubric-row">
+            <div class="rubric-box">
+              <div class="rubric-lbl"><span>1. การจำลอง &amp; Trace Table</span><strong>${rub.simulation}/40</strong></div>
+              <div class="rubric-track"><div class="rubric-fill" style="width:${Math.min(100, Math.round((rub.simulation / 40) * 100))}%"></div></div>
+            </div>
+            <div class="rubric-box">
+              <div class="rubric-lbl"><span>2. การจัดลำดับรหัส &amp; ผังงาน</span><strong>${rub.sequencing}/35</strong></div>
+              <div class="rubric-track"><div class="rubric-fill" style="width:${Math.min(100, Math.round((rub.sequencing / 35) * 100))}%"></div></div>
+            </div>
+            <div class="rubric-box">
+              <div class="rubric-lbl"><span>3. การอธิบายเหตุผลวิทยาศาสตร์</span><strong>${rub.subjective}/25</strong></div>
+              <div class="rubric-track"><div class="rubric-fill" style="width:${Math.min(100, Math.round((rub.subjective / 25) * 100))}%"></div></div>
+            </div>
+          </div>
+        ` : '';
+
+        const errors = Array.isArray(n.errors) ? n.errors : [];
+        const isAllGood = errors.length === 1 && errors[0].code === 'NONE_EXCELLENT';
+        const rems = Array.isArray(n.remediations) ? n.remediations : [];
+
+        return `
+          <article class="diag-card status-${esc(n.status)} ${!n.is_read ? 'unread' : ''}">
+            <div class="diag-head">
+              <div>
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+                  <span style="font-size:12px;padding:2px 9px;border-radius:99px;background:rgba(56,189,248,0.18);color:#7dd3fc;font-weight:700;">
+                    ${esc(gameLabelFor(n.game_id))}
+                  </span>
+                  ${!n.is_read ? `<span class="notify-badge">🔔 แจ้งเตือนใหม่</span>` : `<span style="font-size:11.5px;color:#6ee7b7;">✓ อ่านแล้ว</span>`}
+                </div>
+                <div class="diag-title">${esc(n.summary_title || n.module_title)}</div>
+                <div class="diag-meta">
+                  <span>👤 ${esc(n.student_id)} ${esc(n.full_name)} (${esc(n.section)})</span>
+                  <span>🕒 ตรวจเมื่อ: ${esc(n.created_at)}</span>
+                  <span>🤖 ผู้ตรวจ: ${esc(n.notify_source)}</span>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+                <span class="score-pill ${scClass}">คะแนน ${sc.toFixed(1)} / 100</span>
+                <a href="${esc(gameLinkFor(n.game_id))}" class="nav-pill no-print" style="font-size:12px;">
+                  🚀 เปิดหน้าปฏิบัติการเพื่อแก้ไข/ส่งงานใหม่
+                </a>
+              </div>
+            </div>
+
+            ${rubHtml}
+
+            <div class="er-grid">
+              <div class="err-panel ${isAllGood ? 'ok' : ''}">
+                <div class="panel-h">
+                  ${isAllGood ? '✅ ผลการตรวจสอบข้อผิดพลาด (ไม่พบข้อผิดพลาดหลัก)' : '⚠️ ข้อผิดพลาดและจุดที่ต้องปรับปรุง (Detected Errors)'}
+                </div>
+                <ul class="er-list">
+                  ${errors.map((e) => `
+                    <li style="color:${e.code === 'NONE_EXCELLENT' ? '#a7f3d0' : '#fecaca'};">
+                      <strong>[${esc(e.category || e.code)}]</strong><br>
+                      ${esc(e.detail)}
+                    </li>
+                  `).join('')}
+                </ul>
+              </div>
+
+              <div class="rem-panel">
+                <div class="panel-h">🛠️ แนวทางการแก้ไขและพัฒนาต่อยอดรายบุคคล (Remediation Steps)</div>
+                <ul class="er-list">
+                  ${rems.map((r) => `
+                    <li style="color:#bae6fd;">
+                      ${esc(r.step)}
+                    </li>
+                  `).join('')}
+                </ul>
+              </div>
+            </div>
+
+            ${n.teacher_comment ? `
+              <div class="teacher-note-box"><strong>💬 รายละเอียดผลตรวจจากระบบ AI และอาจารย์ผู้สอน:</strong>\n${esc(n.teacher_comment)}</div>
+            ` : ''}
+          </article>
+        `;
+      }).join('');
+    }
+
+    function renderTeacherView() {
+      const ebGrid = document.getElementById('error-breakdown-grid');
+      ebGrid.innerHTML = (dbState.error_breakdown || []).map((e) => `
+        <div class="kpi-card" style="border-color:rgba(245,158,11,0.35);">
+          <small>${esc(e.code)}</small>
+          <strong style="color:#fcd34d;font-size:22px;">${e.count} ครั้ง</strong>
+          <div style="font-size:12.5px;color:#e2e8f0;margin-top:4px;">${esc(e.category)}</div>
+        </div>
+      `).join('');
+
+      const tbody = document.getElementById('teacher-stu-tbody');
+      tbody.innerHTML = dbState.students.map((s) => {
+        const statusBadge = s.avg_score >= 80
+          ? '<span style="color:#6ee7b7;font-weight:700;">✅ ดีเยี่ยม</span>'
+          : (s.total_reports > 0 && s.avg_score > 0
+            ? '<span style="color:#fcd34d;font-weight:700;">⚠️ แนะนำปรับปรุง</span>'
+            : '<span style="color:#fca5a5;font-weight:700;">🔴 รอส่งงาน/แก้ไข</span>');
+        return `
+          <tr>
+            <td><code>${esc(s.student_id)}</code></td>
+            <td><strong>${esc(s.full_name)}</strong></td>
+            <td><span style="color:${(s.section || '').includes('ฟิสิกส์') ? '#38bdf8' : '#a7f3d0'};font-weight:700;">${esc(s.section)}</span></td>
+            <td>${s.total_reports} รายการ</td>
+            <td><strong>${s.avg_score}%</strong></td>
+            <td><span style="color:#fcd34d;font-weight:700;">${s.error_count} จุด</span></td>
+            <td>${statusBadge}</td>
+            <td>
+              <button class="nav-pill" onclick="inspectStudent('${esc(s.student_id)}')" style="font-size:12px;">🔍 ดูรายงาน</button>
+              <button class="nav-pill active" onclick="prefillNotify('${esc(s.student_id)}')" style="font-size:12px;">🔔 แจ้งเตือนกลับ</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    window.inspectStudent = function (sid) {
+      activeSection = 'ALL';
+      document.querySelectorAll('.sec-btn').forEach((b) => b.classList.toggle('active', b.dataset.sec === 'ALL'));
+      activeStudentId = sid;
+      populateStudentSelectors();
+      renderStudentView();
+      document.getElementById('tab-student-mode').click();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.prefillNotify = function (sid) {
+      document.getElementById('t-notify-student').value = sid;
+      document.getElementById('t-notify-errors').focus();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    async function markAllCurrentStudentRead() {
+      const readSet = getReadSet();
+      dbState.notifications.forEach((n) => {
+        if (n.student_id === activeStudentId) {
+          n.is_read = 1;
+          readSet.add(Number(n.id));
+        }
+      });
+      saveReadSet(readSet);
+      try {
+        await fetch('api_student_feedback.php?action=mark_read', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'mark_read', student_id: activeStudentId })
+        });
+      } catch (_) {}
+      renderStudentView();
+    }
+
+    document.getElementById('btn-mark-all-read').onclick = markAllCurrentStudentRead;
+    document.getElementById('btn-ack-banner').onclick = markAllCurrentStudentRead;
+
+    document.querySelectorAll('.sec-btn').forEach((btn) => {
+      btn.onclick = () => {
+        document.querySelectorAll('.sec-btn').forEach((b) => b.classList.toggle('active', b === btn));
+        activeSection = btn.dataset.sec;
+        activeStudentId = '';
+        populateStudentSelectors();
+        renderStudentView();
+      };
+    });
+
+    document.getElementById('stu-select').onchange = (e) => {
+      activeStudentId = e.target.value;
+      localStorage.setItem('cs2027_student_id', activeStudentId);
+      renderStudentView();
+    };
+
+    document.getElementById('game-filter').onchange = renderStudentView;
+
+    document.getElementById('tab-student-mode').onclick = () => {
+      document.getElementById('tab-student-mode').classList.add('active');
+      document.getElementById('tab-teacher-mode').classList.remove('active');
+      document.getElementById('view-student').classList.remove('hidden');
+      document.getElementById('view-teacher').classList.add('hidden');
+    };
+
+    document.getElementById('tab-teacher-mode').onclick = () => {
+      document.getElementById('tab-teacher-mode').classList.add('active');
+      document.getElementById('tab-student-mode').classList.remove('active');
+      document.getElementById('view-teacher').classList.remove('hidden');
+      document.getElementById('view-student').classList.add('hidden');
+    };
+
+    document.getElementById('btn-send-notification').onclick = async () => {
+      const sid = document.getElementById('t-notify-student').value;
+      const stu = dbState.students.find((s) => s.student_id === sid) || { student_id: sid, full_name: sid, section: '' };
+      const gameId = document.getElementById('t-notify-game').value;
+      const score = Number(document.getElementById('t-notify-score').value || 0);
+      const status = document.getElementById('t-notify-status').value;
+      const errLines = document.getElementById('t-notify-errors').value.split('\n').map((x) => x.trim()).filter(Boolean);
+      const remLines = document.getElementById('t-notify-rems').value.split('\n').map((x) => x.trim()).filter(Boolean);
+      const comment = document.getElementById('t-notify-comment').value.trim();
+
+      const customErrors = errLines.map((line, idx) => ({
+        code: `TEACHER_ERR_${idx + 1}`,
+        category: 'ประเด็นข้อผิดพลาดที่อาจารย์ผู้สอนแจ้งเตือน',
+        severity: status === 'resubmit' ? 'high' : 'medium',
+        detail: line
+      }));
+      const customRems = remLines.map((line) => ({ step: line }));
+
+      const payload = {
+        action: 'create_notification',
+        student_id: stu.student_id,
+        full_name: stu.full_name,
+        section: stu.section,
+        game_id: gameId,
+        module_id: 'all',
+        score,
+        status,
+        errors: customErrors.length ? customErrors : undefined,
+        remediations: customRems.length ? customRems : undefined,
+        teacher_comment: comment || 'อาจารย์ผู้สอนส่งรายงานผลตรวจ ข้อผิดพลาด และแนวทางแก้ไขกลับให้นักศึกษา',
+        notify_source: 'ผศ.ดร.ชีวะ ทัศนา (อาจารย์ผู้สอนแจ้งเตือนรายบุคคล)'
+      };
+
+      let savedItem = null;
+      try {
+        const res = await fetch('api_student_feedback.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const txt = await res.text();
+        if (res.ok && txt && !txt.trim().startsWith('<?php')) {
+          const d = JSON.parse(txt);
+          if (d.ok) {
+            savedItem = {
+              id: d.notification_id || Date.now(),
+              student_id: stu.student_id,
+              full_name: stu.full_name,
+              section: stu.section,
+              game_id: gameId,
+              module_id: 'all',
+              module_title: d.summary_title,
+              submission_ref_id: 999,
+              score,
+              max_score: 100,
+              status,
+              notify_source: payload.notify_source,
+              summary_title: d.summary_title,
+              errors: d.errors,
+              remediations: d.remediations,
+              rubric: {},
+              teacher_comment: payload.teacher_comment,
+              is_read: 0,
+              created_at: new Date().toISOString().replace('T', ' ').slice(0, 19)
+            };
+          }
+        }
+      } catch (_) {}
+
+      if (!savedItem) {
+        savedItem = {
+          id: Date.now(),
+          student_id: stu.student_id,
+          full_name: stu.full_name,
+          section: stu.section,
+          game_id: gameId,
+          module_id: 'all',
+          module_title: gameLabelFor(gameId),
+          submission_ref_id: 999,
+          score,
+          max_score: 100,
+          status,
+          notify_source: payload.notify_source,
+          summary_title: `🔔 แจ้งเตือนจากอาจารย์ผู้สอน (${gameLabelFor(gameId)}): คะแนน ${score}%`,
+          errors: customErrors.length ? customErrors : [{ code: 'TEACHER_DIAG', category: 'ข้อสังเกตจากผู้สอน', severity: 'medium', detail: 'โปรดตรวจสอบรายละเอียดและแนวทางแก้ไขจากอาจารย์ผู้สอน' }],
+          remediations: customRems.length ? customRems : [{ step: 'ทบทวนบทเรียนและปรับปรุงตามข้อเสนอแนะของอาจารย์ผู้สอน' }],
+          rubric: {},
+          teacher_comment: payload.teacher_comment,
+          is_read: 0,
+          created_at: new Date().toISOString().replace('T', ' ').slice(0, 19)
+        };
+      }
+
+      saveCustomLocalNotification(savedItem);
+      dbState.notifications.unshift(savedItem);
+      const stuRef = dbState.students.find((s) => s.student_id === stu.student_id);
+      if (stuRef) {
+        stuRef.total_reports++;
+        stuRef.unread_reports++;
+      }
+
+      document.getElementById('t-notify-msg').textContent =
+        `✅ ส่งแจ้งเตือนรายงานคะแนน ข้อผิดพลาด และแนวทางแก้ไขกลับให้นักศึกษา ${stu.student_id} ${stu.full_name} พร้อมบันทึกลงฐานข้อมูลเรียบร้อยแล้ว!`;
+      activeStudentId = stu.student_id;
+      populateStudentSelectors();
+      renderStudentView();
+      renderTeacherView();
+    };
+
+    document.getElementById('btn-export-analytics-csv').onclick = () => {
+      const headers = ['ID', 'Student_ID', 'Full_Name', 'Section', 'Game', 'Module', 'Score', 'Status', 'Errors', 'Remediations', 'Created_At'];
+      const rows = dbState.notifications.map((n) => [
+        n.id,
+        n.student_id,
+        n.full_name,
+        n.section,
+        n.game_id,
+        n.module_id,
+        n.score,
+        n.status,
+        (n.errors || []).map((e) => `${e.category}: ${e.detail}`).join(' | '),
+        (n.remediations || []).map((r) => r.step).join(' | '),
+        n.created_at
+      ]);
+      const csv = '\uFEFF' + [headers, ...rows].map((r) => r.map((c) => `"${String(c ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `CS2027_Diagnostic_Error_Database_${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+    };
+
+    loadDatabase();
+  </script>
+</body>
+</html>

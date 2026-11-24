@@ -97,10 +97,32 @@ try {
             json_encode($payload, JSON_UNESCAPED_UNICODE),
         ));
 
+        $subId = (int)$pdo->lastInsertId();
+        $diagReport = null;
+        $fbFile = dirname(__DIR__) . '/api_student_feedback.php';
+        if (file_exists($fbFile)) {
+            require_once $fbFile;
+            try {
+                $diagReport = fb_record_notification($pdo, array(
+                    'student_id' => $studentId,
+                    'full_name' => $fullName,
+                    'section' => $section,
+                    'game_id' => 'method05_3d',
+                    'module_id' => '05_method_obe_steam',
+                    'submission_id' => $subId,
+                    'score' => $score,
+                    'rubric' => $clo,
+                    'teacher_comment' => "ผ่าน {$passed}/6 ด่านจำลอง 3 มิติ (S={$clo['1']}%, T={$clo['2']}%, E={$clo['3']}%, A={$clo['4']}%, M={$clo['5']}%)",
+                    'notify_source' => 'ALGO-QUEST 3D OBE×STEAM Evaluator',
+                ));
+            } catch (Exception $fe) {}
+        }
+
         aq_json_response(array(
             'ok' => true,
-            'submission_id' => (int)$pdo->lastInsertId(),
-            'message' => 'บันทึกผลคะแนน OBE STEAM ลงฐานข้อมูล CS2027 สำเร็จ',
+            'submission_id' => $subId,
+            'diagnostic' => $diagReport,
+            'message' => 'บันทึกผลคะแนน OBE STEAM และสร้างรายงานวิเคราะห์ข้อผิดพลาดลงฐานข้อมูล CS2027 สำเร็จ',
         ));
     }
 } catch (Exception $e) {

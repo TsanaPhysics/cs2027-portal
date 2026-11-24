@@ -127,7 +127,27 @@ try {
             ));
         }
 
-        aq_json_response(array('ok' => true, 'message' => 'Saved to database'));
+        $diagReport = null;
+        $fbFile = dirname(dirname(__DIR__)) . '/api_student_feedback.php';
+        if (file_exists($fbFile)) {
+            require_once $fbFile;
+            try {
+                $pctScore = min(100, round(($passedCount / 10.0) * 100, 1));
+                $diagReport = fb_record_notification($pdo, array(
+                    'student_id' => $studentId,
+                    'full_name' => $fullName,
+                    'section' => $section,
+                    'game_id' => 'blockly_ug',
+                    'module_id' => 'blockly_10_levels',
+                    'score' => $pctScore,
+                    'rubric' => array('passed_count' => $passedCount, 'total_stars' => $totalStars, 'total_xp' => $totalXp, 'rank_title' => $rankTitle),
+                    'teacher_comment' => "ผ่าน {$passedCount}/10 ด่าน · สะสม {$totalStars}/30 ดาว · {$totalXp} XP ({$rankTitle})",
+                    'notify_source' => 'AlgoQuest Blockly Auto-Judge',
+                ));
+            } catch (Exception $fe) {}
+        }
+
+        aq_json_response(array('ok' => true, 'message' => 'Saved to database', 'diagnostic' => $diagReport));
     }
 
     aq_json_response(array('ok' => false, 'error' => 'Method not allowed'), 405);

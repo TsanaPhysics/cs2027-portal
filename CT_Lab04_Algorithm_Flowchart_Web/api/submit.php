@@ -161,6 +161,27 @@ try {
         $submissionId = (int)$pdo->lastInsertId();
         $pdo->commit();
 
+        $diagReport = null;
+        $fbFile = dirname(dirname(__DIR__)) . '/api_student_feedback.php';
+        if (file_exists($fbFile)) {
+            require_once $fbFile;
+            try {
+                $diagReport = fb_record_notification($pdo, array(
+                    'student_id' => $studentId,
+                    'full_name' => $fullName,
+                    'section' => $section,
+                    'game_id' => 'ctlab04',
+                    'module_id' => $moduleId,
+                    'submission_id' => $submissionId,
+                    'score' => $aiScore !== null ? $aiScore : $autoScore,
+                    'rubric' => $aiResult ? $aiResult['rubric'] : array(),
+                    'teacher_comment' => $aiFeedback,
+                    'notify_source' => $aiModel ? $aiModel : 'CT-Lab04 AI Grader',
+                    'status' => $status,
+                ));
+            } catch (Exception $fe) {}
+        }
+
         json_response(array(
             'ok' => true,
             'submission_id' => $submissionId,
@@ -172,7 +193,8 @@ try {
             'status' => $status,
             'completed_count' => $completedCount,
             'total_modules' => $totalModules,
-            'message' => $aiResult ? 'ส่งงานและตรวจให้คะแนนด้วย AI อัตโนมัติเรียบร้อยแล้ว' : 'ส่งงานเรียบร้อยแล้ว',
+            'diagnostic' => $diagReport,
+            'message' => $aiResult ? 'ส่งงานและตรวจให้คะแนนด้วย AI พร้อมบันทึกข้อผิดพลาดและแนวทางแก้ไขลงฐานข้อมูลแล้ว' : 'ส่งงานเรียบร้อยแล้ว',
         ), 201);
     }
 

@@ -266,6 +266,72 @@ async function fetchStudentRoster() {
   }
 }
 
+function recordBlocklyDiagnosticLocal(stats) {
+  const pctScore = Math.round((stats.passedCount / CHALLENGES.length) * 100);
+  const errors = [];
+  const rems = [];
+
+  CHALLENGES.forEach((lvl) => {
+    const p = state.progress[lvl.id];
+    if (!p || !p.passed) {
+      errors.push({
+        code: `ERR_LVL_${lvl.id.toUpperCase()}`,
+        category: `ด่านที่ยังไม่ผ่าน: ${lvl.shortTitle}`,
+        severity: 'medium',
+        detail: `ยังไม่ได้ส่งหรือยังไม่ผ่าน Test Cases ของด่าน ${lvl.shortTitle} (เป้าหมายความซับซ้อน ${lvl.complexity})`
+      });
+    } else if ((p.stars || 0) < 3) {
+      errors.push({
+        code: `OPT_LVL_${lvl.id.toUpperCase()}`,
+        category: `ประสิทธิภาพจำนวนบล็อก: ${lvl.shortTitle}`,
+        severity: 'low',
+        detail: `ผ่านด่าน ${lvl.shortTitle} แล้ว (${p.stars}/3 ดาว) แต่ใช้บล็อก ${p.bestBlocks} บล็อก (เกณฑ์ Par ≤ ${lvl.parBlocks} บล็อก)`
+      });
+    }
+  });
+
+  if (errors.length > 0) {
+    rems.push({ step: 'ใช้โครงสร้างลูป (Repeat / While) และตัวแปรสะสมค่าแทนการวางบล็อกซ้ำกัน เพื่อลดจำนวนบล็อกให้ไม่เกินเกณฑ์ Par Blocks' });
+    rems.push({ step: 'กดปุ่ม "💡 คำใบ้" ในด่านที่ยังไม่ผ่าน แล้วกด "▶ ทดสอบ & ส่งตรวจ (Judge)" เพื่อเก็บให้ครบ 10 ด่าน' });
+  } else {
+    errors.push({
+      code: 'NONE_EXCELLENT',
+      category: 'พิชิตครบทั้ง 10 ด่านสมบูรณ์',
+      severity: 'low',
+      detail: `ยอดเยี่ยมมาก! ผ่านครบ ${stats.passedCount}/${CHALLENGES.length} ด่าน สะสม ${stats.totalStars} ดาว (${stats.totalXp} XP)`
+    });
+    rems.push({ step: 'สามารถเปิดดูรายงานผลตรวจย้อนหลังและพิมพ์รายงาน PDF ได้ในหน้าฐานข้อมูลผลตรวจผู้เรียน' });
+  }
+
+  try {
+    const customList = JSON.parse(localStorage.getItem('cs2027_custom_notifications_v1') || '[]');
+    customList.unshift({
+      id: Date.now(),
+      student_id: state.profile.studentId,
+      full_name: state.profile.name,
+      section: state.profile.section,
+      game_id: 'blockly_ug',
+      module_id: 'blockly_10_levels',
+      module_title: 'AlgoQuest UG (Blockly 10 ด่าน)',
+      submission_ref_id: 999,
+      score: pctScore,
+      max_score: 100,
+      status: pctScore >= 80 ? 'graded' : 'needs_improvement',
+      notify_source: 'AlgoQuest Blockly Auto-Judge',
+      summary_title: `🔔 ผลตรวจ AlgoQuest UG (Blockly): คะแนน ${pctScore}% (ผ่าน ${stats.passedCount}/${CHALLENGES.length} ด่าน · ${stats.totalStars} ⭐)`,
+      errors: errors.slice(0, 5),
+      remediations: rems,
+      rubric: {},
+      teacher_comment: `ระดับขั้น: ${stats.rankTitle} | XP: ${stats.totalXp} | ดาวสะสม: ${stats.totalStars}/${CHALLENGES.length * 3}`,
+      is_read: 0,
+      created_at: new Date().toISOString().replace('T', ' ').slice(0, 19)
+    });
+    localStorage.setItem('cs2027_custom_notifications_v1', JSON.stringify(customList));
+  } catch (_) {}
+
+  return { pctScore, errors, rems };
+}
+
 async function syncProgressToDB(silent = true) {
   if (window.IS_TEACHER_MODE) return;
   if (!state.profile.studentId) {
@@ -278,6 +344,10 @@ async function syncProgressToDB(silent = true) {
   }
   saveCurrentWorkspace();
   const stats = computeSummaryStats();
+  const diag = recordBlocklyDiagnosticLocal(stats);
+  const errSummary = diag.errors.slice(0, 3).map((e) => `• ${e.detail}`).join('\n');
+  const remSummary = diag.rems.map((r) => `• ${r.step}`).join('\n');
+
   try {
     const res = await fetch('api/progress.php', {
       method: 'POST',
@@ -295,8 +365,8 @@ async function syncProgressToDB(silent = true) {
     });
     const data = await res.json();
     if (data.ok) {
-      const msg = `ส่งงานและบันทึกคะแนนของ ${state.profile.studentId} ${state.profile.name} เรียบร้อยแล้ว!\nผ่าน: ${stats.passedCount}/${CHALLENGES.length} ด่าน | ดาว: ${stats.totalStars}/${CHALLENGES.length * 3} ⭐ | XP: ${stats.totalXp}`;
-      logConsole(`☁️ ${msg.replace('\n', ' ')}`, 'ok');
+      const msg = `ส่งงานและบันทึกคะแนนของ ${state.profile.studentId} ${state.profile.name} เรียบร้อยแล้ว!\nคะแนนรวม: ${diag.pctScore}% (ผ่าน ${stats.passedCount}/${CHALLENGES.length} ด่าน | ดาว: ${stats.totalStars}/${CHALLENGES.length * 3} ⭐ | XP: ${stats.totalXp})\n\n⚠️ การวิเคราะห์ข้อผิดพลาด:\n${errSummary}\n\n🛠️ แนวทางแก้ไข:\n${remSummary}\n\n(บันทึกลงฐานข้อมูลแล้ว สามารถเปิดดูย้อนหลังได้ที่ปุ่ม "🔔 ผลตรวจ & แนวทางแก้ไข")`;
+      logConsole(`☁️ บันทึกผลตรวจและแนวทางแก้ไขของ ${state.profile.studentId} ลงฐานข้อมูลแล้ว (${diag.pctScore}%)`, 'ok');
       if (!silent) {
         sfx.play('pass');
         alert(`✅ ${msg}`);
@@ -320,8 +390,8 @@ async function syncProgressToDB(silent = true) {
       submitted_at: new Date().toLocaleString('th-TH')
     };
     localStorage.setItem('cs2027_blockly_submissions', JSON.stringify(localSubs));
-    const msg = `ส่งงานและบันทึกคะแนน (Cloud Cache) ของ ${state.profile.studentId} ${state.profile.name} เรียบร้อยแล้ว!\nผ่าน: ${stats.passedCount}/${CHALLENGES.length} ด่าน | ดาว: ${stats.totalStars}/${CHALLENGES.length * 3} ⭐ | XP: ${stats.totalXp}`;
-    logConsole(`☁️ ${msg.replace('\n', ' ')}`, 'ok');
+    const msg = `ส่งงานและบันทึกคะแนนของ ${state.profile.studentId} ${state.profile.name} เรียบร้อยแล้ว!\nคะแนนรวม: ${diag.pctScore}% (ผ่าน ${stats.passedCount}/${CHALLENGES.length} ด่าน | ดาว: ${stats.totalStars}/${CHALLENGES.length * 3} ⭐ | XP: ${stats.totalXp})\n\n⚠️ การวิเคราะห์ข้อผิดพลาด:\n${errSummary}\n\n🛠️ แนวทางแก้ไข:\n${remSummary}\n\n(บันทึกลงฐานข้อมูลแล้ว สามารถเปิดดูย้อนหลังได้ที่ปุ่ม "🔔 ผลตรวจ & แนวทางแก้ไข")`;
+    logConsole(`☁️ บันทึกผลตรวจและแนวทางแก้ไขของ ${state.profile.studentId} ลงฐานข้อมูลแล้ว (${diag.pctScore}%)`, 'ok');
     if (!silent) {
       sfx.play('pass');
       alert(`✅ ${msg}`);
