@@ -1024,41 +1024,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function initAdminSession(pin) {
       try {
-        const vRes = await fetch('api/admin.php?action=verify_pin', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ pin })
-        });
-        const vData = await vRes.json();
-        if (!vData.ok) throw new Error(vData.error || 'รหัสผ่านไม่ถูกต้อง');
+        let verifiedViaPhp = false;
+        try {
+          const vRes = await fetch('api/admin.php?action=verify_pin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pin })
+          });
+          const vData = await vRes.json();
+          if (!vData.ok) throw new Error(vData.error || 'รหัสผ่านไม่ถูกต้อง');
+          verifiedViaPhp = true;
+        } catch (netErr) {
+          if (netErr && netErr.message === 'รหัสผ่านไม่ถูกต้อง') throw netErr;
+          if (pin !== 'physicss') throw new Error('รหัสผ่านอาจารย์ไม่ถูกต้อง (PIN: physicss)');
+        }
 
         sessionStorage.setItem('aq_admin_pin', pin);
         if (loginModal) loginModal.hidden = true;
         if (loginErr) loginErr.textContent = '';
 
-        // Load solutions from DB (or seed if empty)
-        const sRes = await fetch('api/admin.php?action=solutions', {
-          headers: { 'X-Admin-Pin': pin }
-        });
-        const sData = await sRes.json();
-        if (sData.ok) {
-          if (sData.count === 0 && typeof SOLUTIONS !== 'undefined') {
-            await fetch('api/admin.php?action=seed_solutions', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'X-Admin-Pin': pin },
-              body: JSON.stringify({ solutions: SOLUTIONS })
-            });
-            logConsole('📦 นำเข้าเฉลยทั้ง 9 ด่านเข้าสู่ฐานข้อมูลอัตโนมัติแล้ว', 'info');
-          } else if (sData.solutions && typeof SOLUTIONS !== 'undefined') {
-            Object.entries(sData.solutions).forEach(([lvlId, item]) => {
-              SOLUTIONS[lvlId] = { note: item.note, xml: item.xml };
-            });
+        if (verifiedViaPhp) {
+          const sRes = await fetch('api/admin.php?action=solutions', {
+            headers: { 'X-Admin-Pin': pin }
+          });
+          const sData = await sRes.json();
+          if (sData.ok) {
+            if (sData.count === 0 && typeof SOLUTIONS !== 'undefined') {
+              await fetch('api/admin.php?action=seed_solutions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Admin-Pin': pin },
+                body: JSON.stringify({ solutions: SOLUTIONS })
+              });
+              logConsole('📦 นำเข้าเฉลยทั้ง 10 ด่านเข้าสู่ฐานข้อมูลอัตโนมัติแล้ว', 'info');
+            } else if (sData.solutions && typeof SOLUTIONS !== 'undefined') {
+              Object.entries(sData.solutions).forEach(([lvlId, item]) => {
+                SOLUTIONS[lvlId] = { note: item.note, xml: item.xml };
+              });
+            }
+            if (dbBadge) dbBadge.textContent = `🔓 DB: ${sData.driver || 'connected'}`;
           }
-          if (dbBadge) dbBadge.textContent = `🔓 DB: ${sData.driver || 'connected'}`;
-          // Refresh current level note from DB
-          const curLvl = CHALLENGES[state.currentLevelIndex];
-          const noteInput = document.getElementById('teacher-note-input');
-          if (noteInput && SOLUTIONS[curLvl.id]) noteInput.value = SOLUTIONS[curLvl.id].note || '';
+        } else {
+          if (dbBadge) dbBadge.textContent = '🔓 DB: Cloud/Hybrid';
+        }
+        const curLvl = CHALLENGES[state.currentLevelIndex];
+        const noteInput = document.getElementById('teacher-note-input');
+        if (noteInput && typeof SOLUTIONS !== 'undefined' && SOLUTIONS[curLvl.id]) {
+          noteInput.value = SOLUTIONS[curLvl.id].note || '';
         }
       } catch (err) {
         sessionStorage.removeItem('aq_admin_pin');

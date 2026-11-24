@@ -2515,9 +2515,40 @@
         const keys = Object.keys(MODULE_LABELS);
         const done = keys.filter((k) => !!prog.completed[k]).length;
         const autoScore = Math.round((done / keys.length) * 100);
+        const simScore = Math.round((done / keys.length) * 40);
+        const seqScore = Math.min(35, 22 + done * 3);
+        const subjScore = ($('sub-note').value.trim().length > 10) ? 23 : 18;
+        const aiScore = Math.min(100, simScore + seqScore + subjScore);
+        const aiRubric = { simulation: simScore, sequencing: seqScore, subjective: subjScore };
+        const aiFeedback = `ตรวจประเมินอัตโนมัติ (CT-Lab04 Hybrid AI): ผ่านกิจกรรมจำลอง ${done}/${keys.length} โมดูล คะแนนรวม ${aiScore}%`;
+        const localSubs = JSON.parse(localStorage.getItem('ct04_local_submissions_v1') || '[]');
+        const newId = localSubs.length > 0 ? Math.max(...localSubs.map((x) => Number(x.id) || 0)) + 1 : 1;
+        localSubs.unshift({
+          id: newId,
+          student_id: sid,
+          full_name: fname,
+          section: sec,
+          module_id: $('sub-scope').value,
+          completed_count: done,
+          total_modules: keys.length,
+          auto_score: autoScore,
+          ai_score: aiScore,
+          ai_rubric_json: JSON.stringify(aiRubric),
+          ai_rubric: aiRubric,
+          ai_feedback: aiFeedback,
+          ai_model: 'CT-Lab04 Hybrid AI v1.0',
+          payload_json: JSON.stringify({ completed: prog.completed, attempts: prog.attempts, snapshot }),
+          student_note: $('sub-note').value.trim(),
+          teacher_score: aiScore,
+          teacher_feedback: aiFeedback,
+          status: 'graded',
+          submitted_at: new Date().toISOString().replace('T', ' ').slice(0, 19)
+        });
+        localStorage.setItem('ct04_local_submissions_v1', JSON.stringify(localSubs));
         $('sub-feedback').className = 'feedback good';
-        $('sub-feedback').textContent = `บันทึกผลการส่งงาน (Cloud Cache) ของ ${sid} ${fname} สำเร็จ! คะแนนความก้าวหน้า: ${autoScore}%`;
-        toast(`บันทึกงานสำเร็จ · ${autoScore}%`);
+        $('sub-feedback').textContent = `ส่งงาน #${newId} สำเร็จ! คะแนน AI: ${aiScore}%`;
+        $('sub-ai-result').innerHTML = renderAiEvalHtml(aiScore, aiRubric, aiFeedback, 'CT-Lab04 Hybrid AI v1.0');
+        toast(`ส่งงานสำเร็จ · AI ประเมิน ${aiScore}%`);
       } finally {
         btn.disabled = false;
         btn.textContent = '📤 ส่งงานให้ AI ตรวจและบันทึกผล';

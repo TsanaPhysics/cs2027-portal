@@ -54,10 +54,14 @@ function aq_get_pdo()
     );
 
     if (aq_is_university_server()) {
-        $dsn = 'mysql:host=localhost;dbname=chewa;charset=utf8mb4';
-        $pdo = new PDO($dsn, 'chewa', 'PhysiK66', $options);
-        aq_ensure_schema($pdo);
-        return $pdo;
+        try {
+            $dsn = 'mysql:host=localhost;dbname=chewa;charset=utf8mb4';
+            $pdo = new PDO($dsn, 'chewa', 'PhysiK66', $options);
+            aq_ensure_schema($pdo);
+            return $pdo;
+        } catch (PDOException $e) {
+            // Fallback to local MySQL or SQLite below
+        }
     }
 
     $db = 'ct_lab_db';
